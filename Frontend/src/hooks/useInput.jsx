@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useState } from "react";
 
+let i = 0;
+
 export default function useInput(validation, initialState) {
   const [value, setValue] = useState(initialState);
   const [isValid, setIsValid] = useState(false);
@@ -8,9 +10,14 @@ export default function useInput(validation, initialState) {
 
   useEffect(() => {
     if (!validation.isValidationOn || !isTouched) return;
-    const id = setTimeout(() => {
+    if (isTouched && !i) {
       setIsValid(validation.validationFunc(value));
-    }, [100]);
+      i++;
+    } else {
+      var id = setTimeout(() => {
+        setIsValid(validation.validationFunc(value));
+      }, [500]);
+    }
 
     return () => {
       clearTimeout(id);
