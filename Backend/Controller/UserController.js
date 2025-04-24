@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
 });
 
 //Create User
-//URL http://localhost:3000/user/create
+//URL http://localhost:5000/user/create
 router.post("/create", async (req, res) => {
     try {
         const user = new User(req.body);
@@ -19,9 +19,15 @@ router.post("/create", async (req, res) => {
         res.status(201).send({ message: "User created successfully" });
     } catch (err) {
         console.error("Error saving user:", err);
+        
+        if (err.name === "ValidationError") {
+            return res.status(400).send({ error: err.message });
+        }
+
         res.status(500).send({ error: "Failed to create user" });
     }
 });
+
 
 //Forgot Password
 //URL http://localhost:5000/user/update
