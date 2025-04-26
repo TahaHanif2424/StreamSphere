@@ -7,11 +7,10 @@ const VideoSchema=new Schema({
         required:true
     },
     video_id:{
-        type: Types.ObjectId,
-        required:true
+        type: mongoose.Types.ObjectId,
     },
     user_id:{
-        type:Types.ObjectId,
+        type:mongoose.Types.ObjectId,
         required:true
     },
     title:{
@@ -37,7 +36,7 @@ const VideoSchema=new Schema({
     Views:{
         type:Number,
     },
-    Category:{
+    category:{
         type:String,
         required:true
     },

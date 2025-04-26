@@ -6,13 +6,15 @@ const PlayListSchema= new Schema({
         type:mongoose.Types.ObjectId,
         required:true
     },
-    "video_id":{
+    "video_id":[{
         type:mongoose.Types.ObjectId,
-        required:true
-    },
+    }],
     "playlist_id":{
         type:mongoose.Types.ObjectId,
-        required:true
     },
+    "name":{
+        type:String,
+        required:true
+    }
 });
 module.exports= mongoose.model('PlayList', PlayListSchema);
