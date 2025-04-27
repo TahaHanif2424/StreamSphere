@@ -6,7 +6,7 @@ const router=express.Router();
 
 
 //Subscribe Channel
-//URL http://localhost:5000/Subscription/subscribe
+//URL http://localhost:5000/subscription/subscribe
 router.post("/subscribe", async (req,res)=>{
     try{
         const subscribe=new Subscribe(req.body);
@@ -19,7 +19,7 @@ router.post("/subscribe", async (req,res)=>{
 
 
 //UN-Subscribe Channel
-//URL http://localhost:5000/Subscription/unsubscribe/id
+//URL http://localhost:5000/subscription/unsubscribe/id
 router.put("/unsubscribe/:id", async (req, res) => {
     try {
         const channelIdToUnsubscribe = req.params.id; 

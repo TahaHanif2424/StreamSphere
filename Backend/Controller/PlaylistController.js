@@ -1,6 +1,5 @@
 const express=require("express");
 const Playlist=require("../Model/PlayList");
-const Video = require("../Model/Video");
 
 const router=express.Router();
 
