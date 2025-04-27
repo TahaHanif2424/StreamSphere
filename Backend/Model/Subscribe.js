@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 const Schema=mongoose.Schema;
 
-const SibscribeSchema= new Schema({
+const SubscribeSchema= new Schema({
     "user_id":{
         type:mongoose.Types.ObjectId,
         required:true
@@ -11,4 +11,4 @@ const SibscribeSchema= new Schema({
         required: true, 
     },
 });
-module.exports= mongoose.model('User', SibscribeSchema);
+module.exports= mongoose.model('Subscribed', SubscribeSchema);
