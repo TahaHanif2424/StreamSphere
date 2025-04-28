@@ -26,22 +26,23 @@ export default function Input({
   let bgClass = "bg-white";
 
   if (validation && isTouched) {
-    if (isValid) bgClass = "bg-sky-500";
-    else bgClass = "bg-red-300";
+    if (isValid) bgClass = "bg-sky-100";
+    else bgClass = "bg-red-200";
   }
 
   return (
-    <div className="flex gap-4">
-      <label className="text-lg font-semibold text-gray-600" htmlFor={id}>
+    <div className="flex flex-col gap-1 items-start justify-start w-full">
+      <label className="text-sm font-medium text-gray-900 tracking-wide" htmlFor={id}>
         {label}
       </label>
       <input
         onChange={handleInputChange}
-        className={`outline-none border border-solid border-gray-800 px-2 ${bgClass}`}
+        className={`outline-none border border-solid border-gray-800 px-1 py-0.5 rounded-md text-md ${bgClass}`}
         type={type}
         id={id}
         value={value}
+        fuc
       />
     </div>
   );
-}
+};
