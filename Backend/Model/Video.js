@@ -29,12 +29,15 @@ const VideoSchema=new Schema({
     },
     likes:{
         type:Number,
+        default:0
     },
-    Comments:{
+    comments:{
         type:Number,
+        default:0
     },
-    Views:{
+    views:{
         type:Number,
+        default:0
     },
     category:{
         type:String,

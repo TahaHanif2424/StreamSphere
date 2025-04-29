@@ -11,4 +11,4 @@ const HistroySchema= new Schema({
         required: true, 
     },
 });
-module.exports= mongoose.model('User', HistroySchema);
+module.exports= mongoose.model('Histroy', HistroySchema);

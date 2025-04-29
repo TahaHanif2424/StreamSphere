@@ -1,11 +1,12 @@
 const express = require("express");
 const Comment = require("../Model/Comments");
+const Video = require("../Model/Video");
 
 const router = express.Router();
 
 
 //Like Video
-// http://localhost:5000/comment/id
+// http://localhost:5000/comment/id    here the id is video_id
 router.post("/:id", async (req, res) => {
     try {
         const user_id = req.body.user_id;
@@ -16,8 +17,12 @@ router.post("/:id", async (req, res) => {
         if(!video_id){
             return res.status(400).send({ message: "Invalid Video" });
         }
+        const video=await Video.findById(video_id);
+        
         const comments=new Comment({user_id,video_id,comment});
         await comments.save();
+        video.comments+=1;
+        await video.save();
         return res.status(200).send({ message: "Comment added successfully" });
     } catch (err) {
         return res.status(500).send({ error: "Error while adding the comment" });
@@ -26,15 +31,19 @@ router.post("/:id", async (req, res) => {
 
 
 //UN-Like Video
-// http://localhost:5000/comment/delete/id
+// http://localhost:5000/comment/delete/id      here the id is comment_id
 router.delete("/delete/:id", async (req, res) => {
     try {
         const commentId = req.params.id;
+        const commentDB=await Comment.findById(commentId);
+        const video=await Video.findById(commentDB.video_id);
         const userId = req.body.user_id;
         const comment = await Comment.findOne({ _id: commentId, user_id: userId });
         if (!comment) {
             return res.status(404).send({ error: "Comment not found or not authorized" });
         }
+        video.comments-=1;
+        await video.save();
         await Comment.deleteOne({ _id: commentId });
         return res.status(200).send({ message: "Comment deleted successfully" });
     } catch (err) {
