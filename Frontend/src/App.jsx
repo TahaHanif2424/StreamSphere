@@ -1,11 +1,9 @@
-import Input from "./components/UI/Input";
-import useInput from "./hooks/useInput";
+import { RouterProvider } from 'react-router';
 import './App.css';
+import router from './routes/router';
 
 function App() {
-  const [emailValue, setEmailValue, isEmailTouched, setIsEmailTouched, isEmailValid] = useInput({isValidationOn: true, validationFunc: (value) => value.length >= 16}, '');
-
-  return <Input type={'email'} label={'Enter Email'} id={'email'} value={emailValue} validation={true} isTouched={isEmailTouched} isValid={isEmailValid} setValue={setEmailValue} setIsTouched={setIsEmailTouched} />
+  return <RouterProvider router={router} />
 };
 
 export default App
