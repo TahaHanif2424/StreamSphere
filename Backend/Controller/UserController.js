@@ -11,8 +11,8 @@ router.get("/", (req, res) => {
 });
 
 //Create User
-//URL http://localhost:5000/user/create
-router.post("/create", async (req, res) => {
+//URL http://localhost:5000/user/signup
+router.post("/signup", async (req, res) => {
     try {
         const user = new User(req.body);
         await user.save();
