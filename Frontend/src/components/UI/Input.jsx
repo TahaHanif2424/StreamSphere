@@ -41,7 +41,6 @@ export default function Input({
         type={type}
         id={id}
         value={value}
-        fuc
       />
     </div>
   );
