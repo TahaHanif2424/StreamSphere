@@ -1,13 +1,13 @@
 const express=require("express");
-const mongoose=require("mongoose");
 const Video=require("../Model/Video");
+const verifyJWT=require('../Middleware/verifyJWT');
 
 const router=express.Router();
 
 
 //Get all Videos
 //URL http://localhost:5000/video/get-all
-router.get("/get-all", async(req,res)=>{
+router.get("/get-all",verifyJWT, async(req,res)=>{
     try{
         const video= await Video.find();
         res.status(200).send({video});
