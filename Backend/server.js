@@ -6,6 +6,7 @@ const playlistRouter=require("./Controller/PlaylistController");
 const SubscribedRouter=require("./Controller/SubscribeController");
 const LikedRouter=require("./Controller/LikeController");
 const CommentRouter=require("./Controller/CommentController");
+const HistroyRouter=require("./Controller/HistroyController")
 
 const app = express();
 
@@ -28,6 +29,9 @@ app.use('/like',LikedRouter);
 
 //Comment Router
 app.use('/comment',CommentRouter);
+
+//Histroy Router
+app.use('/histroy',HistroyRouter);
 
 app.listen(5000, () => {
     console.log("Server connected..");

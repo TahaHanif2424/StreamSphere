@@ -1,17 +1,25 @@
 const express = require("express");
 const Likes = require("../Model/Likes");
+const Video = require("../Model/Video");
 
 const router = express.Router();
 
 
 //Like Video
-// http://localhost:5000/like/id
+// http://localhost:5000/like/id    here the id is video_id
 router.post("/:id", async (req, res) => {
     try {
         const user_id = req.body.user_id;
         const video_id = req.params.id;
+        const video=await Video.findById(video_id);
         const like=new Likes({user_id,video_id});
-        await like.save();
+        if(video){
+            video.likes+=1;
+            await video.save();
+            await like.save();
+        }else{
+            return res.status(500).send({ error: "No video found" });
+        }
         return res.status(200).send({ message: "Video Liked successfully" })
     } catch (err) {
         return res.status(500).send({ error: "Error while Liking the video" });
@@ -20,12 +28,17 @@ router.post("/:id", async (req, res) => {
 
 
 //UN-Like Video
-// http://localhost:5000/like/unlike/id
+// http://localhost:5000/like/unlike/id            here the id is video_id
 router.delete("/unlike/:id", async (req, res) => {
     try {
         const user_id = req.body.user_id;
         const video_id = req.params.id;
-        const like=await Likes.findOneAndDelete({user_id, video_id});
+        const video=await Video.findById(video_id);
+        if(video){
+            const like=await Likes.findOneAndDelete({user_id, video_id});
+            video.likes-=1;
+            await video.save();
+        }
         return res.status(200).send({ message: "Video UnLiked successfully" })
     } catch (err) {
         return res.status(500).send({ error: "Error while unlvideoiking the " });
