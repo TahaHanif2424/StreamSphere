@@ -1,5 +1,5 @@
 export default function HomePage() {
-    return <div className="mt-[10%] grid grid-cols-3">
+    return <div className="mt-[10dvh] grid grid-cols-3">
         <h1>Hello</h1>
     </div>
 }
