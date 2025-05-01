@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import AuthPage, {action as authAction} from "../pages/AuthPage";
+import AuthPage from "../pages/AuthPage";
 import HomePage from "../pages/HomePage";
 import RootPage, {loader as userLoader} from "../pages/RootPage";
+import { authAction } from "../actions";
 
 const router = createBrowserRouter([
   { path: "/auth", element: <AuthPage />, index: true, action: authAction},
