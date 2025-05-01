@@ -6,7 +6,8 @@ const playlistRouter=require("./Controller/PlaylistController");
 const SubscribedRouter=require("./Controller/SubscribeController");
 const LikedRouter=require("./Controller/LikeController");
 const CommentRouter=require("./Controller/CommentController");
-const HistroyRouter=require("./Controller/HistroyController")
+const HistroyRouter=require("./Controller/HistroyController");
+const RatingRouter=require("./Controller/RatingController");
 
 const app = express();
 
@@ -32,6 +33,9 @@ app.use('/comment',CommentRouter);
 
 //Histroy Router
 app.use('/histroy',HistroyRouter);
+
+//Rating Router
+app.use('/rating',RatingRouter);
 
 app.listen(5000, () => {
     console.log("Server connected..");
