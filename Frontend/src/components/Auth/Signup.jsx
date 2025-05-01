@@ -49,7 +49,10 @@ export default function Signup() {
     event.preventDefault();
 
     if (isFormValid) {
-      submit({ email: enteredEmail, password: enteredPassword });
+      submit({ email: enteredEmail, password: enteredPassword }, {
+        method: 'POST',
+        action: '/auth?mode=signup'
+      });
       return;
     }
   }

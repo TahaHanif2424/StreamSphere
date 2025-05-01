@@ -12,7 +12,7 @@ export default function RootPage() {
 
 
 export async function loader() {
-    if(store.getState().user)
+    if(store.getState().user.user)
         return;
     const userToken = localStorage.getItem('userToken') || null;
     if(!userToken)
