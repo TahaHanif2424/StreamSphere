@@ -42,7 +42,7 @@ export default function Signup() {
     isChannelValid,
   ] = useInput({ isValidationOn: false }, "");
 
-  const isFormValid = isEmailValid && isPasswordValid;
+  const isFormValid = isEmailValid && isPasswordValid && isConfirmPasswordValid;
   const submit = useSubmit();
 
   function handleFormSubmission(event) {
@@ -105,7 +105,7 @@ export default function Signup() {
         setValue={setEnteredConfirmPassword}
         isTouched={isConfirmPasswordTouched}
         setIsTouched={setIsConfirmPasswordTouched}
-        isValid={isChannelValid}
+        isValid={isConfirmPasswordValid}
         type={"password"}
         label={"Confirm Password"}
         id={"confirm-password"}
