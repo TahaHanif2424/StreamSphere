@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 import store from "../store";
 import { userActions } from "../store/user-slice";
 import Header from "../components/UI/Header";

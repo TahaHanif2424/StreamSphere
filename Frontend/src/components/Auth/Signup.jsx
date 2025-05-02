@@ -1,6 +1,6 @@
 import useInput from "../../hooks/useInput";
 import { validateConfirmPassword, validateEmail, validatePassword } from "../../utils/validation";
-import { useSubmit, Form } from "react-router";
+import { useSubmit, Form } from 'react-router-dom';
 import Input from "../UI/Input";
 
 export default function Signup() {
