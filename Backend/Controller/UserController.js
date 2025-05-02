@@ -1,32 +1,63 @@
 const express=require("express");
+const bcrypt=require("bcrypt"); 
 const User =require("../Model/User");
-
+const {GenerateAccessToken,GenerateRefreshToken}=require("../Auth/GenerateToken");
 const router=express.Router();
-
 
 //Get All User 
 //URL: https://localhost:5000/user/
-router.get("/", (req, res) => {
+router.get("/" ,(req, res) => {
     res.send({message:"Connected...."});
 });
 
-//Create User
+// User Signup
 //URL http://localhost:5000/user/signup
 router.post("/signup", async (req, res) => {
     try {
+        const salt= await bcrypt.genSalt();
+        const hashedPassword=await bcrypt.hash(req.body.password,salt);
         const user = new User(req.body);
+        user.password=hashedPassword;
+        console.log(user);
         await user.save();
         res.status(201).send({ message: "User created successfully" });
     } catch (err) {
         console.error("Error saving user:", err);
-        
         if (err.name === "ValidationError") {
             return res.status(400).send({ error: err.message });
         }
-
         res.status(500).send({ error: "Failed to create user" });
     }
 });
+
+
+//User Login
+//URL  http://localhost:5000/user/login
+
+router.post("/login", async(req,res)=>{
+    try{
+        const {email,password}=req.body;
+        const user=await User.findOne({email});
+        if(!user){
+        res.status(400).send({ error: "Invalid Username and Password" });
+        }
+        const user_id=user._id.toString();
+        const login=await bcrypt.compare(password,user.password);
+        if(login){
+
+            const accessToken=GenerateAccessToken(user_id);
+            const refreshToken=GenerateRefreshToken(user_id);
+
+           return res.status(201).send({ message: "Logged in successfully", accessToken,refreshToken });
+        }else{
+        res.status(400).send({ error: "Invalid Username and Password" });
+        }
+    }catch(err){
+        res.status(500).send({ error: "Login Failed",err:err });
+        
+    }
+})
+
 
 
 //Forgot Password
