@@ -47,7 +47,8 @@ router.post("/login", async(req,res)=>{
 
             const accessToken=GenerateAccessToken(email);
             const refreshToken=GenerateRefreshToken(email);
-
+            user.refreshToken = refreshToken;
+            await user.save();
             res.cookie('jwt',refreshToken,{httpOnly:true,maxAge:24*60*60*1000, sameSite:'none'});
             
            return res.status(201).send({ message: "Logged in successfully", accessToken,refreshToken });

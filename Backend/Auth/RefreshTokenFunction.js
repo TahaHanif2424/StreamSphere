@@ -1,12 +1,14 @@
-const cookieParser=require("cookie-parser");
 const jwt=require('jsonwebtoken');
 const {GenerateAccessToken}=require("./GenerateToken");
+const User=require("../Model/User")
 
- function handleRefreshToken(req,res){
+ async function handleRefreshToken(req,res){
     try{
         const cookie=req.cookies;
         if(!cookie?.jwt)return res.sendStatus(401);
         const refreshToken=cookie.jwt;
+        const findUser=await User.findOne({refreshToken:refreshToken});
+        if(!findUser)return res.sendStatus(403);
         jwt.verify(
             refreshToken,
             process.env.REFRESH_SECRET_TOKEN,
@@ -18,7 +20,7 @@ const {GenerateAccessToken}=require("./GenerateToken");
             }
         )
     }catch(err){
-        return res.status(500).send({ error: "Could not refresh token", err });
+        return res.sendStatus(500);
         
     }
 }
