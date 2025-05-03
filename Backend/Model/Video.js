@@ -6,9 +6,6 @@ const VideoSchema=new Schema({
         type:String,
         required:true
     },
-    video_id:{
-        type: mongoose.Types.ObjectId,
-    },
     user_id:{
         type:mongoose.Types.ObjectId,
         required:true

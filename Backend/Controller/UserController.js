@@ -41,13 +41,15 @@ router.post("/login", async(req,res)=>{
         if(!user){
         res.status(400).send({ error: "Invalid Username and Password" });
         }
-        const user_id=user._id.toString();
+    
         const login=await bcrypt.compare(password,user.password);
         if(login){
 
-            const accessToken=GenerateAccessToken(user_id);
-            const refreshToken=GenerateRefreshToken(user_id);
+            const accessToken=GenerateAccessToken(email);
+            const refreshToken=GenerateRefreshToken(email);
 
+            res.cookie('jwt',refreshToken,{httpOnly:true,maxAge:24*60*60*1000, sameSite:'none'});
+            
            return res.status(201).send({ message: "Logged in successfully", accessToken,refreshToken });
         }else{
         res.status(400).send({ error: "Invalid Username and Password" });

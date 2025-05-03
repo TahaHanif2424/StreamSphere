@@ -16,6 +16,22 @@ router.get("/get-all",verifyJWT, async(req,res)=>{
     }
 });
 
+
+//Find all videos of USER
+//URL http://localhost:5000/video/get
+
+router.get("/get",verifyJWT, async(req,res)=>{
+    try{
+        const user_id=req.body.user_id;
+        const video= await Video.find({user_id});
+        res.status(200).send({video});
+    }catch(err){
+        return res.status(400).send({error:"InValid Request"})
+    }
+});
+
+
+
 //Add Video
 //URL http://localhost:5000/video/add
 router.post("/add", async(req,res)=>{

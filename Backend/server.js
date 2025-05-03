@@ -8,12 +8,16 @@ const LikedRouter=require("./Controller/LikeController");
 const CommentRouter=require("./Controller/CommentController");
 const HistroyRouter=require("./Controller/HistroyController");
 const RatingRouter=require("./Controller/RatingController");
+const RefreshToken=require("./Routes/RefreshTokenRoute");
 const cookieParser = require("cookie-parser");
 const app = express();
 
 
 app.use(express.json());
 app.use(cookieParser());
+
+//Refresh Token
+app.use("/refresh", RefreshToken);
 
 //User Routes
 app.use("/user",userRouter);
