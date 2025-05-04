@@ -10,7 +10,14 @@ const HistroyRouter=require("./Controller/HistroyController");
 const RatingRouter=require("./Controller/RatingController");
 const RefreshToken=require("./Routes/RefreshTokenRoute");
 const cookieParser = require("cookie-parser");
+
+const multer=require('multer');
+
+
 const app = express();
+
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
 
 
 app.use(express.json());
