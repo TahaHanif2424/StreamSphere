@@ -1,3 +1,5 @@
+import { redirect } from "react-router";
+
 export async function authAction({request, params}) {
     const formData = await request.formData();
 
