@@ -8,6 +8,8 @@ export default function ChannelPage() {
   const { channelName } = useParams();
   const currUser = useSelector((state) => state.user.user);
 
+  
+
   return (
     <div className="flex">
       <h1>{channelName}</h1>
@@ -17,7 +19,7 @@ export default function ChannelPage() {
         </button>
       )}
       <Suspense fallback={<div>Loading....</div>}>
-        <Await resolve={videos} children={loadedVideos => <VideosList videos={loadedVideos}/>} />
+        <Await resolve={videos} children={loadedVideos => <VideosList isChangeable={channelName == currUser} videos={loadedVideos}/>} />
       </Suspense>
     </div>
   );
@@ -32,7 +34,7 @@ async function loadChannelVideos(channelName) {
   return responseData;
 }
 
-export async function loader({ request, params }) {
+export async function loader({ params }) {
   const channelName = params.channelName;
   return defer({
     videos: loadChannelVideos(channelName),

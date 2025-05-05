@@ -6,5 +6,8 @@
 }
 
 body {
+    width: 100dvw;
     max-width: 100dvw;
+    overflow-x: hidden;
+    overflow-y: auto;
 }

@@ -9,3 +9,7 @@ export function validatePassword(string) {
 export function validateConfirmPassword(confirmPassword, password) {
     return confirmPassword.length >= 8 && confirmPassword === password;
 };
+
+export function validateTitle(string) {
+    return string.trim().length > 0;
+}

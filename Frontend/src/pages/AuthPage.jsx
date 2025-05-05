@@ -4,24 +4,24 @@ import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 
 export default function AuthPage() {
-    const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-    useEffect(() => {
-        if (!searchParams.has('mode')) {
-            setSearchParams({ mode: 'login' });
-            return;
-        }
-        const mode = searchParams.get('mode');
-        if (mode !== 'signup' && mode !== 'login')
-            setSearchParams({ mode: 'login' });
-    }, [searchParams]);
-
+  useEffect(() => {
+    if (!searchParams.has("mode")) {
+      setSearchParams({ mode: "login" });
+      return;
+    }
     const mode = searchParams.get("mode");
-    const componentRendered = mode === "signup" ? <Signup /> : <Login />;
+    if (mode !== "signup" && mode !== "login")
+      setSearchParams({ mode: "login" });
+  }, [searchParams]);
 
-    return (
-        <div className="w-full h-screen flex justify-center items-center">
-            {componentRendered}
-        </div>
-    );
+  const mode = searchParams.get("mode");
+  const componentRendered = mode === "signup" ? <Signup /> : <Login />;
+
+  return (
+    <div className="w-screen min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-200 flex justify-center items-center p-4">
+      {componentRendered}
+    </div>
+  );
 }

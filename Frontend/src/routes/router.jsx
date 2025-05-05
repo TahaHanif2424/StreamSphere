@@ -4,6 +4,7 @@ import HomePage, { loader as HomeLoader } from "../pages/HomePage";
 import RootPage, { loader as userLoader } from "../pages/RootPage";
 import { authAction } from "../actions";
 import ChannelPage, { loader as channelLoader } from "../pages/ChannelPage";
+import VideoForm from "../pages/VideoFormPage";
 
 const router = createBrowserRouter([
   { path: "/auth", element: <AuthPage />, index: true, action: authAction },
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
         element: <ChannelPage />,
         loader: channelLoader,
       },
+      {path: 'videos/:videoId/edit', element: <VideoForm />}
     ],
   },
 ]);
