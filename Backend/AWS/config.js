@@ -1,2 +1,4 @@
-const AWS=require('aws-sdk');
-const S3=new AWS.S3();
+const S3Client=require('@aws-sdk/client-s3');
+require('dotenv');
+
+configDotenv.config()
