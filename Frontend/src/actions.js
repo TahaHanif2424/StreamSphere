@@ -1,6 +1,6 @@
 import { redirect } from "react-router";
 
-export async function authAction({request, params}) {
+export async function authAction({request}) {
     const formData = await request.formData();
 
     const url = new URL(request.url);
@@ -15,7 +15,7 @@ export async function authAction({request, params}) {
         password: formData.get('password')
     };
 
-    const response = await fetch('http://localhost:5000/user' + mode, {
+    const response = await fetch('http://localhost:5000/user/' + mode, {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
