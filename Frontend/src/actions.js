@@ -1,4 +1,4 @@
-export async function authAction({request}) {
+export async function authAction({request, params}) {
     const formData = await request.formData();
 
     const url = new URL(request.url);

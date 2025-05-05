@@ -28,14 +28,14 @@ export default function Login() {
     if (isFormValid) {
       submit({email: enteredEmail, password: enteredPassword}, {
         method: 'POST',
-        action: '/auth?mode=signup'
+        action: '/auth?mode=login'
       });
       return;
     }
   }
 
   return (
-    <Form onSubmit={handleFormSubmission} className="flex bg-blue-50/70 flex-col items-center gap-5 p-5 w-max shadow-lg shadow-black/30 rounded-lg font-inter border border-solid border-gray-900">
+    <Form onSubmit={handleFormSubmission} action="/" className="flex bg-blue-50/70 flex-col items-center gap-5 p-5 w-max shadow-lg shadow-black/30 rounded-lg font-inter border border-solid border-gray-900">
       <h1 className="text-2xl tracking-wide font-bold text-center text-gray-950">
         Login Form
       </h1>
