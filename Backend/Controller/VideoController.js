@@ -1,16 +1,34 @@
 const express=require("express");
 const Video=require("../Model/Video");
-const verifyJWT=require('../Middleware/verifyJWT');
-
+const {PutObjectCommand,GetObjectCommand,DeleteObjectCommand}=require('@aws-sdk/client-s3');
+const S3=require('../AWS/AWSConfig');
 const router=express.Router();
-
+const multer = require("multer");
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage });
+const crypto=require('crypto');
+const bucketName=process.env.BUCKET_NAME;
+const sharp=require('sharp');
+const { getSignedUrl } =require ("@aws-sdk/s3-request-presigner");
 
 //Get all Videos
 //URL http://localhost:5000/video/get-all
-router.get("/get-all",verifyJWT, async(req,res)=>{
+router.get("/get-all", async(req,res)=>{
     try{
-        const video= await Video.find();
-        res.status(200).send({video});
+        const videos= await Video.find();
+        for(const video of videos){
+            if (!video.videoName) continue;
+            const getObjectParams=({
+                Bucket:bucketName,
+                Key:video.videoName
+            });
+
+            const command = new GetObjectCommand(getObjectParams);
+            const url = await getSignedUrl(S3, command, { expiresIn: 3600 });
+            video.URL=url;
+            await video.save();
+        }
+        res.status(200).send(videos);
     }catch(err){
         return res.status(400).send({error:"InValid Request"})
     }
@@ -20,7 +38,7 @@ router.get("/get-all",verifyJWT, async(req,res)=>{
 //Find all videos of USER
 //URL http://localhost:5000/video/get
 
-router.get("/get",verifyJWT, async(req,res)=>{
+router.get("/get", async(req,res)=>{
     try{
         const user_id=req.body.user_id;
         const video= await Video.find({user_id});
@@ -34,15 +52,37 @@ router.get("/get",verifyJWT, async(req,res)=>{
 
 //Add Video
 //URL http://localhost:5000/video/add
-router.post("/add", async(req,res)=>{
-    try{
-    const video= new Video(req.body);
-    await video.save();
-    res.status(200).send(video);
-    }catch(err){
-        return res.status(400).send({error:"Bad request"});
+router.post("/add", upload.single("image"), async (req, res) => {
+    try {
+      // Parse JSON string from form-data field
+      const videoData = JSON.parse(req.body.data);
+  
+        
+    //   const buffer=await sharp(req.file.buffer).resize({height:1080,width:1920,fit:'contain'}).toBuffer();
+      const randomName= (bytes=32)=>crypto.randomBytes(bytes).toString('hex');
+      const videoName=randomName();
+      const params = {
+        Bucket: bucketName,
+        Key: videoName,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype, 
+      };
+  
+      const command = new PutObjectCommand(params);
+      await S3.send(command);
+
+      const video = new Video(videoData);
+      video.videoName=videoName;
+      await video.save();
+
+      res.status(200).send(video);
+
+    } catch (err) {
+      console.error(err);
+      return res.status(400).send({ error: "Bad request", message: err.message });
     }
-});
+  });
+  
 
 
 //Delete Video
@@ -50,7 +90,14 @@ router.post("/add", async(req,res)=>{
 router.delete("/delete/:id", async(req,res)=>{
     try{
     const video_id= req.params.id;
-    const deleteVideo=await Video.findByIdAndDelete(video_id);
+    const deleteVideo=await Video.findById(video_id);
+    const params={
+        Bucket: bucketName,
+        Key:deleteVideo.videoName,
+    };
+    const command=new DeleteObjectCommand(params);
+    await S3.send(command);
+    await Video.deleteOne({_id:video_id});
     if(deleteVideo){
         return res.status(200).send({message:"Video deleted successfully"});
     }

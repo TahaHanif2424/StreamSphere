@@ -11,18 +11,15 @@ const RatingRouter=require("./Controller/RatingController");
 const RefreshToken=require("./Routes/RefreshTokenRoute");
 const cookieParser = require("cookie-parser");
 
-const multer=require('multer');
 const cors = require('cors');
 
 const app = express();
 
-const storage = multer.memoryStorage()
-const upload = multer({ storage: storage })
 
 app.use(cors({
-    origin: 'http://localhost:5173', // replace with your frontend domain
+    origin: 'http://localhost:5173', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true // if you're using cookies
+    credentials: true 
   }));
 
 

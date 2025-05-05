@@ -25,7 +25,7 @@ export default function HomePage() {
 }
 
 export async function loadVideos() {
-  const response = await fetch("https://localhost:5000/videos");
+  const response = await fetch("http://localhost:5000/video/get-all");
   if (!response.ok) throw new Error("Unable to fetch videos");
   const responseData = await response.json();
   return responseData;

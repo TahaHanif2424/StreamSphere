@@ -10,6 +10,11 @@ const VideoSchema=new Schema({
         type:mongoose.Types.ObjectId,
         required:true
     },
+    videoName:{
+        type:String,
+        required:true
+    },
+
     title:{
         type:String,
         required:true
