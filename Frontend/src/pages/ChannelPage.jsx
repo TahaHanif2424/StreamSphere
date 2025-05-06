@@ -8,7 +8,6 @@ export default function ChannelPage() {
   const { channelName } = useParams();
   const currUser = useSelector((state) => state.user.user);
 
-  
 
   return (
     <div className="flex">

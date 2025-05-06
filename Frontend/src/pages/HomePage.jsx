@@ -1,6 +1,7 @@
 import { Await, defer, useLoaderData } from "react-router-dom";
 import { Suspense } from "react";
 import VideosList from "../components/HomePage/VideosList";
+import SkeletonVideosList from '../components/UI/Skeleton/VideosList';
 
 export default function HomePage() {
   const { videos } = useLoaderData();
@@ -10,7 +11,7 @@ export default function HomePage() {
       <h1 className="text-center text-3xl font-semibold">
         Entertain yourself by streaming our recent Videos
       </h1>
-      <Suspense fallback={<p className="text-center">Loading......</p>}>
+      <Suspense fallback={<SkeletonVideosList />}>
         <Await
           resolve={videos}
           children={(loadedVideos) => (
