@@ -5,10 +5,10 @@ export default function VideoItem({
   id,
   title,
   channelName,
-  channelImg,
   views,
   isChangeable,
-  onDelete
+  onDelete,
+  URL
 }) {
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ export default function VideoItem({
       </div>
       <div className="flex">
         <img
-          src={channelImg}
+          src={URL}
           className="rounded-full w-[10%]"
           alt={channelName}
         />

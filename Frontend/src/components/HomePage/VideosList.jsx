@@ -3,6 +3,7 @@ import VideoItem from "./VideoItem";
 
 export default function VideosList({videos, isChangeable = false}) {
     const [stateVideos, setStateVideos] = useState(videos);
+    console.log(stateVideos);
 
     const handleVideoDelete = async id => {
         const response = await fetch(`http://localhost:5000/videos/${id}`, {
@@ -14,6 +15,6 @@ export default function VideosList({videos, isChangeable = false}) {
     }
 
     return <>
-    {videos.map(video => <VideoItem isChangeable={isChangeable} onDelete={handleVideoDelete} {...video} />)}
+    {stateVideos.map(video => <VideoItem isChangeable={isChangeable} onDelete={handleVideoDelete} {...video} />)}
     </>
 }
