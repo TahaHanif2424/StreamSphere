@@ -54,7 +54,7 @@ router.get("/get", async(req,res)=>{
 //URL http://localhost:5000/video/add
 router.post("/add", upload.single("image"), async (req, res) => {
     try {
-      // Parse JSON string from form-data field
+
       const videoData = JSON.parse(req.body.data);
   
         

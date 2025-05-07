@@ -14,7 +14,6 @@ const VideoSchema=new Schema({
         type:String,
         required:true
     },
-
     title:{
         type:String,
         required:true
@@ -43,7 +42,7 @@ const VideoSchema=new Schema({
     },
     category:{
         type:String,
-        required:true
+        // required:true
     },
 });
 module.exports=mongoose.model('Video', VideoSchema);

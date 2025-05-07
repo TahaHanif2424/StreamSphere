@@ -2,6 +2,10 @@ const mongoose=require("mongoose");
 const Schema=mongoose.Schema;
 
 const UserSchema= new Schema({
+    "channelName":{
+        type:String,
+        required:true
+    },
     "email":{
         type:String,
         required:true
@@ -14,8 +18,11 @@ const UserSchema= new Schema({
         type:Boolean,
         default:false
     },
-    refreshToken: {
+    "refreshToken": {
          type: String
-     }
+     },
+    "subscriber": {
+         type: Number
+     },
 });
 module.exports= mongoose.model('User', UserSchema);
