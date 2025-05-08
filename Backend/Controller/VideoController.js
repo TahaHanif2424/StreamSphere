@@ -13,26 +13,57 @@ const { getSignedUrl } =require ("@aws-sdk/s3-request-presigner");
 
 //Get all Videos
 //URL http://localhost:5000/video/get-all
-router.get("/get-all", async(req,res)=>{
-    try{
-        const videos= await Video.find();
-        for(const video of videos){
-            if (!video.videoName) continue;
-            const getObjectParams=({
-                Bucket:bucketName,
-                Key:video.videoName
-            });
+// router.get("/get-all", async(req,res)=>{
+//     try{
+//         const videos= await Video.find().populate("user_id", "channelName");;
+//         for(const video of videos){
+//             if (!video.videoName) continue;
+//             const getObjectParams=({
+//                 Bucket:bucketName,
+//                 Key:video.videoName
+//             });
 
-            const command = new GetObjectCommand(getObjectParams);
-            const url = await getSignedUrl(S3, command, { expiresIn: 3600 });
-            video.URL=url;
-            await video.save();
-        }
-        res.status(200).send(videos);
-    }catch(err){
-        return res.status(400).send({error:"InValid Request"})
+//             const command = new GetObjectCommand(getObjectParams);
+//             const url = await getSignedUrl(S3, command, { expiresIn: 3600 });
+//             video.URL=url;
+//             await video.save();
+//         }
+//         res.status(200).send(videos);
+//     }catch(err){
+//         return res.status(400).send({error:"InValid Request"})
+//     }
+// });
+router.get("/get-all", async (req, res) => {
+    try {
+        const videos = await Video.find().populate("user_id", "channelName");
+
+        const signedVideos = await Promise.all(
+            videos.map(async (video) => {
+                if (!video.videoName) return video;
+
+                const getObjectParams = {
+                    Bucket: bucketName,
+                    Key: video.videoName,
+                };
+
+                const command = new GetObjectCommand(getObjectParams);
+                const url = await getSignedUrl(S3, command, { expiresIn: 3600 });
+
+                return {
+                    ...video.toObject(),
+                    URL: url,
+                    channelName: video.user_id?.channelName || "Unknown",
+                };
+            })
+        );
+
+        res.status(200).send(signedVideos);
+    } catch (err) {
+        console.error(err);
+        res.status(400).send({ error: "Invalid Request" });
     }
 });
+
 
 
 //Find all videos of USER

@@ -1,14 +1,13 @@
 import { useNavigate } from "react-router-dom";
 
 export default function VideoItem({
-  thumbnail,
+  thumbnailURL,
   id,
   title,
   channelName,
   views,
   isChangeable,
   onDelete,
-  URL
 }) {
   const navigate = useNavigate();
 
@@ -32,7 +31,7 @@ export default function VideoItem({
         onClick={handleVideoPlayClick}
         className="relative rounded-md w-full"
       >
-        <img src={thumbnail} className="w-full" alt={title} />
+        <img src={thumbnailURL} className="w-full ruonded-md" alt={title} />
       </div>
       <div className="flex">
         <img
