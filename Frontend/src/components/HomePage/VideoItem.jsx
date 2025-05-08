@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function VideoItem({
@@ -10,6 +11,8 @@ export default function VideoItem({
   onDelete,
 }) {
   const navigate = useNavigate();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const handleVideoPlayClick = () => navigate("/videos/" + id);
   const handleChannelClick = () => navigate("/channels/" + channelName);
@@ -20,9 +23,28 @@ export default function VideoItem({
     <div className="flex flex-col gap-3 bg-white p-4 rounded-xl shadow-md transition-transform duration-200 hover:scale-[1.01]">
       <div
         onClick={handleVideoPlayClick}
-        className="cursor-pointer rounded-lg w-full overflow-hidden aspect-video"
+        className="cursor-pointer rounded-lg w-full overflow-hidden aspect-video relative bg-gray-100"
       >
-        <img src={URL} className="w-full h-full object-cover" alt={title} />
+        {!isLoaded && !hasError && (
+          <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+            Loading...
+          </div>
+        )}
+        {hasError ? (
+          <img
+            src="/fallback-thumbnail.jpg"
+            className="w-full h-full object-cover"
+            alt="Fallback thumbnail"
+          />
+        ) : (
+          <img
+            src={URL}
+            className={`w-full h-full object-cover transition-opacity duration-300 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+            onLoad={() => setIsLoaded(true)}
+            onError={() => setHasError(true)}
+            alt={title}
+          />
+        )}
       </div>
 
       <div className="flex gap-3">
@@ -31,7 +53,10 @@ export default function VideoItem({
         <div className="flex flex-col justify-center">
           <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
           <div className="flex items-center text-sm text-gray-700 gap-3">
-            <h3 onClick={handleChannelClick} className="hover:underline cursor-pointer text-sky-600">
+            <h3
+              onClick={handleChannelClick}
+              className="hover:underline cursor-pointer text-sky-600"
+            >
               {channelName}
             </h3>
             <h4 className="text-gray-500">{views} views</h4>
