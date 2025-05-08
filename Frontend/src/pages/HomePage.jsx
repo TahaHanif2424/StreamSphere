@@ -15,9 +15,7 @@ export default function HomePage() {
         <Await
           resolve={videos}
           children={(loadedVideos) => (
-            <div className="grid grid-cols-4 gap-5">
               <VideosList videos={loadedVideos} />
-            </div>
           )}
         />
       </Suspense>
