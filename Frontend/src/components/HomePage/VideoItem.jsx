@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 export default function VideoItem({
-  thumbnailURL,
+  URL,
   id,
   title,
   channelName,
@@ -22,7 +22,7 @@ export default function VideoItem({
         onClick={handleVideoPlayClick}
         className="cursor-pointer rounded-lg overflow-hidden aspect-video"
       >
-        <img src={thumbnailURL} className="w-full h-full object-cover" alt={title} />
+        <img src={URL} className="w-full h-full object-cover" alt={title} />
       </div>
 
       <div className="flex gap-3">
