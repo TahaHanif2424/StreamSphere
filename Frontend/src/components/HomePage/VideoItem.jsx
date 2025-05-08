@@ -20,7 +20,7 @@ export default function VideoItem({
     <div className="flex flex-col gap-3 bg-white p-4 rounded-xl shadow-md transition-transform duration-200 hover:scale-[1.01]">
       <div
         onClick={handleVideoPlayClick}
-        className="cursor-pointer rounded-lg overflow-hidden aspect-video"
+        className="cursor-pointer rounded-lg w-full overflow-hidden aspect-video"
       >
         <img src={URL} className="w-full h-full object-cover" alt={title} />
       </div>
