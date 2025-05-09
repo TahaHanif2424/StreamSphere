@@ -6,6 +6,7 @@ export default function VideoItem({
   id,
   title,
   channelName,
+  channelImageURL,
   views,
   isChangeable,
   onDelete,
@@ -48,7 +49,9 @@ export default function VideoItem({
       </div>
 
       <div className="flex gap-3">
-        <div className="w-10 h-10 rounded-full bg-sky-100 shrink-0"></div>
+        <div className="w-10 h-10 rounded-full bg-sky-100 shrink-0">
+          <img src={ channelImageURL } className="w-full rounded-full" alt="" />
+        </div>
 
         <div className="flex flex-col justify-center">
           <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
