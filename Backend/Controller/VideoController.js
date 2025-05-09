@@ -35,7 +35,7 @@ const { getSignedUrl } =require ("@aws-sdk/s3-request-presigner");
 // });
 router.get("/get-all", async (req, res) => {
     try {
-        const videos = await Video.find().populate("user_id", "channelName");
+        const videos = await Video.find().populate("user_id", "channelName channelImageURL");
 
         const signedVideos = await Promise.all(
             videos.map(async (video) => {
@@ -52,8 +52,10 @@ router.get("/get-all", async (req, res) => {
                 return {
                     ...video.toObject(),
                     URL: url,
-                    channelName: video.user_id?.channelName || "Unknown",
-                };
+                    channelName: video.user_id?.channelName || "Default",
+                    channelImageURL: video.user_id?.channelImageURL || "",
+                  };
+                  
             })
         );
 

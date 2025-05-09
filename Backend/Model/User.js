@@ -4,7 +4,7 @@ const Schema=mongoose.Schema;
 const UserSchema= new Schema({
     "channelName":{
         type:String,
-        required:true
+        // required:true
     },
     "email":{
         type:String,
@@ -23,6 +23,12 @@ const UserSchema= new Schema({
      },
     "subscriber": {
          type: Number
+     },
+    "channelImageURL": {
+         type: String
+     },
+    "channelImageName": {
+         type: String
      },
 });
 module.exports= mongoose.model('User', UserSchema);
