@@ -10,6 +10,11 @@ const HistroyRouter=require("./Controller/HistroyController");
 const RatingRouter=require("./Controller/RatingController");
 const RefreshToken=require("./Routes/RefreshTokenRoute");
 const cookieParser = require("cookie-parser");
+const fs = require("fs");
+const path = require("path");
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
+const os = require("os");
 
 const cors = require('cors');
 
@@ -17,11 +22,15 @@ const app = express();
 
 
 app.use(cors({
-    origin: 'http://localhost:5173', 
+    origin: ['http://localhost:5173','http://localhost:3000'], 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true 
   }));
 
+  app.use((req,res,next)=>{
+    res.header("Access-Control-Allow-Origin");
+    next();
+  })
 
 app.use(express.json());
 app.use(cookieParser());

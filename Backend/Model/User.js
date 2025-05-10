@@ -4,7 +4,7 @@ const Schema=mongoose.Schema;
 const UserSchema= new Schema({
     "channelName":{
         type:String,
-        // required:true
+        required:true
     },
     "email":{
         type:String,

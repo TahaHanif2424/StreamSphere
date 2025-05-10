@@ -13,7 +13,7 @@ const VideoSchema=new Schema({
     },
     videoName:{
         type:String,
-        required:true
+        // required:true
     },
     title:{
         type:String,
@@ -27,6 +27,9 @@ const VideoSchema=new Schema({
         default:Date.now
     }, 
     thumbnailURL:{
+        type:String,
+    },
+    thumbnailName:{
         type:String,
     },
     likes:{

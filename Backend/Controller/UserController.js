@@ -122,7 +122,7 @@ router.put("/uploadimage/:id", upload.single("image"), async (req, res) => {
         const imageName = randomName();
 
         const buffer = await sharp(req.file.buffer)
-            .resize({ height: 1080, width: 1920, fit: 'contain' })
+            .resize({ height: 800, width: 800, fit: 'contain' })
             .toBuffer();
 
         const params = {
@@ -168,7 +168,6 @@ router.get("/getimage", async (req, res) => {
                 return {
                     ...user.toObject(),
                     channelImageURL: url,
-                    
                 };
             })
         );

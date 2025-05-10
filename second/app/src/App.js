@@ -1,0 +1,115 @@
+import React, { useState, useEffect } from 'react';
+import VideoPlayer from './VideoPlayer';
+import axios from 'axios';
+
+function App() {
+  const [videos, setVideos] = useState([]);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('http://localhost:5000/video/get-all');
+
+        // Update the videoData structure for VideoPlayer
+        const updatedVideos = response.data.map(video => ({
+          ...video,
+          hlsBaseUrl: video.URL
+        }));
+
+        setVideos(updatedVideos);
+
+        if (updatedVideos && updatedVideos.length > 0) {
+          setSelectedVideo(updatedVideos[0]);
+        }
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching videos:', err);
+        setError('Failed to load videos. Please try again later.');
+        setLoading(false);
+      }
+    };
+
+    fetchVideos();
+  }, []);
+
+  const handleVideoSelect = (video) => {
+    setSelectedVideo(video);
+    document.getElementById('video-player-section').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <div className="app-container">
+      <header>
+        <h1>Streaming Video Platform</h1>
+      </header>
+
+      <div className="content-container">
+        <section id="video-player-section" className="video-player-section">
+          {loading ? (
+            <div className="loading">Loading videos...</div>
+          ) : error ? (
+            <div className="error">{error}</div>
+          ) : selectedVideo ? (
+            <div>
+              <h2>{selectedVideo.title}</h2>
+              <div className="video-player-wrapper">
+                <VideoPlayer videoData={{
+                  hlsBaseUrl: selectedVideo.hlsBaseUrl
+                }} />
+              </div>
+
+              <div className="video-details">
+                <div className="channel-info">
+                  {selectedVideo.channelImageURL && (
+                    <img 
+                      src={selectedVideo.channelImageURL} 
+                      alt={selectedVideo.channelName} 
+                      className="channel-image"
+                    />
+                  )}
+                  <h3>{selectedVideo.channelName}</h3>
+                </div>
+                <p className="description">{selectedVideo.description}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="no-video">Select a video to play</div>
+          )}
+        </section>
+
+        <section className="video-list-section">
+          <h2>Available Videos</h2>
+          {videos.length > 0 ? (
+            <div className="video-grid">
+              {videos.map((video) => (
+                <div 
+                  key={video._id} 
+                  className={`video-item ${selectedVideo?._id === video._id ? 'selected' : ''}`}
+                  onClick={() => handleVideoSelect(video)}
+                >
+                  <div className="thumbnail-container">
+                    <div className="thumbnail-placeholder">
+                      <span>Preview</span>
+                    </div>
+                  </div>
+                  <div className="video-item-details">
+                    <h3>{video.title}</h3>
+                    <p className="channel-name">{video.channelName}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : !loading && (
+            <div className="no-videos">No videos available</div>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+}
+
+export default App;
