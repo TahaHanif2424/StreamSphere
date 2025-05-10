@@ -15,8 +15,13 @@ const bucketName = process.env.BUCKET_NAME;
 
 //Multer imports
 const multer = require("multer");
-const storage = multer.memoryStorage()
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 500 * 1024 * 1024 },
+}).fields([
+    { name: 'video', maxCount: 1 },
+    { name: 'thumbnail', maxCount: 1 }
+]);
 
 //Other imports
 const crypto = require('crypto');
@@ -81,28 +86,29 @@ router.get("/get", async (req, res) => {
 });
 
 
-router.post("/add", upload.single("image"), async (req, res) => {
+router.post("/add", upload, async (req, res) => {
     try {
         const videoData = JSON.parse(req.body.data);
+        const videoFile = req.files.video[0];
+        const thumbnailFile = req.files.thumbnail[0];
+        const resizedBuffer = await sharp(thumbnailFile.buffer)
+        .resize(1920, 1080) // Width: 320px, Height: 180px
+        .toFormat('jpeg')
+        .toBuffer();
 
-        // Generate random names
         const randomName = (bytes = 8) => crypto.randomBytes(bytes).toString("hex");
         const fileId = randomName();
         const tempName = `${fileId}.mp4`;
 
-        // Create temporary folder for processing
         const uploadFolder = path.join(os.tmpdir(), fileId);
         fs.mkdirSync(uploadFolder, { recursive: true });
 
-        // Path for storing the uploaded video temporarily
         const tempPath = path.join(uploadFolder, tempName);
-        fs.writeFileSync(tempPath, req.file.buffer);
+        fs.writeFileSync(tempPath, videoFile.buffer);
 
-        // Create HLS output folder within the temporary folder
         const hlsFolder = path.join(uploadFolder, "hls");
         fs.mkdirSync(hlsFolder, { recursive: true });
 
-        // FFmpeg command using spawn instead of exec
         const ffmpeg = spawn('ffmpeg', [
             '-i', tempPath,
             '-filter_complex', '[0:v]split=3[v1][v2][v3];[v1]scale=640:360[v360];[v2]scale=854:480[v480];[v3]scale=1280:720[v720]',
@@ -120,85 +126,55 @@ router.post("/add", upload.single("image"), async (req, res) => {
             path.join(hlsFolder, '720p.m3u8')
         ]);
 
-        // Handle process execution
-        return new Promise((resolve, reject) => {
-            let stdoutData = '';
-            let stderrData = '';
+        ffmpeg.on('close', async (code) => {
+            if (code !== 0) {
+                return res.status(500).send({ error: `FFmpeg failed with code ${code}` });
+            }
 
-            ffmpeg.stdout.on('data', (data) => {
-                stdoutData += data.toString();
-                console.log(`FFmpeg stdout: ${data}`);
+            const outputMasterPlaylist = path.join(hlsFolder, "master.m3u8");
+            const masterPlaylistContent = `#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=640x360\n360p.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=1400000,RESOLUTION=854x480\n480p.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=2800000,RESOLUTION=1280x720\n720p.m3u8\n`;
+            fs.writeFileSync(outputMasterPlaylist, masterPlaylistContent);
+
+            const baseS3Key = `videos/${fileId}`;
+            const uploadPromises = [];
+
+            const files = fs.readdirSync(hlsFolder);
+            files.forEach(file => {
+                const filePath = path.join(hlsFolder, file);
+                uploadPromises.push(
+                    S3.send(new PutObjectCommand({
+                        Bucket: bucketName,
+                        Key: `${baseS3Key}/${file}`,
+                        Body: fs.readFileSync(filePath),
+                        ContentType: file.endsWith(".m3u8") ? "application/x-mpegURL" : "video/MP2T"
+                    }))
+                );
             });
 
-            ffmpeg.stderr.on('data', (data) => {
-                stderrData += data.toString();
-                console.log(`FFmpeg stderr: ${data}`);  // FFmpeg outputs most info to stderr
+            const thumbnailKey = `${baseS3Key}/thumbnail-${Date.now()}.jpg`;
+            uploadPromises.push(
+                S3.send(new PutObjectCommand({
+                    Bucket: bucketName,
+                    Key: thumbnailKey,
+                    Body: resizedBuffer,
+                    ContentType: thumbnailFile.mimetype
+                }))
+            );
+
+            await Promise.all(uploadPromises);
+
+            const video = new Video({
+                ...videoData,
+                videoName: `${baseS3Key}/master.m3u8`,
+                thumbnailName: thumbnailKey,
+                thumbnailURL: `https://${bucketName}.s3.amazonaws.com/${thumbnailKey}`,
             });
 
-            ffmpeg.on('close', (code) => {
-                console.log(`FFmpeg process exited with code ${code}`);
-                
-                if (code !== 0) {
-                    return reject(new Error(`FFmpeg process failed with code ${code}: ${stderrData}`));
-                }
+            await video.save();
+            fs.rmSync(uploadFolder, { recursive: true, force: true });
 
-                try {
-                    // Create the master playlist
-                    const outputMasterPlaylist = path.join(hlsFolder, "master.m3u8");
-                    const masterPlaylistContent = `#EXTM3U
-#EXT-X-VERSION:3
-#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=640x360
-360p.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=1400000,RESOLUTION=854x480
-480p.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=2800000,RESOLUTION=1280x720
-720p.m3u8
-`;
-                    fs.writeFileSync(outputMasterPlaylist, masterPlaylistContent);
-
-                    // Verify files were created
-                    const files = fs.readdirSync(hlsFolder);
-                    console.log("Files generated:", files);
-
-                    // Upload to S3
-                    const baseS3Key = `videos/${fileId}`;
-                    
-                    // Loop through all created files
-                    const uploadPromises = files.map(file => {
-                        const filePath = path.join(hlsFolder, file);
-                        const uploadParams = {
-                            Bucket: bucketName,
-                            Key: `${baseS3Key}/${file}`,
-                            Body: fs.readFileSync(filePath),
-                            ContentType: file.endsWith(".m3u8") ? "application/x-mpegURL" : "video/MP2T"
-                        };
-                        return S3.send(new PutObjectCommand(uploadParams));
-                    });
-
-                    Promise.all(uploadPromises).then(() => {
-                        // Save video metadata to MongoDB
-                        const video = new Video(videoData);
-                        video.videoName = `${baseS3Key}/master.m3u8`;
-                        video.save().then(savedVideo => {
-                            // Cleanup temporary files
-                            fs.rmSync(uploadFolder, { recursive: true, force: true });
-                            resolve(savedVideo);
-                            res.status(200).send(savedVideo);
-                        }).catch(err => {
-                            reject(err);
-                            res.status(500).send({ error: "Failed to save video metadata", message: err.message });
-                        });
-                    }).catch(err => {
-                        reject(err);
-                        res.status(500).send({ error: "S3 upload failed", message: err.message });
-                    });
-                } catch (err) {
-                    reject(err);
-                    res.status(500).send({ error: "Failed to process video", message: err.message });
-                }
-            });
+            res.status(200).send(video);
         });
-
     } catch (err) {
         console.error("HLS Upload Error:", err);
         return res.status(400).send({ error: "Video processing failed", message: err.message });
