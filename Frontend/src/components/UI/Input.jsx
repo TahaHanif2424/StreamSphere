@@ -4,6 +4,7 @@ export default function Input({
   type,
   label,
   id,
+  name,
   validation,
   value,
   isTouched,
@@ -49,6 +50,7 @@ export default function Input({
         type={type}
         id={id}
         value={value}
+        name={name}
         onChange={handleInputChange}
         className={`w-full px-3 py-2 text-gray-800 rounded-lg shadow-sm transition duration-200 outline-none border ${borderClass} ${bgClass} focus:ring-2`}
       />
