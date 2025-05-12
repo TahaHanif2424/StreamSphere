@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-export default function FileDropZone({ setFiles }) {
-  const [imageURL, setImageURL] = useState(null);
-  const [videoURL, setVideoURL] = useState(null);
+export default function FileDropZone({ setFiles, files }) {
+  const [imageURL, setImageURL] = useState(files.image);
+  const [videoURL, setVideoURL] = useState(files.video);
 
   const onDrop = useCallback((acceptedFiles) => {
     let image = null;
