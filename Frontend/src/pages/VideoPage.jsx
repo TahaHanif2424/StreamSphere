@@ -27,5 +27,9 @@ export async function loader({params}) {
     return video._id !== params.videoId;
    });
 
+   if(!destinationVideo) {
+    throw new Error('Cant find the requried Video');
+   }
+
     return {destinationVideo, videos};
 };
