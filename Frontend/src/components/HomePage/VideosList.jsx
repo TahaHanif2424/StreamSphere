@@ -16,7 +16,7 @@ export default function VideosList({ videos, isChangeable = false }) {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
       {stateVideos.map((video) => (
         <VideoItem
-          key={video.id}
+          key={video._id}
           isChangeable={isChangeable}
           onDelete={handleVideoDelete}
           {...video}

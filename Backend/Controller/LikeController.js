@@ -4,6 +4,20 @@ const Video = require("../Model/Video");
 
 const router = express.Router();
 
+//Get Likes for a video
+// http://localhost:5000/likes/id  here the id is video_id
+
+router.get("/:id",async (req,res)=>{
+    try {
+        const video_id=req.params.id;
+        const likes=await  Likes.find({video_id});
+        return res.status(200).send(likes);
+    } catch (error) {
+        console.error({error});
+    }
+});
+
+
 
 //Like Video
 // http://localhost:5000/like/id    here the id is video_id

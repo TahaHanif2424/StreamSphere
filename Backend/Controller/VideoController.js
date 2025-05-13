@@ -1,6 +1,8 @@
 //Express Imports
 const express = require("express");
 const Video = require("../Model/Video");
+const Comment = require("../Model/Comments");
+const Likes = require("../Model/Likes");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
@@ -40,12 +42,18 @@ router.get("/get-all", async (req, res) => {
             videos.map(async (video) => {
                 if (!video.videoName) return video;
 
+                // Generate signed video URL
                 const getVideoUrl = new GetObjectCommand({
                     Bucket: bucketName,
                     Key: video.videoName,
                 });
                 const videoUrl = await getSignedUrl(S3, getVideoUrl, { expiresIn: 3600 });
 
+                // Save URL to database
+                video.URL = videoUrl;
+                await video.save(); // saves updated URL to MongoDB
+
+                // Generate signed channel image URL
                 let imageUrl = "";
                 if (video.user_id?.channelImageName) {
                     const getImageUrl = new GetObjectCommand({
@@ -72,6 +80,7 @@ router.get("/get-all", async (req, res) => {
 });
 
 
+
 //Find all videos of USER
 //URL http://localhost:5000/video/get
 
@@ -89,6 +98,7 @@ router.get("/get", async (req, res) => {
 router.post("/add", upload, async (req, res) => {
     try {
         const videoData = JSON.parse(req.body.data);
+        console.log(videoData);
         const videoFile = req.files.video[0];
         const thumbnailFile = req.files.thumbnail[0];
         const resizedBuffer = await sharp(thumbnailFile.buffer)
@@ -220,6 +230,8 @@ router.delete("/delete/:id", async (req, res) => {
 
         // Delete from MongoDB
         await Video.deleteOne({ _id: video_id });
+        await Comment.deleteMany({video_id});
+        await Likes.deleteMany({video_id});
 
         return res.status(200).send({ message: "Video and related files deleted successfully." });
     } catch (err) {

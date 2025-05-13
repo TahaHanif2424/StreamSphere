@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 
-export default function VideoItem({ URL, title, channelName, channelImageURL, views, _id }) {
+export default function VideoItem({ title, channelName, channelImageURL, views, _id, thumbnailURL }) {
   const navigate = useNavigate();
 
   function handleVideoPlayClick() {
@@ -17,7 +17,7 @@ export default function VideoItem({ URL, title, channelName, channelImageURL, vi
       className="cursor-pointer flex flex-col w-full max-w-sm bg-white rounded-xl shadow-md overflow-hidden hover:scale-[1.01] transition-transform duration-200"
     >
       <div className="w-full aspect-video overflow-hidden">
-        <img src={URL} alt={title} className="w-full h-full object-cover" />
+        <img src={thumbnailURL} alt={title} className="w-full h-full object-cover" />
       </div>
 
       <div className="flex gap-3 p-3">

@@ -4,12 +4,12 @@ const Schema=mongoose.Schema;
 const VideoSchema=new Schema({
     URL:{
         type:String,
-        required:true
+        // required:true
     },
     user_id:{
         type:mongoose.Types.ObjectId,
         ref:"User",
-        required:true
+        // required:true
     },
     videoName:{
         type:String,
@@ -17,7 +17,7 @@ const VideoSchema=new Schema({
     },
     title:{
         type:String,
-        required:true
+        // required:true
     },
     description:{
         type:String,

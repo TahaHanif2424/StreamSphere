@@ -5,6 +5,19 @@ const Video = require("../Model/Video");
 const router = express.Router();
 
 
+//Get Comment for a video
+// http://localhost:5000/comment/id  here the id is video_id
+
+router.get("/:id",async (req,res)=>{
+    try {
+        const video_id=req.params.id;
+        const comments=await  Comment.find({video_id});
+        return res.status(200).send(comments);
+    } catch (error) {
+        console.error({error});
+    }
+});
+
 //Like Video
 // http://localhost:5000/comment/id    here the id is video_id
 router.post("/:id", async (req, res) => {

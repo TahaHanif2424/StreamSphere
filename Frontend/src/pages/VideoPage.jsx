@@ -5,7 +5,7 @@ export default function VideoPage() {
     const data = useRouteLoaderData('video');
     return <div className="flex p-5 justify-between">
         <div className="flex flex-col gap-3">
-            <video src={data.destinationVideo} alt="main-video" />
+            <video src={data.destinationVideo.URL} alt="main-video" />
             {/* <CommentsList /> */}
         </div>
         <VideosList videos={data.videos} />

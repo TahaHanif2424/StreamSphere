@@ -2,23 +2,23 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function VideoItem({
-  URL,
-  id,
+  _id,
   title,
   channelName,
   channelImageURL,
   views,
   isChangeable,
   onDelete,
+  thumbnailURL
 }) {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  const handleVideoPlayClick = () => navigate("/videos/" + id);
+  const handleVideoPlayClick = () => navigate("/videos/" + _id);
   const handleChannelClick = () => navigate("/channels/" + channelName);
-  const handleDeleteClick = () => onDelete(id);
-  const handleEditClick = () => navigate(`/videos/${id}/edit`);
+  const handleDeleteClick = () => onDelete(_id);
+  const handleEditClick = () => navigate(`/videos/${_id}/edit`);
 
   return (
     <div className="flex flex-col gap-3 bg-white p-4 rounded-xl shadow-md transition-transform duration-200 hover:scale-[1.01]">
@@ -39,7 +39,7 @@ export default function VideoItem({
           />
         ) : (
           <img
-            src={URL}
+            src={thumbnailURL}
             className={`w-full h-full object-cover transition-opacity duration-300 ${isLoaded ? "opacity-100" : "opacity-0"}`}
             onLoad={() => setIsLoaded(true)}
             onError={() => setHasError(true)}
