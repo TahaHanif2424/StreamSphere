@@ -26,12 +26,18 @@ export default function ChannelPage() {
 
 async function loadChannelVideos(channelName) {
   const response = await fetch(
-    "http:localhost:5000/videos?channel=" + channelName
+    "http:localhost:5000/video/get", {
+      method: 'POST',
+      body: JSON.stringify({user_id: channelName}),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
   );
   if (!response.ok) throw new Error("could not fetch the videos");
   const responseData = response.json();
   return responseData;
-}
+};
 
 export async function loader({ params }) {
   const channelName = params.channelName;
