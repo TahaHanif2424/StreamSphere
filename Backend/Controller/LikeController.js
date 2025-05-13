@@ -10,13 +10,12 @@ const router = express.Router();
 router.get("/:id",async (req,res)=>{
     try {
         const video_id=req.params.id;
-        const likes=await  Likes.find({video_id});
+        const likes=await  Likes.find({video_id}).populate("user_id", "channelImageURL channelName");
         return res.status(200).send(likes);
     } catch (error) {
         console.error({error});
     }
 });
-
 
 
 //Like Video
