@@ -8,7 +8,8 @@ const LikeSchema= new Schema({
     },
     "user_id":{
         type:mongoose.Types.ObjectId,
-        required:true
+        required:true,
+        ref:"User",
     },
     "date":{
         type:Date,
