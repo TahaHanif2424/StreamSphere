@@ -12,6 +12,7 @@ const multer = require("multer");
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 const { getSignedUrl } =require ("@aws-sdk/s3-request-presigner");
+const requireAuth = require('../Middleware/verifyJWT');
 
 
 //Get All User 
