@@ -17,6 +17,18 @@ router.post("/subscribe", async (req,res)=>{
     }
 });
 
+router.get('/count/:id', async (req, res) => {
+  try {
+    const channelId = req.params.id;
+    // Find all subscriptions where subscribedChannel array includes channelId
+    const subs = await Subscribe.find({ subscribedChannel: channelId });
+    return res.status(200).json({ count: subs.length });
+  } catch (err) {
+    console.error('Error fetching subscription count', err);
+    return res.status(500).json({ error: 'Error fetching subscription count' });
+  }
+});
+
 
 //UN-Subscribe Channel
 //URL http://localhost:5000/subscription/unsubscribe/id
