@@ -7,7 +7,7 @@ export default function RootPage() {
   return (
     <>
       <Header />
-      <div className="mt-[10dvh] w-screen bg-gray-100 pt-5">
+      <div className="mt-[10dvh] w-screen pt-5">
         <Outlet />
       </div>
     </>

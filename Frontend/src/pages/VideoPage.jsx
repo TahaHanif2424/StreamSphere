@@ -3,14 +3,36 @@ import VideosList from "../components/VideoPage/VideosList";
 import CommentsList from "../components/VideoPage/CommentsList";
 
 export default function VideoPage() {
-  const data = useRouteLoaderData("video");
+  const { destinationVideo, videos, comments } = useRouteLoaderData("video");
+
   return (
-    <div className="flex p-5 justify-between">
-      <div className="flex flex-col gap-3">
-        <video src={data.destinationVideo.URL} alt="main-video" />
-        <CommentsList comments={data.comments} channelName={data.destinationVideo.channelName} channelImageURL={data.destinationVideo.channelImageURL} videoId={data.destinationVideo._id}/>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div className="lg:col-span-2 flex flex-col gap-6">
+          <div className="w-full aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
+            <video
+              src={destinationVideo.URL}
+              controls
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <CommentsList
+            comments={comments}
+            channelName={destinationVideo.channelName}
+            channelImageURL={destinationVideo.channelImageURL}
+            videoId={destinationVideo._id}
+          />
+        </div>
+
+        <aside className="flex flex-col gap-4">
+          <h2 className="text-xl font-semibold text-gray-800">Up Next</h2>
+          <div className="flex-1 overflow-y-auto space-y-4">
+            <VideosList videos={videos} />
+          </div>
+        </aside>
       </div>
-      <VideosList videos={data.videos} />
     </div>
   );
 }

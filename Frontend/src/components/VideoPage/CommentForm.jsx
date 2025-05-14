@@ -11,72 +11,61 @@ export default function CommentForm({
   const [
     enteredComment,
     setEnteredComment,
-    isCommentTouched,
-    setIsCommentTouched,
-    isCommentValid,
+    isTouched,
+    setIsTouched,
+    isValid,
   ] = useInput({ isValidationOn: true, validationFunc: validateTitle }, "");
-  const isFormValid = isCommentValid;
 
-  async function handleFormSubmission(event) {
-    event.preventDefault();
-    if (!isFormValid) return;
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    if (!isValid) return;
 
-    const response = await fetch("http://localhost:5000/comment/" + videoId, {
+    const res = await fetch(`http://localhost:5000/comment/${videoId}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_id: "681e23ffb39582f66be5419d",
-        comment: enteredComment,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: "681e23ffb39582f66be5419d", comment: enteredComment }),
     });
+    if (!res.ok) throw new Error("Unable to post comment");
 
-    if (!response.ok) {
-      throw new Error("Unable to make the comment");
-    }
-
-    setComments((prevComments) => [
-      ...prevComments,
+    setComments((prev) => [
+      ...prev,
       {
+        _id: Date.now().toString(),
         channelName,
         channelImageURL,
         comment: enteredComment,
         date: Date.now(),
       },
     ]);
-
     setEnteredComment("");
-    setIsCommentTouched(false);
-  }
+    setIsTouched(false);
+  };
 
   return (
-    <form
-      onSubmit={handleFormSubmission}
-      className="flex items-start gap-3 py-2 px-3 bg-gray-100 rounded-md shadow-sm"
-    >
+    <form onSubmit={submitHandler} className="flex items-start gap-3 p-4 bg-white rounded-lg shadow-sm">
       <img
         src={channelImageURL}
         alt={channelName}
         className="w-10 h-10 rounded-full object-cover"
       />
-      <div className="flex flex-col gap-2 w-full">
+      <div className="flex-1 flex flex-col gap-2">
         <Input
           type="text"
           id="comment"
           name="comment"
           label="Add a comment"
-          validation={true}
+          validation
           value={enteredComment}
           setValue={setEnteredComment}
-          isTouched={isCommentTouched}
-          setIsTouched={setIsCommentTouched}
-          isValid={isCommentValid}
+          isTouched={isTouched}
+          setIsTouched={setIsTouched}
+          isValid={isValid}
           className="w-full"
         />
         <button
           type="submit"
-          className="self-end px-4 py-1.5 text-sm font-medium bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200"
+          disabled={!isValid}
+          className="self-end px-4 py-1.5 text-sm font-medium bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
         >
           Submit
         </button>

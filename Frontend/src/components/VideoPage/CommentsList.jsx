@@ -2,22 +2,28 @@ import { useState } from "react";
 import CommentForm from "./CommentForm";
 import CommentItem from "./CommentItem";
 
-export default function CommentsList({ comments, channelName, channelImageURL, videoId }) {
-  console.log(comments);
-  const [allComments, setAllComments] = useState(comments);
+export default function CommentsList({
+  comments: initialComments,
+  channelName,
+  channelImageURL,
+  videoId,
+}) {
+  const [allComments, setAllComments] = useState(initialComments);
 
   return (
-    <div className="flex flex-col w-full gap-4 mt-4">
-      <h2 className="text-lg font-semibold text-gray-900 mb-2">Comments</h2>
+    <div className="flex flex-col gap-6">
+      <h2 className="text-lg font-semibold text-gray-800">Comments</h2>
       <CommentForm
-        setComments={setAllComments}
-        channelImageURL={channelImageURL}
         channelName={channelName}
+        channelImageURL={channelImageURL}
+        setComments={setAllComments}
         videoId={videoId}
       />
-      {allComments.map((comment) => (
-        <CommentItem {...comment} key={comment._id} />
-      ))}
+      <div className="space-y-4">
+        {allComments.map((c) => (
+          <CommentItem key={c._id} {...c} />
+        ))}
+      </div>
     </div>
   );
 }
