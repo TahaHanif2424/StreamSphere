@@ -1,9 +1,8 @@
 // src/pages/ChannelPage.jsx
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Await, defer, useLoaderData, useNavigate, useParams } from 'react-router';
 import VideosList from '../components/HomePage/VideosList';
-import { Dialog } from '@headlessui/react';
 
 export default function ChannelPage() {
   const { videos, channelInfo, subCount, totalLikes } = useLoaderData();
@@ -11,14 +10,14 @@ export default function ChannelPage() {
   const currUser = useSelector((state) => state.user.user);
   const navigate = useNavigate();
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
   function handleUploadClick() {
     navigate('/upload');
   }
-  function openDialog() { setIsDialogOpen(true); }
-  function closeDialog() { setIsDialogOpen(false); setSelectedFile(null); }
+  function openModal() { setIsModalOpen(true); }
+  function closeModal() { setIsModalOpen(false); setSelectedFile(null); }
   async function handleImageSubmit(e) {
     e.preventDefault();
     if (!selectedFile) return;
@@ -28,8 +27,7 @@ export default function ChannelPage() {
       method: 'PUT',
       body: form,
     });
-    closeDialog();
-    // reload page
+    closeModal();
     window.location.reload();
   }
 
@@ -40,7 +38,7 @@ export default function ChannelPage() {
         <div className="flex items-center gap-4">
           <img
             src={channelInfo.channelImageURL}
-            onClick={openDialog}
+            onClick={openModal}
             alt={channelInfo.channelName}
             className="w-16 h-16 rounded-full object-cover cursor-pointer shadow-md"
           />
@@ -74,23 +72,42 @@ export default function ChannelPage() {
         </Await>
       </Suspense>
 
-      {/* Image Upload Dialog */}
-      <Dialog open={isDialogOpen} onClose={closeDialog} className="fixed inset-0 z-50 flex items-center justify-center">
-        <Dialog.Overlay className="fixed inset-0 bg-black opacity-50" />
-        <form onSubmit={handleImageSubmit} className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm">
-          <Dialog.Title className="text-xl font-semibold mb-4">Change Channel Image</Dialog.Title>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setSelectedFile(e.target.files[0])}
-            className="mb-4"
-          />
-          <div className="flex justify-end gap-2">
-            <button type="button" onClick={closeDialog} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" disabled={!selectedFile}>Save</button>
-          </div>
-        </form>
-      </Dialog>
+      {/* Custom Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Overlay */}
+          <div onClick={closeModal} className="fixed inset-0 bg-black opacity-50" />
+          {/* Modal Content */}
+          <form
+            onSubmit={handleImageSubmit}
+            className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
+          >
+            <h3 className="text-xl font-semibold mb-4">Change Channel Image</h3>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setSelectedFile(e.target.files[0])}
+              className="mb-4"
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                disabled={!selectedFile}
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
