@@ -1,5 +1,6 @@
 import { useRouteLoaderData } from "react-router";
 import VideosList from "../components/VideoPage/VideosList";
+import CommentsList from "../components/VideoPage/CommentsList";
 
 export default function VideoPage() {
   const data = useRouteLoaderData("video");
@@ -7,7 +8,7 @@ export default function VideoPage() {
     <div className="flex p-5 justify-between">
       <div className="flex flex-col gap-3">
         <video src={data.destinationVideo.URL} alt="main-video" />
-        <CommentsList comments={data.comments} />
+        <CommentsList comments={data.comments} channelName={data.destinationVideo.channelName} channelImageURL={data.destinationVideo.channelImageURL} videoId={data.destinationVideo.video_id}/>
       </div>
       <VideosList videos={data.videos} />
     </div>

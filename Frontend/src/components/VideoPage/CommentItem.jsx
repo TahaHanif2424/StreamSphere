@@ -28,10 +28,12 @@ export default function CommentItem({
           >
             {channelName}
           </h3>
-          <span className="text-gray-500 text-xs">{new Date(date).toLocaleDateString()}</span>
+          <span className="text-gray-500 text-xs">
+            {new Date(date).toLocaleDateString()}
+          </span>
         </div>
         <p className="text-gray-700">{comment}</p>
       </div>
     </div>
   );
-};
+}
