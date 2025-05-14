@@ -1,7 +1,8 @@
 // src/routes/AuthRoute.jsx
 import { redirect } from 'react-router-dom';
-import store from '../store/index';
-import { userActions } from '../store/user-slice';
+import store from './store/index';
+import { userActions } from './store/user-slice';
+import { patchFetchForAuth } from './utils/pathFetch';
 
 export async function authAction({ request }) {
   const form = await request.formData();
@@ -28,6 +29,7 @@ export async function authAction({ request }) {
     };
     localStorage.setItem('accessToken', accessToken);
     store.dispatch(userActions.addUser(user));
+    patchFetchForAuth();
     return redirect('/');
   } else {
     return redirect('/auth?mode=login');
