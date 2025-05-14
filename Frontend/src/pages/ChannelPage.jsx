@@ -6,6 +6,7 @@ import VideosList from '../components/HomePage/VideosList';
 
 export default function ChannelPage() {
   const { videos, channelInfo, subCount, totalLikes } = useLoaderData();
+  console.log(channelInfo);
   const { channelId } = useParams();
   const currUser = useSelector((state) => state.user.user);
   const navigate = useNavigate();
