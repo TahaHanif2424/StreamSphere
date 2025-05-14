@@ -73,15 +73,6 @@ export default function ChannelPage() {
         </Await>
       </Suspense>
 
-      {channelId === currUser && (
-          <button
-            onClick={handleUploadClick}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg transition"
-          >
-            Upload New Video
-          </button>
-        )}
-
       {/* Videos List */}
       <Suspense fallback={<div className="text-center text-gray-500">Loading videos...</div>}>
         <Await resolve={loaderData.videos}>
