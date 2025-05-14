@@ -10,7 +10,7 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
 
   // Check like status
   useEffect(() => {
-    fetch(`http://localhost:5000/likes/${videoId}`)
+    fetch(`http://localhost:5000/like/${videoId}`)
       .then((res) => res.json())
       .then((data) => {
         const userLiked = data.some((like) => like.user_id._id === currentUser._id);
@@ -22,7 +22,7 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
 
   // Check subscription status
   useEffect(() => {
-    fetch(`http://localhost:5000/subscription/${currentUser._id}`)
+    fetch(`http://localhost:5000/subscription/subscribe`)
       .then((res) => {
         if (!res.ok) throw new Error('Not subscribed');
         return res.json();
