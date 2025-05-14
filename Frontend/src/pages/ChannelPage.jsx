@@ -1,11 +1,10 @@
-// src/pages/ChannelPage.jsx
 import { Suspense, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Await, defer, useLoaderData, useNavigate, useParams } from 'react-router';
 import VideosList from '../components/HomePage/VideosList';
 
 export default function ChannelPage() {
-  const { videos, channelInfo, subCount, totalLikes } = useLoaderData();
+  const loaderData = useLoaderData();
   const { channelId } = useParams();
   const currUser = useSelector((state) => state.user.user);
   const navigate = useNavigate();
@@ -33,40 +32,55 @@ export default function ChannelPage() {
 
   return (
     <div className="min-h-screen w-full bg-gray-50 py-8 px-4 sm:px-10">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 border-b pb-4 border-gray-200">
-        <div className="flex items-center gap-4">
-          <img
-            src={channelInfo.channelImageURL}
-            onClick={openModal}
-            alt={channelInfo.channelName}
-            className="w-16 h-16 rounded-full object-cover cursor-pointer shadow-md"
-          />
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800">{channelInfo.channelName}</h1>
-            <div className="flex items-center gap-4 text-gray-600 mt-1">
-              <span>{subCount} subscribers</span>
-              <span>{totalLikes} total likes</span>
+      {/* Header: channel info + counts */}
+      <Suspense fallback={<div className="text-center text-gray-500 py-8">Loading channel info...</div>}>
+        <Await resolve={loaderData.channelInfo}>
+          {(channelInfo) => (
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 border-b pb-4 border-gray-200">
+              <div className="flex items-center gap-4">
+                <img
+                  src={channelInfo.channelImageURL}
+                  onClick={openModal}
+                  alt={channelInfo.channelName}
+                  className="w-16 h-16 rounded-full object-cover cursor-pointer shadow-md"
+                />
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-800">{channelInfo.channelName}</h1>
+                  <div className="flex items-center gap-4 text-gray-600 mt-1">
+                    <Suspense fallback={<span>– subscribers</span>}>
+                      <Await resolve={loaderData.subCount}>
+                        {(subCount) => <span>{subCount} subscribers</span>}
+                      </Await>
+                    </Suspense>
+                    <Suspense fallback={<span>– total likes</span>}>
+                      <Await resolve={loaderData.totalLikes}>
+                        {(totalLikes) => <span>{totalLikes} total likes</span>}
+                      </Await>
+                    </Suspense>
+                  </div>
+                </div>
+              </div>
+              {channelId === currUser && (
+                <button
+                  onClick={handleUploadClick}
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg transition"
+                >
+                  Upload New Video
+                </button>
+              )}
             </div>
-          </div>
-        </div>
-        {channelId === currUser && (
-          <button
-            onClick={handleUploadClick}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg transition"
-          >
-            Upload New Video
-          </button>
-        )}
-      </div>
+          )}
+        </Await>
+      </Suspense>
 
+      {/* Videos List */}
       <Suspense fallback={<div className="text-center text-gray-500">Loading videos...</div>}>
-        <Await resolve={videos}>
-          {(loadedVideos) => (
+        <Await resolve={loaderData.videos}>
+          {(loaded) => (
             <VideosList
               isChangeable={channelId === currUser}
               isOpenedOnChannels={true}
-              videos={loadedVideos.video}
+              videos={loaded.video}
             />
           )}
         </Await>
@@ -75,9 +89,7 @@ export default function ChannelPage() {
       {/* Custom Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Overlay */}
           <div onClick={closeModal} className="fixed inset-0 bg-black opacity-50" />
-          {/* Modal Content */}
           <form
             onSubmit={handleImageSubmit}
             className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
