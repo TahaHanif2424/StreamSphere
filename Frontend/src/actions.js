@@ -1,27 +1,35 @@
-export async function authAction({request}) {
-    const formData = await request.formData();
+// src/routes/AuthRoute.jsx
+import { redirect } from 'react-router-dom';
+import store from '../store/index';
+import { userActions } from '../store/user-slice';
 
-    const url = new URL(request.url);
-    const mode = url.searchParams.get('mode');
+export async function authAction({ request }) {
+  const form = await request.formData();
+  const mode = new URL(request.url).searchParams.get('mode');
+  const endpoint = mode === 'signup' ? '/user/signup' : '/user/login';
 
-    const body = mode === 'login' ? {
-        email: formData.get('email'),
-        password: formData.get('password')
-    } : {
-        name: formData.get('channel'),
-        email: formData.get('email'),
-        password: formData.get('password')
+  const res = await fetch(endpoint, {
+    method: 'POST',
+    credentials: 'include',                 // so refresh cookie is set
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.fromEntries(form))
+  });
+  if (!res.ok) throw new Error('Auth failed');
+
+  if (mode === 'login') {
+    const { accessToken } = await res.json();
+    // Decode minimal user from the JWT payload
+    const payload = JSON.parse(atob(accessToken.split('.')[1]));
+    const user = {
+      _id: payload.userId,
+      email: payload.email,
+      channelName: payload.channelName,
+      channelImageURL: payload.channelImageURL
     };
-
-    const response = await fetch('http://localhost:5000/user/' + mode, {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-
-    const responseData = await response.json();
-
+    localStorage.setItem('accessToken', accessToken);
+    store.dispatch(userActions.addUser(user));
     return redirect('/');
-};
+  } else {
+    return redirect('/auth?mode=login');
+  }
+}
