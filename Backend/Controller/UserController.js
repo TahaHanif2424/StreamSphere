@@ -180,4 +180,10 @@ router.get("/getimage", async (req, res) => {
     }
 });
 
+router.get('/profile', requireAuth, (req, res) => {
+  // Only the token-holder can hit this
+  const { _id, email, channelName, channelImageURL } = req.user;
+  res.json({ _id, email, channelName, channelImageURL });
+});
+
 module.exports = router;
