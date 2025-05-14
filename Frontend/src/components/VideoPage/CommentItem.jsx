@@ -5,6 +5,7 @@ export default function CommentItem({
   channelName,
   comment,
   date,
+  user_id
 }) {
   const navigate = useNavigate();
   return (
@@ -12,16 +13,16 @@ export default function CommentItem({
       <img
         src={channelImageURL}
         alt={channelName}
-        onClick={() => navigate(`/channels/${channelName}`)}
+        onClick={() => navigate(`/channels/${user_id._id}`)}
         className="w-10 h-10 rounded-full object-cover cursor-pointer"
       />
       <div className="flex-1">
         <div className="flex items-center gap-2 text-sm">
           <span
-            onClick={() => navigate(`/channels/${channelName}`)}
+            onClick={() => navigate(`/channels/${user_id._id}`)}
             className="font-semibold text-gray-800 hover:underline cursor-pointer"
           >
-            {channelName}
+            {user_id.channelName}
           </span>
           <span className="text-gray-500">
             {new Date(date).toLocaleDateString()}

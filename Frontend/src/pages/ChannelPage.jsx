@@ -35,6 +35,7 @@ export default function ChannelPage() {
           children={(loadedVideos) => (
             <VideosList
               isChangeable={channelId === currUser}
+              isOpenedOnChannels={true}
               videos={loadedVideos.video}
             />
           )}

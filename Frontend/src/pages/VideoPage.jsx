@@ -1,6 +1,7 @@
 import { useRouteLoaderData } from "react-router";
 import VideosList from "../components/VideoPage/VideosList";
 import CommentsList from "../components/VideoPage/CommentsList";
+import VideoPlayer from '../components/VideoPage/VideoPlayer';
 
 export default function VideoPage() {
   const { destinationVideo, videos, comments } = useRouteLoaderData('video');

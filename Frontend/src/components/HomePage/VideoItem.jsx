@@ -10,7 +10,8 @@ export default function VideoItem({
   views,
   isChangeable,
   onDelete,
-  thumbnailURL
+  thumbnailURL,
+  isOpenedOnChannels
 }) {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -50,19 +51,23 @@ export default function VideoItem({
       </div>
 
       <div className="flex gap-3">
-        <div className="w-10 h-10 rounded-full bg-sky-100 shrink-0">
-          <img src={ channelImageURL } className="w-full rounded-full" alt="" />
-        </div>
+        {
+          !isOpenedOnChannels && <div className="w-10 h-10 rounded-full bg-sky-100 shrink-0">
+            <img src={user_id ? user_id.channelImageURL || '' : ''} className="w-full rounded-full" alt="" />
+          </div>
+        }
 
         <div className="flex flex-col justify-center">
           <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
           <div className="flex items-center text-sm text-gray-700 gap-3">
-            <h3
-              onClick={handleChannelClick}
-              className="hover:underline cursor-pointer text-sky-600"
-            >
-              {channelName}
-            </h3>
+            {
+              !isOpenedOnChannels && <h3
+                onClick={handleChannelClick}
+                className="hover:underline cursor-pointer text-sky-600"
+              >
+                {user_id ? user_id.channelName || '' : ''}
+              </h3>
+            }
             <h4 className="text-gray-500">{views} views</h4>
           </div>
         </div>

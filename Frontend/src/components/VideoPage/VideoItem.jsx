@@ -5,6 +5,7 @@ export default function VideoItem({
   title,
   channelName,
   channelImageURL,
+  user_id,
   views,
   thumbnailURL,
 }) {
@@ -29,7 +30,7 @@ export default function VideoItem({
         <p
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/channels/${channelName}`);
+            navigate(`/channels/${user_id._id}`);
           }}
           className="text-xs text-sky-600 hover:underline cursor-pointer mt-1"
         >
