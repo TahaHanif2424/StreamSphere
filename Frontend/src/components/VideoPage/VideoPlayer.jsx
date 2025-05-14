@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 import { FaCog, FaPause, FaPlay, FaForward, FaBackward } from 'react-icons/fa';
 
+
+// format seconds to mm:ss or hh:mm:ss
 function formatTime(seconds) {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
@@ -107,22 +109,26 @@ export default function VideoPlayer({ videoData }) {
     <div className="relative group">
       <video ref={videoRef} controls={false} className="w-full rounded-lg shadow-lg bg-black" style={{ aspectRatio: '16/9' }} playsInline />
 
-      {/* overlays */}
-      {isLoading && <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white">Loading...</div>}
+      {/* Loading Spinner */}
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-12 h-12 border-4 border-t-4 border-white border-opacity-75 rounded-full animate-spin"></div>
+        </div>
+      )}
+      {/* Error Overlay */}
       {error && <div className="absolute inset-0 p-4 text-red-500 bg-black bg-opacity-50">{error}</div>}
 
-      {/* controls center */}
+      {/* Center Controls */}
       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
         <button onClick={() => seekBy(-10)} className="p-2 mx-4 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-75"><FaBackward size={20}/></button>
         <button onClick={togglePlay} className="p-3 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-75">
-          {isPlaying ? <FaPause size={24}/> : <FaPlay size={24}/>}  
+          {isPlaying ? <FaPause size={24}/> : <FaPlay size={24}/>}
         </button>
         <button onClick={() => seekBy(10)} className="p-2 mx-4 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-75"><FaForward size={20}/></button>
       </div>
 
-      {/* bottom bar */}
+      {/* Bottom Bar */}
       <div className="absolute left-0 right-0 bottom-0 h-10 flex items-center px-3 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity">
-        {/* progress bar container */}
         <div
           ref={progressRef}
           onClick={selectTime}
@@ -137,13 +143,9 @@ export default function VideoPlayer({ videoData }) {
             </div>
           )}
         </div>
-
-        {/* time display */}
         <div className="ml-4 text-sm text-white select-none">
           {formatTime(currentTime)} / {formatTime(duration)}
         </div>
-
-        {/* settings */}
         <div className="ml-4 relative">
           <button onClick={() => setShowQualityMenu(!showQualityMenu)} className="p-1 bg-black bg-opacity-50 rounded text-white hover:bg-opacity-75"><FaCog size={16}/></button>
           {showQualityMenu && (
