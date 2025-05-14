@@ -36,7 +36,8 @@ const sharp = require('sharp');
 
 router.get("/get-all", async (req, res) => {
     try {
-        const videos = await Video.find().populate("user_id", "channelName channelImageName");
+        const videos = await Video.find().populate("user_id", "channelName channelImageURL");
+        console.log(videos);
 
         const signedVideos = await Promise.all(
             videos.map(async (video) => {
@@ -84,10 +85,11 @@ router.get("/get-all", async (req, res) => {
 //Find all videos of USER
 //URL http://localhost:5000/video/get
 
-router.get("/get", async (req, res) => {
+router.post("/get", async (req, res) => {
     try {
         const user_id = req.body.user_id;
         const video = await Video.find({ user_id });
+        console.log(video);
         res.status(200).send({ video });
     } catch (err) {
         return res.status(400).send({ error: "InValid Request" })

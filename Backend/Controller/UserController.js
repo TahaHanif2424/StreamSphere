@@ -171,6 +171,7 @@ router.get("/getimage", async (req, res) => {
                 };
             })
         );
+        console.log(userImages);
         res.status(200).send(userImages);
         }
     catch (err) {
