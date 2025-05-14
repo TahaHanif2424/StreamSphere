@@ -5,6 +5,7 @@ export default function VideoItem({
   _id,
   title,
   channelName,
+  user_id,
   channelImageURL,
   views,
   isChangeable,
@@ -16,7 +17,7 @@ export default function VideoItem({
   const [hasError, setHasError] = useState(false);
 
   const handleVideoPlayClick = () => navigate("/videos/" + _id);
-  const handleChannelClick = () => navigate("/channels/" + channelName);
+  const handleChannelClick = () => navigate("/channels/" + user_id._id);
   const handleDeleteClick = () => onDelete(_id);
   const handleEditClick = () => navigate(`/videos/${_id}/edit`);
 

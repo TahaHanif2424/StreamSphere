@@ -8,7 +8,7 @@ export default function VideoPage() {
     <div className="flex p-5 justify-between">
       <div className="flex flex-col gap-3">
         <video src={data.destinationVideo.URL} alt="main-video" />
-        <CommentsList comments={data.comments} channelName={data.destinationVideo.channelName} channelImageURL={data.destinationVideo.channelImageURL} videoId={data.destinationVideo.video_id}/>
+        <CommentsList comments={data.comments} channelName={data.destinationVideo.channelName} channelImageURL={data.destinationVideo.channelImageURL} videoId={data.destinationVideo._id}/>
       </div>
       <VideosList videos={data.videos} />
     </div>
@@ -34,12 +34,14 @@ export async function loader({ params }) {
   }
 
   const comments = await fetch(
-    "https://localhost:5000/comment/" + params.videoId
+    "http://localhost:5000/comment/" + params.videoId
   );
 
   if(!comments.ok) {
     throw new Error('Cant fetch the comments');
   }
 
-  return { destinationVideo, videos, comments };
+  const commentsData = await comments.json();
+
+  return { destinationVideo, videos, comments : commentsData };
 }

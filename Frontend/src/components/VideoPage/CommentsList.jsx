@@ -3,6 +3,7 @@ import CommentForm from "./CommentForm";
 import CommentItem from "./CommentItem";
 
 export default function CommentsList({ comments, channelName, channelImageURL, videoId }) {
+  console.log(comments);
   const [allComments, setAllComments] = useState(comments);
 
   return (

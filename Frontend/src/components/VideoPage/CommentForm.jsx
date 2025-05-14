@@ -27,7 +27,7 @@ export default function CommentForm({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id: "12345",
+        user_id: "681e23ffb39582f66be5419d",
         comment: enteredComment,
       }),
     });
@@ -42,11 +42,12 @@ export default function CommentForm({
         channelName,
         channelImageURL,
         comment: enteredComment,
-        date: Date.now().toLocaleString(),
+        date: Date.now(),
       },
     ]);
 
-    setEnteredTitle("");
+    setEnteredComment("");
+    setIsCommentTouched(false);
   }
 
   return (

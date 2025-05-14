@@ -5,11 +5,11 @@ export default function VideosList({ videos, isChangeable = false }) {
   const [stateVideos, setStateVideos] = useState(videos);
 
   const handleVideoDelete = async (id) => {
-    const response = await fetch(`http://localhost:5000/videos/${id}`, {
+    const response = await fetch(`http://localhost:5000/video/delete/${id}`, {
       method: "DELETE",
     });
     if (!response.ok) throw new Error("Can't delete the video");
-    setStateVideos(stateVideos.filter((video) => video.id !== id));
+    setStateVideos(stateVideos.filter((video) => video._id !== id));
   };
 
   return (
