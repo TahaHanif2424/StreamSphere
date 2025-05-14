@@ -23,7 +23,7 @@ export async function loader() {
   if (store.getState().user.user) return; // already logged in
 
   // 1) Attempt refresh
-  const refresh = await fetch("http://localhost:5000/user/refresh-token", {
+  const refresh = await apiFetch("http://localhost:5000/user/refresh-token", {
     method: "GET",
     credentials: "include",
   });

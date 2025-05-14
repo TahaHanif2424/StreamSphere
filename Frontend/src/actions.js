@@ -2,14 +2,13 @@
 import { redirect } from 'react-router-dom';
 import store from './store/index';
 import { userActions } from './store/user-slice';
-import { patchFetchForAuth } from './utils/pathFetch';
 
 export async function authAction({ request }) {
   const form = await request.formData();
   const mode = new URL(request.url).searchParams.get('mode');
   const endpoint = mode === 'signup' ? '/user/signup' : '/user/login';
 
-  const res = await fetch(endpoint, {
+  const res = await fetch('http://localhost:5000' + endpoint, {
     method: 'POST',
     credentials: 'include',                 // so refresh cookie is set
     headers: { 'Content-Type': 'application/json' },
@@ -29,7 +28,6 @@ export async function authAction({ request }) {
     };
     localStorage.setItem('accessToken', accessToken);
     store.dispatch(userActions.addUser(user));
-    patchFetchForAuth();
     return redirect('/');
   } else {
     return redirect('/auth?mode=login');

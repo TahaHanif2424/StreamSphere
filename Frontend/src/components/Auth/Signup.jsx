@@ -54,6 +54,7 @@ export default function Signup() {
         {
           email: enteredEmail,
           password: enteredPassword,
+          channelName: enteredChannel
         },
         {
           method: "POST",
