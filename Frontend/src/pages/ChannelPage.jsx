@@ -99,30 +99,32 @@ export default function ChannelPage() {
       >
         <Await resolve={loaderData.channelInfo}>
           {(channelInfo) => (
-            <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6 border-b pb-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white rounded-xl shadow p-6 mb-6">
               <div className="flex items-center gap-4">
                 <img
                   src={channelInfo.channelImageURL || defaultChannelPic}
                   onClick={openImageModal}
                   alt={channelInfo.channelName}
-                  className={`w-16 h-16 rounded-full object-cover ${
-                    currUser._id === channelId ? "cursor-pointer" : ""
+                  className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-blue-600 ${
+                    currUser._id === channelId
+                      ? "cursor-pointer hover:opacity-80"
+                      : ""
                   }`}
                 />
                 <div>
-                  <h1 className="text-3xl font-bold">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
                     {channelInfo.channelName}
                   </h1>
-                  <div className="text-gray-600 text-sm mt-1">
-                    <Suspense fallback={<span>– subscribers</span>}>
+                  <div className="text-sm text-gray-600 mt-1">
+                    <Suspense fallback={<span>–</span>}>
                       <Await resolve={loaderData.subCount}>
                         {(subCount) => <span>{subCount} subscribers</span>}
                       </Await>
                     </Suspense>
                     <span className="mx-2">|</span>
-                    <Suspense fallback={<span>– total likes</span>}>
+                    <Suspense fallback={<span>–</span>}>
                       <Await resolve={loaderData.totalLikes}>
-                        {(totalLikes) => <span>{totalLikes} total likes</span>}
+                        {(totalLikes) => <span>{totalLikes} likes</span>}
                       </Await>
                     </Suspense>
                   </div>
@@ -131,9 +133,9 @@ export default function ChannelPage() {
               {channelId === currUser._id && (
                 <button
                   onClick={handleUploadClick}
-                  className="bg-green-600 text-white px-4 py-2 rounded"
+                  className="mt-4 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg transition"
                 >
-                  Upload New Video
+                  Upload Video
                 </button>
               )}
             </div>
@@ -141,35 +143,24 @@ export default function ChannelPage() {
         </Await>
       </Suspense>
 
-      <div className="flex gap-4 mb-6">
-        <button
-          className={`px-4 py-2 rounded ${
-            activeTab === "videos" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }`}
-          onClick={() => setSearchParams({ tab: "videos" })}
-        >
-          Videos
-        </button>
-
-        <button
-          className={`px-4 py-2 rounded ${
-            activeTab === "playlists" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }`}
-          onClick={() => setSearchParams({ tab: "playlists" })}
-        >
-          Playlists
-        </button>
-
-        {channelId === currUser._id && (
+      <div className="flex gap-4 mb-6 border-b border-gray-200">
+        {[
+          "videos",
+          "playlists",
+          ...(channelId === currUser._id ? ["history"] : []),
+        ].map((tabName) => (
           <button
-            className={`px-4 py-2 rounded ${
-              activeTab === "history" ? "bg-blue-600 text-white" : "bg-gray-200"
+            key={tabName}
+            onClick={() => setSearchParams({ tab: tabName })}
+            className={`relative px-4 py-2 text-sm font-medium transition ${
+              activeTab === tabName
+                ? "text-blue-600 after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-0.5 after:bg-blue-600"
+                : "text-gray-500 hover:text-blue-600"
             }`}
-            onClick={() => setSearchParams({ tab: "history" })}
           >
-            Watch History
+            {tabName.charAt(0).toUpperCase() + tabName.slice(1)}
           </button>
-        )}
+        ))}
       </div>
 
       {activeTab === "videos" && (
@@ -245,15 +236,17 @@ export default function ChannelPage() {
           {playlists.length === 0 ? (
             <p className="text-gray-500">No playlists yet.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {playlists.map((pl) => (
                 <div
                   key={pl._id}
-                  className="p-4 border rounded shadow cursor-pointer hover:bg-gray-100"
+                  className="bg-white p-4 rounded-lg shadow hover:shadow-md transition cursor-pointer border border-gray-200"
                   onClick={() => navigate(`/playlists/${pl._id}`)}
                 >
-                  <h2 className="text-lg font-semibold">{pl.name}</h2>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {pl.name}
+                  </h3>
+                  <p className="text-sm text-gray-500">
                     {pl.video_id.length} videos
                   </p>
                 </div>
@@ -272,20 +265,22 @@ export default function ChannelPage() {
           />
           <form
             onSubmit={handleImageSubmit}
-            className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
+            className="bg-white w-full max-w-sm p-6 rounded-xl shadow-xl relative z-10"
           >
-            <h3 className="text-xl font-semibold mb-4">Change Channel Image</h3>
+            <h2 className="text-xl font-bold mb-4 text-gray-800">
+              Change Channel Image
+            </h2>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setSelectedFile(e.target.files[0])}
-              className="mb-4"
+              className="mb-4 block w-full text-sm"
             />
             <div className="flex justify-end gap-2">
               <button
                 type="button"
                 onClick={closeImageModal}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
               >
                 Cancel
               </button>
