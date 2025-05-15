@@ -95,9 +95,9 @@ export default function Header() {
 
           {/* Center: Search Bar */}
           <motion.div
-            className="relative hidden md:flex md:justify-start md:items-center"
-            initial={{ width: 220 }}
-            whileFocus={{ width: 300 }}
+            className="relative hidden md:flex md:justify-start md:items-center -ml-20"
+            initial={{ width: 300 }}
+            whileFocus={{ width: 400 }}
           >
             <input
               type="search"
