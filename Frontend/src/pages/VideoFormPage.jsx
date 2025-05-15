@@ -29,15 +29,20 @@ export async function action({ request, params }) {
   formData.append("thumbnail", thumbnailFile);
   formData.append("data", JSON.stringify({ title, user_id: user._id }));
 
-  console.log(formData);
-
   const url = isEditing
     ? `http://localhost:5000/video/update/${params.videoId}`
     : "http://localhost:5000/video/add";
 
-  const response = await apiFetch(url, {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await fetch(url, {
     method: "POST",
     body: formData,
+    credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
   });
 
   return response;
