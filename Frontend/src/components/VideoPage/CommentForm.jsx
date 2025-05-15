@@ -1,6 +1,7 @@
 import useInput from "../../hooks/useInput";
 import { validateTitle } from "../../utils/validation";
 import Input from "../UI/Input";
+import { apiFetch } from "../../utils/api";
 
 export default function CommentForm({
   channelName,
@@ -20,7 +21,7 @@ export default function CommentForm({
     e.preventDefault();
     if (!isValid) return;
 
-    const res = await fetch(`http://localhost:5000/comment/${videoId}`, {
+    const res = await apiFetch(`http://localhost:5000/comment/${videoId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user_id: "681e23ffb39582f66be5419d", comment: enteredComment }),

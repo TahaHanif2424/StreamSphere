@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { apiFetch } from '../../utils/api';
 
 export default function VideoActions({ videoId, channelId, initialLikes }) {
   const currentUser = useSelector((state) => state.user.user);
@@ -10,7 +11,7 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
 
   // Check like status
   useEffect(() => {
-    fetch(`http://localhost:5000/like/${videoId}`)
+    apiFetch(`http://localhost:5000/like/${videoId}`)
       .then((res) => res.json())
       .then((data) => {
         const userLiked = data.some((like) => like.user_id._id === currentUser._id);
@@ -22,7 +23,7 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
 
   // Check subscription status
   useEffect(() => {
-    fetch(`http://localhost:5000/subscription/subscribe`)
+    apiFetch(`http://localhost:5000/subscription/subscribe`)
       .then((res) => {
         if (!res.ok) throw new Error('Not subscribed');
         return res.json();
@@ -36,14 +37,14 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
   const toggleLike = async () => {
     try {
       if (!liked) {
-        await fetch(`http://localhost:5000/like/${videoId}`, {
+        await apiFetch(`http://localhost:5000/like/${videoId}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: currentUser._id }),
         });
         setLikeCount((c) => c + 1);
       } else {
-        await fetch(`http://localhost:5000/like/unlike/${videoId}`, {
+        await apiFetch(`http://localhost:5000/like/unlike/${videoId}`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: currentUser._id }),
@@ -59,13 +60,13 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
   const toggleSubscribe = async () => {
     try {
       if (!subscribed) {
-        await fetch('http://localhost:5000/subscription/subscribe', {
+        await apiFetch('http://localhost:5000/subscription/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: currentUser._id, subscribedChannel: [channelId] }),
         });
       } else {
-        await fetch(`http://localhost:5000/subscription/unsubscribe/${channelId}`, {
+        await apiFetch(`http://localhost:5000/subscription/unsubscribe/${channelId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: currentUser._id }),
