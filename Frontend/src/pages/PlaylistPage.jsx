@@ -76,7 +76,7 @@ export default function PlaylistPage() {
       {videos.length === 0 ? (
         <p className="text-gray-500">No videos in this playlist.</p>
       ) : (
-        <VideosList videos={videos} />
+        <VideosList videos={videos} isOpenedOnChannels={true} isChangeable={currUser.user_id === playlist.user_id} />
       )}
     </div>
   );
