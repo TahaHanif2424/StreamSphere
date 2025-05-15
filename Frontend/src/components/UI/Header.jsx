@@ -32,7 +32,7 @@ export default function Header() {
   };
 
   const handleViewChannel = () => {
-    navigate(`/channel/${userData._id}`);
+    navigate(`/channels/${userData._id}`);
   };
 
   return (
