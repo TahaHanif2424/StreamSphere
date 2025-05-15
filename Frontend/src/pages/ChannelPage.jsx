@@ -85,7 +85,7 @@ export default function ChannelPage() {
                   </div>
                 </div>
               </div>
-              {channelId === currUser && (
+              {channelId === currUser._id && (
                 <button
                   onClick={handleUploadClick}
                   className="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg transition"
