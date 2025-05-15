@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState, useRef } from "react";
-import { logoutUser } from "../../redux/userSlice";
+import { logoutUser } from "../../store/userSlice";
 import defaultChannelPic from '../../../public/icon-7797704_640.png';
 
 export default function Header() {
