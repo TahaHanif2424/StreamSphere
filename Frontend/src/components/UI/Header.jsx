@@ -217,13 +217,6 @@ export default function Header() {
                         }
                       />
                       <SidebarItem
-                        label="Analytics"
-                        icon="BarChart3"
-                        onClick={() =>
-                          goTo(`/channels/${userData._id}?tab=analytics`)
-                        }
-                      />
-                      <SidebarItem
                         label="Upload"
                         icon="Upload"
                         onClick={() => goTo("/upload")}
