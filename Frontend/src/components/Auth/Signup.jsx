@@ -6,7 +6,7 @@ import {
   validateConfirmPassword,
 } from "../../utils/validation";
 import Input from "../UI/Input";
-import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaUser } from "react-Icons/fa";
 import { motion } from "framer-motion";
 
 export default function Signup() {
@@ -111,7 +111,7 @@ export default function Signup() {
           type="text"
           label="Channel Name"
           id="channel"
-          icon={FaUser}
+          Icon={FaUser}
         />
       </div>
 
@@ -126,7 +126,7 @@ export default function Signup() {
           type="email"
           label="Email"
           id="email"
-          icon={FaEnvelope}
+          Icon={FaEnvelope}
         />
       </div>
 
@@ -141,7 +141,7 @@ export default function Signup() {
           type="password"
           label="Password"
           id="password"
-          icon={FaLock}
+          Icon={FaLock}
         />
       </div>
 
@@ -156,7 +156,7 @@ export default function Signup() {
           type="password"
           label="Confirm Password"
           id="confirm-password"
-          icon={FaLock}
+          Icon={FaLock}
         />
       </div>
 
