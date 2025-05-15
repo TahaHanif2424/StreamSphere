@@ -31,6 +31,7 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
         return res.json();
       })
       .then((sub) => {
+        console.log(sub, channelId);
         setSubscribed(sub.subscribedChannel.includes(channelId));
       })
       .catch(() => setSubscribed(false));
