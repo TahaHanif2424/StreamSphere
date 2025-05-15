@@ -1,8 +1,14 @@
-import { Suspense, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Await, defer, useLoaderData, useNavigate, useParams } from 'react-router';
-import VideosList from '../components/HomePage/VideosList';
-import { apiFetch } from '../utils/api';
+import { Suspense, useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  Await,
+  defer,
+  useLoaderData,
+  useNavigate,
+  useParams,
+} from "react-router";
+import VideosList from "../components/HomePage/VideosList";
+import { apiFetch } from "../utils/api";
 
 export default function ChannelPage() {
   const loaderData = useLoaderData();
@@ -14,27 +20,41 @@ export default function ChannelPage() {
   const [selectedFile, setSelectedFile] = useState(null);
 
   function handleUploadClick() {
-    navigate('/upload');
+    navigate("/upload");
   }
-  function openModal() { setIsModalOpen(true); }
-  function closeModal() { setIsModalOpen(false); setSelectedFile(null); }
+  function openModal() {
+    if(currUser._id !== loaderData.channelInfo._id)
+      return;
+    setIsModalOpen(true);
+  }
+  function closeModal() {
+    setIsModalOpen(false);
+    setSelectedFile(null);
+  }
   async function handleImageSubmit(e) {
     e.preventDefault();
     if (!selectedFile) return;
     const form = new FormData();
-    form.append('image', selectedFile);
+    form.append("image", selectedFile);
     await apiFetch(`http://localhost:5000/user/uploadimage/${channelId}`, {
-      method: 'PUT',
+      method: "PUT",
       body: form,
     });
     closeModal();
     window.location.reload();
   }
 
+
   return (
     <div className="min-h-screen w-full bg-gray-50 py-8 px-4 sm:px-10">
       {/* Header: channel info + counts */}
-      <Suspense fallback={<div className="text-center text-gray-500 py-8">Loading channel info...</div>}>
+      <Suspense
+        fallback={
+          <div className="text-center text-gray-500 py-8">
+            Loading channel info...
+          </div>
+        }
+      >
         <Await resolve={loaderData.channelInfo}>
           {(channelInfo) => (
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 border-b pb-4 border-gray-200">
@@ -43,10 +63,12 @@ export default function ChannelPage() {
                   src={channelInfo.channelImageURL}
                   onClick={openModal}
                   alt={channelInfo.channelName}
-                  className="w-16 h-16 rounded-full object-cover cursor-pointer shadow-md"
+                  className={`w-16 h-16 rounded-full object-cover ${currUser._id === channelInfo._id ? 'cursor-pointer' : ''} shadow-md`}
                 />
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-800">{channelInfo.channelName}</h1>
+                  <h1 className="text-3xl font-bold text-gray-800">
+                    {channelInfo.channelName}
+                  </h1>
                   <div className="flex items-center gap-4 text-gray-600 mt-1">
                     <Suspense fallback={<span>– subscribers</span>}>
                       <Await resolve={loaderData.subCount}>
@@ -75,7 +97,11 @@ export default function ChannelPage() {
       </Suspense>
 
       {/* Videos List */}
-      <Suspense fallback={<div className="text-center text-gray-500">Loading videos...</div>}>
+      <Suspense
+        fallback={
+          <div className="text-center text-gray-500">Loading videos...</div>
+        }
+      >
         <Await resolve={loaderData.videos}>
           {(loaded) => (
             <VideosList
@@ -90,7 +116,10 @@ export default function ChannelPage() {
       {/* Custom Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div onClick={closeModal} className="fixed inset-0 bg-black opacity-50" />
+          <div
+            onClick={closeModal}
+            className="fixed inset-0 bg-black opacity-50"
+          />
           <form
             onSubmit={handleImageSubmit}
             className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
@@ -125,26 +154,30 @@ export default function ChannelPage() {
   );
 }
 
-
 // loader
 async function loadChannelVideos(channelId) {
-  const response = await apiFetch('http://localhost:5000/video/get', {
-    method: 'POST',
+  const response = await apiFetch("http://localhost:5000/video/get", {
+    method: "POST",
     body: JSON.stringify({ user_id: channelId }),
-    headers: { 'Content-Type': 'application/json' }
+    headers: { "Content-Type": "application/json" },
   });
-  if (!response.ok) throw new Error('Could not fetch the videos');
+  if (!response.ok) throw new Error("Could not fetch the videos");
   return response.json();
 }
 async function loadChannelInfo(channelId) {
-  const response = await apiFetch('http://localhost:5000/user/getuser/' + channelId, {method: 'GET'});
-  if (!response.ok) throw new Error('Could not fetch user data');
+  const response = await apiFetch(
+    "http://localhost:5000/user/getuser/" + channelId,
+    { method: "GET" }
+  );
+  if (!response.ok) throw new Error("Could not fetch user data");
   const users = await response.json();
   return users;
 }
 
 async function loadSubscriberCount(channelId) {
-  const res = await apiFetch(`http://localhost:5000/subscription/count/${channelId}`);
+  const res = await apiFetch(
+    `http://localhost:5000/subscription/count/${channelId}`
+  );
   if (!res.ok) return 0;
   const { count } = await res.json();
   return count;
@@ -161,6 +194,6 @@ export async function loader({ params }) {
     videos: loadChannelVideos(channelId),
     channelInfo: loadChannelInfo(channelId),
     subCount: loadSubscriberCount(channelId),
-    totalLikes: loadTotalLikes(channelId)
+    totalLikes: loadTotalLikes(channelId),
   });
 }
