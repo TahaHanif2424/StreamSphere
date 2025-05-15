@@ -3,6 +3,7 @@ import VideoPlayer from '../components/VideoPage/VideoPlayer';
 import VideoActions from '../components/VideoPage/VideoActions';
 import CommentsList from '../components/VideoPage/CommentsList';
 import VideosList from '../components/VideoPage/VideosList';
+import { apiFetch } from '../utils/api';
 
 export default function VideoPage() {
   const { destinationVideo, videos, comments } = useRouteLoaderData('video');
@@ -41,7 +42,7 @@ export default function VideoPage() {
 
 
 export async function loader({ params }) {
-  const response = await fetch("http://localhost:5000/video/get-all");
+  const response = await apiFetch("http://localhost:5000/video/get-all");
 
   if (!response.ok) throw new Error("Error fetching the video data");
 
@@ -58,7 +59,7 @@ export async function loader({ params }) {
     throw new Error("Cant find the requried Video");
   }
 
-  const comments = await fetch(
+  const comments = await apiFetch(
     "http://localhost:5000/comment/" + params.videoId
   );
 

@@ -2,6 +2,7 @@ import { Await, defer, useLoaderData } from "react-router-dom";
 import { Suspense } from "react";
 import VideosList from "../components/HomePage/VideosList";
 import SkeletonVideosList from '../components/UI/Skeleton/VideosList';
+import { apiFetch } from "../utils/api";
 
 export default function HomePage() {
   const { videos } = useLoaderData();
@@ -24,7 +25,7 @@ export default function HomePage() {
 }
 
 export async function loadVideos() {
-  const response = await fetch("http://localhost:5000/video/get-all");
+  const response = await apiFetch("http://localhost:5000/video/get-all");
   if (!response.ok) throw new Error("Unable to fetch videos");
   const responseData = await response.json();
   return responseData;

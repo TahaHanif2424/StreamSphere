@@ -1,6 +1,7 @@
 import { useRouteLoaderData } from "react-router";
 import UploadForm from "../components/Upload/UploadForm";
 import store from "../store";
+import { apiFetch } from "../utils/api";
 
 export default function VideoFormPage() {
   const data = useRouteLoaderData("video");
@@ -34,7 +35,7 @@ export async function action({ request, params }) {
     ? `http://localhost:5000/video/update/${params.videoId}`
     : "http://localhost:5000/video/add";
 
-  const response = await fetch(url, {
+  const response = await apiFetch(url, {
     method: "POST",
     body: formData,
   });
