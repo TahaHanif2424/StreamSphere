@@ -6,7 +6,7 @@ import {
   validateConfirmPassword,
 } from "../../utils/validation";
 import Input from "../UI/Input";
-import { FaEnvelope, FaLock, FaUser } from "react-Icons/fa";
+import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 export default function Signup() {
