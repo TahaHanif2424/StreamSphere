@@ -16,6 +16,7 @@ export default function ChannelPage() {
   const { channelId } = useParams();
   const currUser = useSelector((state) => state.user.user);
   const navigate = useNavigate();
+  console.log(channelId, currUser);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -24,7 +25,7 @@ export default function ChannelPage() {
     navigate("/upload");
   }
   function openModal() {
-    if(currUser._id !== loaderData.channelInfo._id)
+    if(currUser._id != loaderData.channelInfo._id)
       return;
     setIsModalOpen(true);
   }
