@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import defaultChannelPic from '../../../public/icon-7797704_640.png';
 
 export default function CommentItem({
   comment,
@@ -9,7 +10,7 @@ export default function CommentItem({
   return (
     <div className="flex gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition">
       <img
-        src={user_id.channelImageURL}
+        src={user_id.channelImageURL || defaultChannelPic}
         alt={user_id.channelName}
         onClick={() => navigate(`/channels/${user_id._id}`)}
         className="w-10 h-10 rounded-full object-cover cursor-pointer"
