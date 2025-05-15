@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommentForm from "./CommentForm";
 import CommentItem from "./CommentItem";
 
@@ -8,7 +8,11 @@ export default function CommentsList({
   channelImageURL,
   videoId,
 }) {
-  const [allComments, setAllComments] = useState(initialComments);
+  const [allComments, setAllComments] = useState([]);
+
+  useEffect(() => {
+    setAllComments(initialComments);
+  })
 
   return (
     <div className="flex flex-col gap-6">
