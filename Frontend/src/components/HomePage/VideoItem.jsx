@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import defaultChannelPic from '../../public/icon-7797704_640.png';
+import defaultChannelPic from '../../../public/icon-7797704_640.png';
 
 export default function VideoItem({
   _id,
