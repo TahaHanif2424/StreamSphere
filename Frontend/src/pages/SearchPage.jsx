@@ -30,7 +30,7 @@ export default function SearchPage() {
         if (!res.ok) throw new Error("Failed to fetch search results");
 
         const data = await res.json();
-        setVideos(data.videos || []);
+        setVideos(data);
       } catch (error) {
         console.error(error);
         setVideos([]);
