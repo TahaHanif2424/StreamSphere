@@ -178,17 +178,43 @@ export default function ChannelPage() {
       {activeTab === "history" && (
         <Suspense fallback={<div>Loading watch history...</div>}>
           <Await resolve={loaderData.watchHistory}>
-            {(data) =>
-              data.watchedVideos.length === 0 ? (
+            {(data) => {
+              const [watchedVideos, setWatchedVideos] = useState(
+                data.watchedVideos
+              );
+
+              async function handleWatchDelete(id) {
+                const response = await apiFetch(
+                  "http://localhost:5000/history/remove/" + id,
+                  {
+                    method: "DELETE",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      user_id: currUser._id,
+                    }),
+                  }
+                );
+
+                if (!response.ok) {
+                  throw new Error("Unable to delete watch history video");
+                }
+
+                setWatchedVideos(videos => videos.filter(video => video._id !== id));
+              }
+
+              return watchedVideos.length === 0 ? (
                 <p className="text-gray-500">No watch history yet.</p>
               ) : (
                 <VideosList
-                  videos={data.watchedVideos}
+                  videos={watchedVideos}
                   isOpenedOnChannels={true}
                   isChangeable={false}
+                  handleDelete={handleWatchDelete}
                 />
-              )
-            }
+              );
+            }}
           </Await>
         </Suspense>
       )}
