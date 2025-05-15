@@ -49,4 +49,5 @@ const VideoSchema=new Schema({
         // required:true
     },
 });
+VideoSchema.index({ title: "text", description: "text" });
 module.exports=mongoose.model('Video', VideoSchema);

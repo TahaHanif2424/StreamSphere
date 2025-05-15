@@ -11,7 +11,7 @@ const { spawn } = require('child_process');
 const os = require("os");
 
 //AWS Imports
-const { PutObjectCommand, GetObjectCommand, DeleteObjectsCommand, ListObjectsV2Command } = require('@aws-sdk/client-s3');
+const { PutObjectCommand, DeleteObjectsCommand, ListObjectsV2Command } = require('@aws-sdk/client-s3');
 const S3 = require('../AWS/AWSConfig');
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const bucketName = process.env.BUCKET_NAME;
@@ -283,21 +283,45 @@ router.put("/update/:id", async (req, res) => {
 router.post("/viewandhistroy/:id", async (req,res)=>{
     try{
         const video_id=req.params.id;
-        const {user_id,watchedVideos}=req.body;
+        const {user_id}=req.body;
         const histroy=await Histroy.findOne({user_id});
         const video=await Video.findOne({_id:video_id});
         if(!histroy){
-            const histroy=new Histroy(req.body);
+            const histroy=new Histroy();
+            histroy.user_id=user_id;
+            histroy.watchedVideos.push(video_id);
             await histroy.save();
             return res.status(200).send({message:"Added to histroy"});
         }
-        histroy.watchedVideos.push(watchedVideos[0]);
+        histroy.watchedVideos.push(video_id);
         await histroy.save();
         video.views=video.views+1;
         await video.save();
-        
+        return res.sendStatus(200);
     }catch(err){
         console.error({err});
     }
-})
+});
+
+//Search functionality
+// URL: POST http://localhost:5000/video/search
+router.post("/search", async (req, res) => {
+    try {
+        const query = req.body.query;
+        const regex = new RegExp(query, 'i'); // i = case-insensitive
+
+        const videos = await Video.find({
+            $or: [
+                { title: { $regex: regex } },
+                { description: { $regex: regex } }
+            ]
+        }).populate("user_id", "channelName channelImageURL");
+
+        res.status(200).send(videos);
+    } catch (err) {
+        console.error(err);
+        res.status(400).send({ error: "Invalid Request" });
+    }
+});
+
 module.exports = router;
