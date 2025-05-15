@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react"; // hamburger & close icons
 import { motion, AnimatePresence } from "framer-motion";
 import defaultChannelPic from "../../../public/icon-7797704_640.png";
+import SidebarItem from "./SidebarItem";
 
 export default function Header() {
   const navigate = useNavigate();
