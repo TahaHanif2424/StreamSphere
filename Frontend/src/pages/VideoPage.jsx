@@ -22,8 +22,8 @@ export default function VideoPage() {
           />
           <CommentsList
             comments={comments}
-            channelName={destinationVideo.channelName}
-            channelImageURL={destinationVideo.channelImageURL}
+            channelName={destinationVideo.user_id.channelName}
+            channelImageURL={destinationVideo.user_id.channelImageURL}
             videoId={destinationVideo._id}
           />
         </div>

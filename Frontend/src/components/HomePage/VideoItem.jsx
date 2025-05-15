@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import defaultChannelPic from '../../public/icon-7797704_640.png';
 
 export default function VideoItem({
   _id,
   title,
-  channelName,
   user_id,
-  channelImageURL,
   views,
   isChangeable,
   onDelete,
@@ -53,7 +52,7 @@ export default function VideoItem({
       <div className="flex gap-3">
         {
           !isOpenedOnChannels && <div className="w-10 h-10 rounded-full bg-sky-100 shrink-0">
-            <img src={user_id ? user_id.channelImageURL || '' : ''} className="w-full rounded-full" alt="" />
+            <img src={user_id.channelImageURL || defaultChannelPic} className="w-full rounded-full" alt="" />
           </div>
         }
 
@@ -65,7 +64,7 @@ export default function VideoItem({
                 onClick={handleChannelClick}
                 className="hover:underline cursor-pointer text-sky-600"
               >
-                {user_id ? user_id.channelName || '' : ''}
+                {user_id.channelName}
               </h3>
             }
             <h4 className="text-gray-500">{views} views</h4>

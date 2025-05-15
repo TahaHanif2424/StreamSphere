@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router";
 
 export default function CommentItem({
-  channelImageURL,
-  channelName,
   comment,
   date,
   user_id

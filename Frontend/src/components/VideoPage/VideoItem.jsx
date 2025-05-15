@@ -3,8 +3,6 @@ import { useNavigate } from "react-router";
 export default function VideoItem({
   _id,
   title,
-  channelName,
-  channelImageURL,
   user_id,
   views,
   thumbnailURL,
@@ -34,7 +32,7 @@ export default function VideoItem({
           }}
           className="text-xs text-sky-600 hover:underline cursor-pointer mt-1"
         >
-          {channelName}
+          {user_id.channelName}
         </p>
         <p className="text-xs text-gray-500 mt-0.5">{views} views</p>
       </div>
