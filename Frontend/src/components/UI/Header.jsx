@@ -55,7 +55,7 @@ export default function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 w-full h-[10dvh] z-30 bg-gradient-to-r from-blue-900 via-black to-black shadow-lg backdrop-blur-md">
-        <div className="w-full h-full mx-auto flex items-center justify-between pl-4 pr-7 py-3 md:py-4">
+        <div className="w-full h-full mx-auto flex items-center justify-between pl-4 pr-7 py-3 md:py-4 relative">
           {/* Left: Hamburger + Brand */}
           <div className="flex items-center gap-5">
             <button
@@ -95,8 +95,8 @@ export default function Header() {
 
           {/* Center: Search Bar */}
           <motion.div
-            className="relative hidden md:flex md:justify-start md:items-center -ml-20"
-            initial={{ width: 300 }}
+            className="absolute top-[50%] left-[50%] -translate-[50%] hidden md:flex md:justify-start md:items-center"
+            initial={{ width: 350 }}
             whileFocus={{ width: 400 }}
           >
             <input
