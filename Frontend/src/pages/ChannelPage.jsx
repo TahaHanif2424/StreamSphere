@@ -9,6 +9,7 @@ import {
 } from "react-router";
 import VideosList from "../components/HomePage/VideosList";
 import { apiFetch } from "../utils/api";
+import defaultChannelPic from '../../public/icon-7797704_640.png';
 
 export default function ChannelPage() {
   const loaderData = useLoaderData();
@@ -60,7 +61,7 @@ export default function ChannelPage() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 border-b pb-4 border-gray-200">
               <div className="flex items-center gap-4">
                 <img
-                  src={channelInfo.channelImageURL}
+                  src={channelInfo.channelImageURL || defaultChannelPic}
                   onClick={openModal}
                   alt={channelInfo.channelName}
                   className={`w-16 h-16 rounded-full object-cover ${currUser._id === channelInfo._id ? 'cursor-pointer' : ''} shadow-md`}
