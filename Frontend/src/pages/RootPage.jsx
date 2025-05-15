@@ -10,7 +10,7 @@ export default function RootPage() {
   return (
     <>
       <Header />
-      <div className="mt-[10dvh] w-screen min-h-[90dvh] overflow-y-auto bg-black px-6 py-8 text-white">
+      <div className="mt-[10dvh] w-screen min-h-[90dvh] overflow-y-auto px-6 py-8 text-slate-100 bg-gradient-to-br from-gray-950 via-[#0f172a] to-[#1e293b] transition-all duration-500 ease-in">
         <RequireAuth>
           <Outlet />
         </RequireAuth>
