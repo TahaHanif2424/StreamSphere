@@ -5,6 +5,7 @@ import CommentsList from '../components/VideoPage/CommentsList';
 import VideosList from '../components/VideoPage/VideosList';
 import { apiFetch } from '../utils/api';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function VideoPage() {
   const { destinationVideo, videos, comments } = useRouteLoaderData('video');
