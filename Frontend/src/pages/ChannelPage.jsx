@@ -10,8 +10,7 @@ import {
 } from "react-router";
 import VideosList from "../components/HomePage/VideosList";
 import { apiFetch } from "../utils/api";
-import defaultChannelPic from '../../public/icon-7797704_640.png';
-import { Link } from "react-router-dom";
+import defaultChannelPic from "../../public/icon-7797704_640.png";
 
 export default function ChannelPage() {
   const loaderData = useLoaderData();
@@ -19,10 +18,12 @@ export default function ChannelPage() {
   const currUser = useSelector((state) => state.user.user);
   const navigate = useNavigate();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [activeTab, setActiveTab] = useState("videos");
   const [playlists, setPlaylists] = useState([]);
+  const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
+  const [newPlaylistName, setNewPlaylistName] = useState("");
 
   useEffect(() => {
     if (activeTab === "playlists") {
@@ -38,14 +39,16 @@ export default function ChannelPage() {
     }
   }
 
-  async function createPlaylist() {
-    const name = prompt("Enter playlist name");
-    if (!name) return;
+  async function createPlaylist(e) {
+    e.preventDefault();
+    if (!newPlaylistName) return;
     await apiFetch("http://localhost:5000/playlist/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: channelId, name, video_id: [] })
+      body: JSON.stringify({ user_id: channelId, name: newPlaylistName, video_id: [] }),
     });
+    setNewPlaylistName("");
+    setIsPlaylistModalOpen(false);
     loadPlaylists();
   }
 
@@ -53,13 +56,13 @@ export default function ChannelPage() {
     navigate("/upload");
   }
 
-  function openModal() {
+  function openImageModal() {
     if (currUser._id !== channelId) return;
-    setIsModalOpen(true);
+    setIsImageModalOpen(true);
   }
 
-  function closeModal() {
-    setIsModalOpen(false);
+  function closeImageModal() {
+    setIsImageModalOpen(false);
     setSelectedFile(null);
   }
 
@@ -72,7 +75,7 @@ export default function ChannelPage() {
       method: "PUT",
       body: form,
     });
-    closeModal();
+    closeImageModal();
     window.location.reload();
   }
 
@@ -85,7 +88,7 @@ export default function ChannelPage() {
               <div className="flex items-center gap-4">
                 <img
                   src={channelInfo.channelImageURL || defaultChannelPic}
-                  onClick={openModal}
+                  onClick={openImageModal}
                   alt={channelInfo.channelName}
                   className={`w-16 h-16 rounded-full object-cover ${currUser._id === channelId ? 'cursor-pointer' : ''}`}
                 />
@@ -146,7 +149,10 @@ export default function ChannelPage() {
       {activeTab === "playlists" && (
         <div>
           {channelId === currUser._id && (
-            <button onClick={createPlaylist} className="mb-4 bg-blue-500 text-white px-4 py-2 rounded">
+            <button
+              onClick={() => setIsPlaylistModalOpen(true)}
+              className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
+            >
               + Add Playlist
             </button>
           )}
@@ -169,9 +175,10 @@ export default function ChannelPage() {
         </div>
       )}
 
-      {isModalOpen && (
+      {/* Image Upload Modal */}
+      {isImageModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div onClick={closeModal} className="fixed inset-0 bg-black opacity-50" />
+          <div onClick={closeImageModal} className="fixed inset-0 bg-black opacity-50" />
           <form
             onSubmit={handleImageSubmit}
             className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
@@ -186,7 +193,7 @@ export default function ChannelPage() {
             <div className="flex justify-end gap-2">
               <button
                 type="button"
-                onClick={closeModal}
+                onClick={closeImageModal}
                 className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
               >
                 Cancel
@@ -202,11 +209,47 @@ export default function ChannelPage() {
           </form>
         </div>
       )}
+
+      {/* Playlist Creation Modal */}
+      {isPlaylistModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div onClick={() => setIsPlaylistModalOpen(false)} className="fixed inset-0 bg-black opacity-50" />
+          <form
+            onSubmit={createPlaylist}
+            className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
+          >
+            <h3 className="text-xl font-semibold mb-4">Create Playlist</h3>
+            <input
+              type="text"
+              value={newPlaylistName}
+              onChange={(e) => setNewPlaylistName(e.target.value)}
+              placeholder="Playlist Name"
+              className="mb-4 w-full p-2 border rounded"
+              required
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setIsPlaylistModalOpen(false)}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Create
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
 
-// loader
+// Loader functions
 async function loadChannelVideos(channelId) {
   const response = await apiFetch("http://localhost:5000/video/get", {
     method: "POST",
