@@ -3,6 +3,7 @@ const express = require("express");
 const Video = require("../Model/Video");
 const Comment = require("../Model/Comments");
 const Likes = require("../Model/Likes");
+const Histroy = require("../Model/Histroy");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
@@ -276,4 +277,22 @@ router.put("/update/:id", async (req, res) => {
 });
 
 
+router.post("/viewandhistroy/:id", async (req,res)=>{
+    try{
+        const video_id=req.params.id;
+        const {user_id,watchedVideos}=req.body;
+        const histroy=await Histroy.findOne({user_id});
+        const video=await Video.findOne({_id:video_id});
+        if(!histroy){
+            const histroy=new Histroy(req.body);
+            await histroy.save();
+            return res.status(200).send({message:"Added to histroy"});
+        }
+        histroy.watchedVideos.push(watchedVideos[0]);
+        await histroy.save();
+        
+    }catch(err){
+        console.error({err});
+    }
+})
 module.exports = router;

@@ -2,7 +2,7 @@ import Login from "../components/Auth/Login";
 import Signup from "../components/Auth/Signup";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
-import bgPic from "/ChatGPT Image May 15, 2025, 09_51_23 PM.png";
+import bgPic from "../../public/bg_pic.png";
 
 export default function AuthPage() {
   const [searchParams, setSearchParams] = useSearchParams();

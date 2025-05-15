@@ -10,5 +10,10 @@ const HistroySchema= new Schema({
         type: [mongoose.Schema.Types.ObjectId],
         required: true, 
     },
+    "data":{
+        type:Date,
+        default:Date.now
+         
+    },
 });
 module.exports= mongoose.model('Histroy', HistroySchema);
