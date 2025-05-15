@@ -3,6 +3,30 @@ const Playlist=require("../Model/PlayList");
 
 const router=express.Router();
 
+//Get All Playlist
+// URL http://localhost:5000/playlist/id      here the id is user_id
+router.get("/:id", async (req,res)=>{
+    try{
+        const user_id=req.params.id;
+        const playlist=await Playlist.find({user_id});
+        return res.status(200).send(playlist)
+    }catch(err){
+        return res.status(500).send({error:"Error while displaying the playlis"});
+    }
+});
+
+
+//Get All videos of playlist
+// URL http://localhost:5000/playlist/video/id      here the id is playlist_id
+router.get("/video/:id", async (req,res)=>{
+    try{
+        const playlist_id=req.params.id;
+        const playlist=await Playlist.findOne({_id:playlist_id});
+        return res.status(200).send(playlist)
+    }catch(err){
+        return res.status(500).send({error:"Error while displaying the playlis"});
+    }
+});
 
 //Create Playlist
 // URL http://localhost:5000/playlist/create

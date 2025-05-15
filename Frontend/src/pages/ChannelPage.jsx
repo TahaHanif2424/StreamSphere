@@ -32,7 +32,7 @@ export default function ChannelPage() {
   }, [activeTab]);
 
   async function loadPlaylists() {
-    const res = await apiFetch(`http://localhost:5000/playlist/user/${channelId}`);
+    const res = await apiFetch(`http://localhost:5000/playlist/${channelId}`);
     if (res.ok) {
       const data = await res.json();
       setPlaylists(data);
