@@ -167,40 +167,74 @@ export default function Header() {
                 animate={{ x: 0 }}
                 exit={{ x: "-100%" }}
                 transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                className="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-blue-900 via-black to-black shadow-2xl z-30 flex flex-col"
+                className="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-blue-950 via-black to-black shadow-2xl z-30 flex flex-col justify-between"
               >
-                <div className="flex items-center justify-between px-4 py-5 border-b border-blue-700">
-                  <h2 className="text-white font-bold text-xl tracking-wide select-none">
-                    Stream Sphere
-                  </h2>
-                  <button
-                    aria-label="Close sidebar"
-                    onClick={toggleSidebar}
-                    className="text-blue-400 hover:text-blue-600 focus:outline-none"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
+                <div>
+                  <div className="flex items-center justify-between px-4 py-5 border-b border-blue-800">
+                    <h2 className="text-white font-bold text-xl tracking-wide select-none">
+                      Stream Sphere
+                    </h2>
+                    <button
+                      aria-label="Close sidebar"
+                      onClick={toggleSidebar}
+                      className="text-blue-400 hover:text-blue-600"
+                    >
+                      <X className="w-6 h-6" />
+                    </button>
+                  </div>
+
+                  <nav className="mt-6 space-y-4 px-4 text-blue-300 font-semibold">
+                    <div className="space-y-2">
+                      <p className="text-sm text-blue-500 uppercase tracking-wider">
+                        Library
+                      </p>
+                      <SidebarItem
+                        label="Watch History"
+                        icon="History"
+                        onClick={() =>
+                          goTo(`/channels/${userData._id}?tab=history`)
+                        }
+                      />
+                      <SidebarItem
+                        label="Playlists"
+                        icon="ListVideo"
+                        onClick={() =>
+                          goTo(`/channels/${userData._id}?tab=playlists`)
+                        }
+                      />
+                    </div>
+
+                    <div className="mt-6 space-y-2">
+                      <p className="text-sm text-blue-500 uppercase tracking-wider">
+                        Your Channel
+                      </p>
+                      <SidebarItem
+                        label="My Videos"
+                        icon="Video"
+                        onClick={() =>
+                          goTo(`/channels/${userData._id}?tab=videos`)
+                        }
+                      />
+                      <SidebarItem
+                        label="Analytics"
+                        icon="BarChart3"
+                        onClick={() =>
+                          goTo(`/channels/${userData._id}?tab=analytics`)
+                        }
+                      />
+                      <SidebarItem
+                        label="Upload"
+                        icon="Upload"
+                        onClick={() => goTo("/upload")}
+                      />
+                    </div>
+                  </nav>
                 </div>
-                <nav className="flex flex-col mt-6 space-y-3 px-4 text-blue-300 font-semibold">
-                  <button
-                    onClick={() => goTo(`/channels/${userData._id}?tab=history`)}
-                    className="hover:text-blue-400 transition-colors"
-                  >
-                    📺 Watch History
-                  </button>
-                  <button
-                    onClick={() => goTo(`/channels/${userData._id}?tab=playlists`)}
-                    className="hover:text-blue-400 transition-colors"
-                  >
-                    🎞️ Playlists
-                  </button>
-                  <button
-                    onClick={() => goTo(`/channels/${userData._id}?tab=videos`)}
-                    className="hover:text-blue-400 transition-colors"
-                  >
-                    📺 Channel Details
-                  </button>
-                </nav>
+
+                <div className="p-4 text-sm text-blue-500 border-t border-blue-800">
+                  <p className="text-xs">&copy; 2025 Stream Sphere</p>
+                  <p className="text-xs">All rights reserved</p>
+                </div>
               </motion.aside>
             </>
           )}
