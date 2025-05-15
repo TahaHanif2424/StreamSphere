@@ -1,31 +1,44 @@
-import { useRouteLoaderData } from 'react-router';
-import VideoPlayer from '../components/VideoPage/VideoPlayer';
-import VideoActions from '../components/VideoPage/VideoActions';
-import CommentsList from '../components/VideoPage/CommentsList';
-import VideosList from '../components/VideoPage/VideosList';
-import { apiFetch } from '../utils/api';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useRouteLoaderData } from "react-router";
+import VideoPlayer from "../components/VideoPage/VideoPlayer";
+import VideoActions from "../components/VideoPage/VideoActions";
+import CommentsList from "../components/VideoPage/CommentsList";
+import VideosList from "../components/VideoPage/VideosList";
+import { apiFetch } from "../utils/api";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function VideoPage() {
-  const { destinationVideo, videos, comments } = useRouteLoaderData('video');
-  const user = useSelector(state => state.user.user);
+  const { destinationVideo, videos, comments } = useRouteLoaderData("video");
+  const user = useSelector((state) => state.user.user);
 
-    useEffect(async () => {
-      const response = await apiFetch('http://localhost:5000/video/viewandhistroy/' + destinationVideo._id, {
-        method: 'POST',
-        body: JSON.stringify({
-          user_id: user._id
-        }),
-        headers: {
-          'Content-Type': 'application/json'
+  useEffect(() => {
+    const updateViewsAndHistory = async () => {
+      try {
+        const response = await apiFetch(
+          "http://localhost:5000/video/viewandhistroy/" + destinationVideo._id,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              user_id: user._id,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Cannot update views and history");
         }
-      });
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
 
-      if(!response.ok) 
-        throw new Error('Cant update the views and history');
-
-    }, [destinationVideo]);
+    if (destinationVideo && user?._id) {
+      updateViewsAndHistory();
+    }
+  }, [destinationVideo, user?._id]);
 
   return (
     <div className="min-h-screen bg-transparent px-4 sm:px-6 lg:px-10 py-8 text-white animate-fadeIn">
