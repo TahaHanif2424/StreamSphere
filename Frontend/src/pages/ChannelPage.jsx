@@ -93,7 +93,7 @@ export default function ChannelPage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 py-8 px-4 sm:px-10">
+    <div className="min-h-screen w-full bg-transparent py-8 px-4 sm:px-10">
       <Suspense
         fallback={<div className="text-center">Loading channel info...</div>}
       >
