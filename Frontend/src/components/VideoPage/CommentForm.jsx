@@ -5,7 +5,6 @@ import { apiFetch } from "../../utils/api";
 import { useSelector } from "react-redux";
 import defaultChannelPic from '../../../public/icon-7797704_640.png';
 
-
 export default function CommentForm({
   channelName,
   channelImageURL,
@@ -34,20 +33,20 @@ export default function CommentForm({
 
     const resData = await res.json();
 
-    setComments((prev) => [
-      ...prev,
-      resData
-    ]);
+    setComments((prev) => [...prev, resData]);
     setEnteredComment("");
     setIsTouched(false);
   };
 
   return (
-    <form onSubmit={submitHandler} className="flex items-start gap-3 p-4 bg-white rounded-lg shadow-sm">
+    <form
+      onSubmit={submitHandler}
+      className="flex items-start gap-4 p-4 bg-gray-100 rounded-md shadow-inner"
+    >
       <img
         src={channelImageURL || defaultChannelPic}
         alt={channelName}
-        className="w-10 h-10 rounded-full object-cover"
+        className="w-12 h-12 rounded-full object-cover"
       />
       <div className="flex-1 flex flex-col gap-2">
         <Input
@@ -62,11 +61,12 @@ export default function CommentForm({
           setIsTouched={setIsTouched}
           isValid={isValid}
           className="w-full"
+          placeholder="Write your comment..."
         />
         <button
           type="submit"
           disabled={!isValid}
-          className="self-end px-4 py-1.5 text-sm font-medium bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
+          className="self-end px-5 py-2 rounded-md bg-sky-600 text-white font-semibold hover:bg-sky-700 transition disabled:opacity-50"
         >
           Submit
         </button>

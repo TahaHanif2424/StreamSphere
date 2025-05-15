@@ -9,7 +9,6 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
   const [likeCount, setLikeCount] = useState(initialLikes || 0);
   const [subscribed, setSubscribed] = useState(false);
 
-  // Check like status
   useEffect(() => {
     apiFetch(`http://localhost:5000/like/${videoId}`)
       .then((res) => res.json())
@@ -23,7 +22,6 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
       .catch(console.error);
   }, [videoId, currentUser._id]);
 
-  // Check subscription status
   useEffect(() => {
     apiFetch(`http://localhost:5000/subscription/` + currentUser._id)
       .then((res) => {
@@ -31,7 +29,6 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
         return res.json();
       })
       .then((sub) => {
-        console.log(sub, channelId);
         setSubscribed(sub.subscribedChannel.includes(channelId));
       })
       .catch(() => setSubscribed(false));
@@ -63,7 +60,6 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
   const toggleSubscribe = async () => {
     try {
       if (!subscribed) {
-        ``;
         await apiFetch("http://localhost:5000/subscription/subscribe", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -93,20 +89,30 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
       {/* Like Button */}
       <button
         onClick={toggleLike}
-        className="flex items-center gap-2 text-white bg-black bg-opacity-60 hover:bg-opacity-80 px-3 py-1 rounded-md transition"
+        className={`flex items-center gap-2 px-4 py-2 rounded-md transition-transform duration-200 ${
+          liked
+            ? "bg-red-600 text-white shadow-lg hover:scale-105"
+            : "bg-gray-800 text-gray-300 hover:bg-red-600 hover:text-white"
+        }`}
+        aria-label={liked ? "Unlike video" : "Like video"}
       >
-        {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
-        <span>{likeCount}</span>
+        {liked ? (
+          <FaHeart className="text-white" />
+        ) : (
+          <FaRegHeart className="text-gray-300" />
+        )}
+        <span className="font-semibold">{likeCount}</span>
       </button>
 
       {/* Subscribe Button */}
       <button
         onClick={toggleSubscribe}
-        className={`px-4 py-1 text-sm font-semibold rounded-md transition shadow-sm ${
+        className={`px-5 py-2 rounded-md font-semibold transition-colors duration-300 shadow-md focus:outline-none ${
           subscribed
-            ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-            : "bg-blue-600 text-white hover:bg-blue-700"
+            ? "bg-sky-200 text-sky-800 hover:bg-sky-300"
+            : "bg-sky-600 text-white hover:bg-sky-700"
         }`}
+        aria-label={subscribed ? "Unsubscribe" : "Subscribe"}
       >
         {subscribed ? "Subscribed" : "Subscribe"}
       </button>

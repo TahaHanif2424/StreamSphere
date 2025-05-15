@@ -9,11 +9,10 @@ export default function VideoPage() {
   const { destinationVideo, videos, comments } = useRouteLoaderData('video');
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-10">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-black to-slate-950 px-4 sm:px-6 lg:px-10 py-8 text-white animate-fadeIn">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Main Video + Comments */}
-        <div className="lg:col-span-2 flex flex-col gap-6">
+        <div className="lg:col-span-2 flex flex-col gap-10">
           <VideoPlayer videoData={destinationVideo} />
           <VideoActions
             videoId={destinationVideo._id}
@@ -29,8 +28,8 @@ export default function VideoPage() {
         </div>
 
         {/* Up Next */}
-        <aside className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold text-gray-800">Up Next</h2>
+        <aside className="flex flex-col gap-4 p-4 bg-slate-800 rounded-xl shadow-lg animate-slideUp">
+          <h2 className="text-xl font-semibold text-sky-300">Up Next</h2>
           <div className="flex-1 overflow-y-auto space-y-4">
             <VideosList videos={videos} />
           </div>
@@ -39,7 +38,6 @@ export default function VideoPage() {
     </div>
   );
 }
-
 
 export async function loader({ params }) {
   const response = await apiFetch("http://localhost:5000/video/get-all");
@@ -51,7 +49,6 @@ export async function loader({ params }) {
 
   const videos = responseData.filter((video) => {
     if (video._id === params.videoId) destinationVideo = video;
-
     return video._id !== params.videoId;
   });
 
@@ -63,11 +60,11 @@ export async function loader({ params }) {
     "http://localhost:5000/comment/" + params.videoId
   );
 
-  if(!comments.ok) {
-    throw new Error('Cant fetch the comments');
+  if (!comments.ok) {
+    throw new Error("Cant fetch the comments");
   }
 
   const commentsData = await comments.json();
 
-  return { destinationVideo, videos, comments : commentsData };
+  return { destinationVideo, videos, comments: commentsData };
 }

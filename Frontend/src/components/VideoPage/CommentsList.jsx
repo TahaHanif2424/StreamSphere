@@ -15,20 +15,21 @@ export default function CommentsList({
   }, [initialComments]);
 
   return (
-    <div className="flex flex-col gap-6">
-      <h2 className="text-lg font-semibold text-gray-800">Comments</h2>
+    <section className="flex flex-col gap-6 bg-white rounded-lg shadow-lg p-6 max-w-4xl w-full mx-auto animate-fadeIn">
+      <h2 className="text-2xl font-semibold text-gray-900 border-b border-gray-200 pb-3">
+        Comments
+      </h2>
       <CommentForm
         channelName={channelName}
         channelImageURL={channelImageURL}
         setComments={setAllComments}
         videoId={videoId}
       />
-      <div className="space-y-4">
-        {allComments.map((c) => {
-          return <CommentItem key = {c._id
-        } { ...c } />;}
-        )}
+      <div className="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+        {allComments.map((c) => (
+          <CommentItem key={c._id} {...c} />
+        ))}
       </div>
-    </div>
+    </section>
   );
 }

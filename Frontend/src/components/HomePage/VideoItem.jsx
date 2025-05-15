@@ -23,7 +23,7 @@ export default function VideoItem({
 
   return (
     <div
-      className="flex flex-col gap-3 p-4 rounded-2xl bg-white/10 backdrop-blur-sm shadow-xl hover:shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1"
+      className="flex flex-col gap-3 p-4 rounded-2xl bg-white/10 backdrop-blur-sm shadow-xl transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1"
     >
       {/* Thumbnail */}
       <div
