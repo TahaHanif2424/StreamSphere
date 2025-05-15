@@ -56,7 +56,7 @@ export default function PlaylistPage() {
 
   return (
     <div className="min-h-screen w-full bg-transparent py-10 px-4 sm:px-10">
-      <div className="max-w-5xl mx-auto bg-transparent p-6 sm:p-10 rounded-2xl shadow-xl">
+      <div className="max-w-5xl mx-auto bg-slate-800 p-6 sm:p-10 rounded-2xl shadow-xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
           <div>
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
