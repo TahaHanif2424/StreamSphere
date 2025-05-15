@@ -106,7 +106,7 @@ export default function Header() {
               className="w-full bg-transparent border border-blue-600 rounded-full py-2 px-4 pl-10 text-blue-300 placeholder-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 shadow-lg"
             />
             <svg
-              className="w-5 h-5 absolute left-3 top-3.5 text-blue-400 pointer-events-none"
+              className="w-5 h-5 absolute left-3 top-3.5 text-blue-400 cursor-pointer"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
