@@ -12,7 +12,7 @@ export default function CommentsList({
 
   useEffect(() => {
     setAllComments(initialComments);
-  })
+  }, [initialComments]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -25,7 +25,6 @@ export default function CommentsList({
       />
       <div className="space-y-4">
         {allComments.map((c) => {
-          console.log(c);
           return <CommentItem key = {c._id
         } { ...c } />;}
         )}
