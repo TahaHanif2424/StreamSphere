@@ -107,7 +107,7 @@ export default function ChannelPage() {
         <Await resolve={loaderData.videos}>
           {(loaded) => (
             <VideosList
-              isChangeable={channelId === currUser}
+              isChangeable={channelId === currUser._id}
               isOpenedOnChannels={true}
               videos={loaded.video}
             />
