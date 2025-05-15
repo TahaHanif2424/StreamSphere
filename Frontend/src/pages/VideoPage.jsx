@@ -4,9 +4,27 @@ import VideoActions from '../components/VideoPage/VideoActions';
 import CommentsList from '../components/VideoPage/CommentsList';
 import VideosList from '../components/VideoPage/VideosList';
 import { apiFetch } from '../utils/api';
+import { useEffect } from 'react';
 
 export default function VideoPage() {
   const { destinationVideo, videos, comments } = useRouteLoaderData('video');
+  const user = useSelector(state => state.user.user);
+
+    useEffect(async () => {
+      const response = await apiFetch('http://localhost:5000/video/viewandhistroy/' + destinationVideo._id, {
+        method: 'POST',
+        body: JSON.stringify({
+          user_id: user._id
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if(!response.ok) 
+        throw new Error('Cant update the views and history');
+
+    }, [destinationVideo]);
 
   return (
     <div className="min-h-screen bg-transparent px-4 sm:px-6 lg:px-10 py-8 text-white animate-fadeIn">
