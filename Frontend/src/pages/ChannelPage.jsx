@@ -1,4 +1,5 @@
-import { Suspense, useState } from "react";
+// --- Updated ChannelPage.jsx ---
+import { Suspense, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   Await,
@@ -10,29 +11,58 @@ import {
 import VideosList from "../components/HomePage/VideosList";
 import { apiFetch } from "../utils/api";
 import defaultChannelPic from '../../public/icon-7797704_640.png';
+import { Link } from "react-router-dom";
 
 export default function ChannelPage() {
   const loaderData = useLoaderData();
   const { channelId } = useParams();
   const currUser = useSelector((state) => state.user.user);
   const navigate = useNavigate();
-  console.log(channelId, currUser);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [activeTab, setActiveTab] = useState("videos");
+  const [playlists, setPlaylists] = useState([]);
+
+  useEffect(() => {
+    if (activeTab === "playlists") {
+      loadPlaylists();
+    }
+  }, [activeTab]);
+
+  async function loadPlaylists() {
+    const res = await apiFetch(`http://localhost:5000/playlist/user/${channelId}`);
+    if (res.ok) {
+      const data = await res.json();
+      setPlaylists(data);
+    }
+  }
+
+  async function createPlaylist() {
+    const name = prompt("Enter playlist name");
+    if (!name) return;
+    await apiFetch("http://localhost:5000/playlist/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: channelId, name, video_id: [] })
+    });
+    loadPlaylists();
+  }
 
   function handleUploadClick() {
     navigate("/upload");
   }
+
   function openModal() {
-    if(currUser._id !== channelId)
-      return;
+    if (currUser._id !== channelId) return;
     setIsModalOpen(true);
   }
+
   function closeModal() {
     setIsModalOpen(false);
     setSelectedFile(null);
   }
+
   async function handleImageSubmit(e) {
     e.preventDefault();
     if (!selectedFile) return;
@@ -46,37 +76,28 @@ export default function ChannelPage() {
     window.location.reload();
   }
 
-
   return (
     <div className="min-h-screen w-full bg-gray-50 py-8 px-4 sm:px-10">
-      {/* Header: channel info + counts */}
-      <Suspense
-        fallback={
-          <div className="text-center text-gray-500 py-8">
-            Loading channel info...
-          </div>
-        }
-      >
+      <Suspense fallback={<div className="text-center">Loading channel info...</div>}>
         <Await resolve={loaderData.channelInfo}>
           {(channelInfo) => (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 border-b pb-4 border-gray-200">
+            <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6 border-b pb-4">
               <div className="flex items-center gap-4">
                 <img
                   src={channelInfo.channelImageURL || defaultChannelPic}
                   onClick={openModal}
                   alt={channelInfo.channelName}
-                  className={`w-16 h-16 rounded-full object-cover ${currUser._id === channelId ? 'cursor-pointer' : ''} shadow-md`}
+                  className={`w-16 h-16 rounded-full object-cover ${currUser._id === channelId ? 'cursor-pointer' : ''}`}
                 />
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-800">
-                    {channelInfo.channelName}
-                  </h1>
-                  <div className="flex items-center gap-4 text-gray-600 mt-1">
+                  <h1 className="text-3xl font-bold">{channelInfo.channelName}</h1>
+                  <div className="text-gray-600 text-sm mt-1">
                     <Suspense fallback={<span>– subscribers</span>}>
                       <Await resolve={loaderData.subCount}>
                         {(subCount) => <span>{subCount} subscribers</span>}
                       </Await>
                     </Suspense>
+                    <span className="mx-2">|</span>
                     <Suspense fallback={<span>– total likes</span>}>
                       <Await resolve={loaderData.totalLikes}>
                         {(totalLikes) => <span>{totalLikes} total likes</span>}
@@ -86,42 +107,71 @@ export default function ChannelPage() {
                 </div>
               </div>
               {channelId === currUser._id && (
-                <button
-                  onClick={handleUploadClick}
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg transition"
-                >
-                  Upload New Video
-                </button>
+                <button onClick={handleUploadClick} className="bg-green-600 text-white px-4 py-2 rounded">Upload New Video</button>
               )}
             </div>
           )}
         </Await>
       </Suspense>
 
-      {/* Videos List */}
-      <Suspense
-        fallback={
-          <div className="text-center text-gray-500">Loading videos...</div>
-        }
-      >
-        <Await resolve={loaderData.videos}>
-          {(loaded) => (
-            <VideosList
-              isChangeable={channelId === currUser._id}
-              isOpenedOnChannels={true}
-              videos={loaded.video}
-            />
-          )}
-        </Await>
-      </Suspense>
+      <div className="flex gap-4 mb-6">
+        <button
+          className={`px-4 py-2 rounded ${activeTab === "videos" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+          onClick={() => setActiveTab("videos")}
+        >
+          Videos
+        </button>
+        <button
+          className={`px-4 py-2 rounded ${activeTab === "playlists" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+          onClick={() => setActiveTab("playlists")}
+        >
+          Playlists
+        </button>
+      </div>
 
-      {/* Custom Modal */}
+      {activeTab === "videos" && (
+        <Suspense fallback={<div>Loading videos...</div>}>
+          <Await resolve={loaderData.videos}>
+            {(loaded) => (
+              <VideosList
+                isChangeable={channelId === currUser._id}
+                isOpenedOnChannels={true}
+                videos={loaded.video}
+              />
+            )}
+          </Await>
+        </Suspense>
+      )}
+
+      {activeTab === "playlists" && (
+        <div>
+          {channelId === currUser._id && (
+            <button onClick={createPlaylist} className="mb-4 bg-blue-500 text-white px-4 py-2 rounded">
+              + Add Playlist
+            </button>
+          )}
+          {playlists.length === 0 ? (
+            <p className="text-gray-500">No playlists yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {playlists.map((pl) => (
+                <div
+                  key={pl._id}
+                  className="p-4 border rounded shadow cursor-pointer hover:bg-gray-100"
+                  onClick={() => navigate(`/playlist/${pl._id}`)}
+                >
+                  <h2 className="text-lg font-semibold">{pl.name}</h2>
+                  <p className="text-sm text-gray-600">{pl.video_id.length} videos</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div
-            onClick={closeModal}
-            className="fixed inset-0 bg-black opacity-50"
-          />
+          <div onClick={closeModal} className="fixed inset-0 bg-black opacity-50" />
           <form
             onSubmit={handleImageSubmit}
             className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
@@ -167,25 +217,17 @@ async function loadChannelVideos(channelId) {
   return response.json();
 }
 async function loadChannelInfo(channelId) {
-  const response = await apiFetch(
-    "http://localhost:5000/user/getuser/" + channelId,
-    { method: "GET" }
-  );
+  const response = await apiFetch("http://localhost:5000/user/getuser/" + channelId);
   if (!response.ok) throw new Error("Could not fetch user data");
-  const users = await response.json();
-  return users;
+  return response.json();
 }
-
 async function loadSubscriberCount(channelId) {
-  const res = await apiFetch(
-    `http://localhost:5000/subscription/count/${channelId}`
-  );
+  const res = await apiFetch(`http://localhost:5000/subscription/count/${channelId}`);
   if (!res.ok) return 0;
   const { count } = await res.json();
   return count;
 }
 async function loadTotalLikes(channelId) {
-  // fetch all videos, sum their likes
   const vidData = await loadChannelVideos(channelId);
   return vidData.video.reduce((sum, vid) => sum + (vid.likes || 0), 0);
 }
