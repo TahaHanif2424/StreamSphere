@@ -73,33 +73,34 @@ export default function Signup() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-md"
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    className="w-full max-w-md"
+  >
+    <Form
+      onSubmit={handleFormSubmission}
+      className="flex flex-col items-center gap-6 p-8 w-full shadow-xl rounded-2xl bg-zinc-900/80 border border-zinc-700 relative overflow-hidden"
     >
-      <Form
-        onSubmit={handleFormSubmission}
-        className="flex flex-col gap-6 p-8 w-full shadow-2xl rounded-2xl bg-[#1c1c1e]/90 backdrop-blur-xl border border-white/10 text-white"
+      <motion.h2
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="text-4xl font-extrabold text-white mb-1"
       >
-        <motion.h2
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-3xl font-bold text-center"
-        >
-          Create Account
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-gray-400 text-sm text-center"
-        >
-          Sign up to continue exploring content
-        </motion.p>
+        Create Account
+      </motion.h2>
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="text-zinc-400 text-sm text-center"
+      >
+        Sign up to continue exploring content
+      </motion.p>
 
+      <div className="w-full">
         <Input
           value={enteredChannel}
           validation={false}
@@ -110,9 +111,11 @@ export default function Signup() {
           type="text"
           label="Channel Name"
           id="channel"
-          icon={<FaUser />}
+          icon={FaUser}
         />
+      </div>
 
+      <div className="w-full">
         <Input
           value={enteredEmail}
           validation={true}
@@ -123,9 +126,11 @@ export default function Signup() {
           type="email"
           label="Email"
           id="email"
-          icon={<FaEnvelope />}
+          icon={FaEnvelope}
         />
+      </div>
 
+      <div className="w-full">
         <Input
           value={enteredPassword}
           validation={true}
@@ -136,9 +141,11 @@ export default function Signup() {
           type="password"
           label="Password"
           id="password"
-          icon={<FaLock />}
+          icon={FaLock}
         />
+      </div>
 
+      <div className="w-full">
         <Input
           value={enteredConfirmPassword}
           validation={true}
@@ -149,18 +156,19 @@ export default function Signup() {
           type="password"
           label="Confirm Password"
           id="confirm-password"
-          icon={<FaLock />}
+          icon={FaLock}
         />
+      </div>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          type="submit"
-          className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl shadow-md transition duration-300"
-        >
-          Sign Up
-        </motion.button>
-      </Form>
-    </motion.div>
-  );
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        type="submit"
+        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 transition duration-300"
+      >
+        Sign Up
+      </motion.button>
+    </Form>
+  </motion.div>
+);
 }

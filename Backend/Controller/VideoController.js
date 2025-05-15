@@ -277,6 +277,9 @@ router.put("/update/:id", async (req, res) => {
 });
 
 
+//Increment view and update Histroy
+//URL http://localhost:5000/video/viewandhistroy:id     here id is video_id
+
 router.post("/viewandhistroy/:id", async (req,res)=>{
     try{
         const video_id=req.params.id;
@@ -290,6 +293,8 @@ router.post("/viewandhistroy/:id", async (req,res)=>{
         }
         histroy.watchedVideos.push(watchedVideos[0]);
         await histroy.save();
+        video.views=video.views+1;
+        await video.save();
         
     }catch(err){
         console.error({err});
