@@ -35,14 +35,9 @@ export async function action({ request, params }) {
 
   const token = localStorage.getItem("accessToken");
 
-  const response = await fetch(url, {
+  const response = await apiFetch(url, {
     method: "POST",
     body: formData,
-    credentials: 'include',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
   });
 
   return response;

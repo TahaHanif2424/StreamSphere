@@ -5,9 +5,8 @@ export async function apiFetch(url, opts = {}) {
     ...opts,
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}` }),
       ...(opts.headers || {}),
+      ...(token && { Authorization: `Bearer ${token}` }),
     },
   };
 
