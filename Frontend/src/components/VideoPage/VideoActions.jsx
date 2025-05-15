@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { apiFetch } from '../../utils/api';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { apiFetch } from "../../utils/api";
 
 export default function VideoActions({ videoId, channelId, initialLikes }) {
   const currentUser = useSelector((state) => state.user.user);
@@ -14,7 +14,9 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
     apiFetch(`http://localhost:5000/like/${videoId}`)
       .then((res) => res.json())
       .then((data) => {
-        const userLiked = data.some((like) => like.user_id._id === currentUser._id);
+        const userLiked = data.some(
+          (like) => like.user_id._id === currentUser._id
+        );
         setLiked(userLiked);
         setLikeCount(data.length);
       })
@@ -25,7 +27,7 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
   useEffect(() => {
     apiFetch(`http://localhost:5000/subscription/` + currentUser._id)
       .then((res) => {
-        if (!res.ok) throw new Error('Not subscribed');
+        if (!res.ok) throw new Error("Not subscribed");
         return res.json();
       })
       .then((sub) => {
@@ -38,15 +40,15 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
     try {
       if (!liked) {
         await apiFetch(`http://localhost:5000/like/${videoId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ user_id: currentUser._id }),
         });
         setLikeCount((c) => c + 1);
       } else {
         await apiFetch(`http://localhost:5000/like/unlike/${videoId}`, {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ user_id: currentUser._id }),
         });
         setLikeCount((c) => Math.max(0, c - 1));
@@ -59,18 +61,25 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
 
   const toggleSubscribe = async () => {
     try {
-      if (!subscribed) {                                      ``
-        await apiFetch('http://localhost:5000/subscription/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: currentUser._id, subscribedChannel: [channelId] }),
+      if (!subscribed) {
+        ``;
+        await apiFetch("http://localhost:5000/subscription/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: currentUser._id,
+            subscribedChannel: [channelId],
+          }),
         });
       } else {
-        await apiFetch(`http://localhost:5000/subscription/unsubscribe/${channelId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: currentUser._id }),
-        });
+        await apiFetch(
+          `http://localhost:5000/subscription/unsubscribe/${channelId}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: currentUser._id }),
+          }
+        );
       }
       setSubscribed(!subscribed);
     } catch (err) {
@@ -92,13 +101,13 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
       {/* Subscribe Button */}
       <button
         onClick={toggleSubscribe}
-        className={`px-4 py-1 text-sm font-medium rounded-md transition $
+        className={`px-4 py-1 text-sm font-semibold rounded-md transition shadow-sm ${
           subscribed
-            ? 'bg-gray-300 text-gray-800 hover:bg-gray-400'
-            : 'bg-red-600 text-white hover:bg-red-700'
-        `}
+            ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+            : "bg-blue-600 text-white hover:bg-blue-700"
+        }`}
       >
-        {subscribed ? 'Subscribed' : 'Subscribe'}
+        {subscribed ? "Subscribed" : "Subscribe"}
       </button>
     </div>
   );
