@@ -15,8 +15,8 @@ export default function CommentsList({
   }, [initialComments]);
 
   return (
-    <section className="flex flex-col gap-6 bg-white rounded-lg shadow-lg p-6 max-w-4xl w-full mx-auto animate-fadeIn">
-      <h2 className="text-2xl font-semibold text-gray-900 border-b border-gray-200 pb-3">
+    <section className="flex flex-col gap-6 bg-slate-900 rounded-xl shadow-md p-6 max-w-4xl w-full mx-auto animate-fadeIn">
+      <h2 className="text-2xl font-semibold text-white border-b border-slate-700 pb-3">
         Comments
       </h2>
       <CommentForm
@@ -25,7 +25,7 @@ export default function CommentsList({
         setComments={setAllComments}
         videoId={videoId}
       />
-      <div className="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+      <div className="space-y-4 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
         {allComments.map((c) => (
           <CommentItem key={c._id} {...c} />
         ))}

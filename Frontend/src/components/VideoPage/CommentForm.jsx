@@ -41,7 +41,7 @@ export default function CommentForm({
   return (
     <form
       onSubmit={submitHandler}
-      className="flex items-start gap-4 p-4 bg-gray-100 rounded-md shadow-inner"
+      className="flex items-start gap-4 p-4 bg-slate-800 rounded-md shadow-inner"
     >
       <img
         src={channelImageURL || defaultChannelPic}
