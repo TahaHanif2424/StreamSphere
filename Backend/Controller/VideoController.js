@@ -308,6 +308,7 @@ router.post("/viewandhistroy/:id", async (req,res)=>{
 router.post("/search", async (req, res) => {
     try {
         const query = req.body.query;
+        console.log(query);
         const regex = new RegExp(query, 'i'); // i = case-insensitive
 
         const videos = await Video.find({
@@ -316,7 +317,7 @@ router.post("/search", async (req, res) => {
                 { description: { $regex: regex } }
             ]
         }).populate("user_id", "channelName channelImageURL");
-
+        console.log(videos);
         res.status(200).send(videos);
     } catch (err) {
         console.error(err);
