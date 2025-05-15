@@ -47,7 +47,7 @@ export default function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 w-full h-[10%] z-30 bg-gradient-to-r from-blue-900 via-black to-black shadow-lg shadow-blue-900/40 backdrop-blur-md">
-        <div className="w-full mx-auto flex items-center justify-between pl-4 pr-7 py-3 md:py-4">
+        <div className="w-full h-full mx-auto flex items-center justify-between pl-4 pr-7 py-3 md:py-4">
           {/* Left: Hamburger + Brand */}
           <div className="flex items-center gap-5">
             <button
