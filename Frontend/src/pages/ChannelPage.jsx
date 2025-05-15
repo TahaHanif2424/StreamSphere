@@ -1,6 +1,7 @@
 // --- Updated ChannelPage.jsx ---
 import { Suspense, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import {
   Await,
   defer,
@@ -20,10 +21,18 @@ export default function ChannelPage() {
 
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [activeTab, setActiveTab] = useState("videos");
   const [playlists, setPlaylists] = useState([]);
   const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = searchParams.get("tab");
+  const [activeTab, setActiveTab] = useState(tab || "videos");
+
+  useEffect(() => {
+    if (tab && tab !== activeTab) {
+      setActiveTab(tab);
+    }
+  }, [tab]);
 
   useEffect(() => {
     if (activeTab === "playlists") {
@@ -137,24 +146,26 @@ export default function ChannelPage() {
           className={`px-4 py-2 rounded ${
             activeTab === "videos" ? "bg-blue-600 text-white" : "bg-gray-200"
           }`}
-          onClick={() => setActiveTab("videos")}
+          onClick={() => setSearchParams({ tab: "videos" })}
         >
           Videos
         </button>
+
         <button
           className={`px-4 py-2 rounded ${
             activeTab === "playlists" ? "bg-blue-600 text-white" : "bg-gray-200"
           }`}
-          onClick={() => setActiveTab("playlists")}
+          onClick={() => setSearchParams({ tab: "playlists" })}
         >
           Playlists
         </button>
+
         {channelId === currUser._id && (
           <button
             className={`px-4 py-2 rounded ${
               activeTab === "history" ? "bg-blue-600 text-white" : "bg-gray-200"
             }`}
-            onClick={() => setActiveTab("history")}
+            onClick={() => setSearchParams({ tab: "history" })}
           >
             Watch History
           </button>
@@ -201,7 +212,9 @@ export default function ChannelPage() {
                   throw new Error("Unable to delete watch history video");
                 }
 
-                setWatchedVideos(videos => videos.filter(video => video._id !== id));
+                setWatchedVideos((videos) =>
+                  videos.filter((video) => video._id !== id)
+                );
               }
 
               return watchedVideos.length === 0 ? (
@@ -330,7 +343,6 @@ export default function ChannelPage() {
   );
 }
 
-// Loader functions
 async function loadChannelVideos(channelId) {
   const response = await apiFetch("http://localhost:5000/video/get", {
     method: "POST",

@@ -30,7 +30,7 @@ export default function Header() {
   };
 
   const handleViewChannel = () => {
-    navigate(`/channels/${userData._id}`);
+    navigate(`/channels/${userData._id}?tab=videos`);
   };
 
   const toggleSidebar = () => {
@@ -108,13 +108,13 @@ export default function Header() {
 
             {/* Sidebar Links */}
             <nav className="flex flex-col px-4 pt-4 space-y-2 text-lg text-gray-700">
-              <button onClick={() => goTo("/history")} className="hover:bg-gray-100 py-2 text-left px-2 rounded">
+              <button onClick={() => goTo(`/channels/${userData._id}?tab=history`)} className="hover:bg-gray-100 py-2 text-left px-2 rounded">
                 📺 Watch History
               </button>
               <button onClick={() => goTo(`/channels/${userData._id}?tab=playlists`)} className="hover:bg-gray-100 py-2 text-left px-2 rounded">
                 🎞️ Playlists
               </button>
-              <button onClick={() => goTo(`/channels/${userData._id}`)} className="hover:bg-gray-100 py-2 text-left px-2 rounded">
+              <button onClick={() => goTo(`/channels/${userData._id}?tab=videos`)} className="hover:bg-gray-100 py-2 text-left px-2 rounded">
                 📺 Channel Details
               </button>
             </nav>

@@ -12,13 +12,13 @@ export default function CommentItem({
       <img
         src={user_id.channelImageURL || defaultChannelPic}
         alt={user_id.channelName}
-        onClick={() => navigate(`/channels/${user_id._id}`)}
+        onClick={() => navigate(`/channels/${user_id._id}?tab=videos`)}
         className="w-10 h-10 rounded-full object-cover cursor-pointer"
       />
       <div className="flex-1">
         <div className="flex items-center gap-2 text-sm">
           <span
-            onClick={() => navigate(`/channels/${user_id._id}`)}
+            onClick={() => navigate(`/channels/${user_id._id}?tab=videos`)}
             className="font-semibold text-gray-800 hover:underline cursor-pointer"
           >
             {user_id.channelName}

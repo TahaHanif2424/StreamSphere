@@ -17,7 +17,7 @@ export default function VideoItem({
   const [hasError, setHasError] = useState(false);
 
   const handleVideoPlayClick = () => navigate("/videos/" + _id);
-  const handleChannelClick = () => navigate("/channels/" + user_id._id);
+  const handleChannelClick = () => navigate("/channels/" + user_id._id + "?tab=videos");
   const handleDeleteClick = () => onDelete(_id);
   const handleEditClick = () => navigate(`/videos/${_id}/edit`);
 
