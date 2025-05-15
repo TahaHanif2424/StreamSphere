@@ -168,7 +168,7 @@ export default function Header() {
                 animate={{ x: 0 }}
                 exit={{ x: "-100%" }}
                 transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                className="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-blue-950 via-black to-black shadow-2xl z-30 flex flex-col justify-between"
+                className="fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-blue-950 via-black to-black shadow-2xl z-30 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between px-4 py-5 border-b border-blue-800">
