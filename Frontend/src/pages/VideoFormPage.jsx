@@ -36,8 +36,6 @@ export async function action({ request, params }) {
     ? `http://localhost:5000/video/update/${params.videoId}`
     : "http://localhost:5000/video/add";
 
-  const token = localStorage.getItem("accessToken");
-
   const response = await apiFetch(url, {
     method: "POST",
     body: formData, 
@@ -52,7 +50,10 @@ export async function action({ request, params }) {
     const response2 = await apiFetch('http://localhost:5000/playlist/add/' + urlSearchparams.get('playlistId'), {
       method: 'PUT',
       body: JSON.stringify({
-        video_id: resData._id 
+        video_id: resData._id,
+        headers: {
+          'Content-Type': 'application/json'
+        } 
       })
     });
 
