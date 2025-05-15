@@ -48,8 +48,14 @@ export default function Header() {
 
   function handleSearchClick() {
     const query = inputRef.current.value;
-    inputRef.current.value = '';
-    navigate('/search?query=' + query);
+    inputRef.current.value = "";
+    navigate("/search?query=" + query);
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      handleSearchClick();
+    }
   }
 
   return (
@@ -88,7 +94,12 @@ export default function Header() {
               </AnimatePresence>
             </button>
 
-            <h1 onClick={() => {navigate('/')}} className="text-white cursor-pointer font-extrabold text-2xl tracking-wide select-none">
+            <h1
+              onClick={() => {
+                navigate("/");
+              }}
+              className="text-white cursor-pointer font-extrabold text-2xl tracking-wide select-none"
+            >
               Stream <span className="text-blue-500">Sphere</span>
             </h1>
           </div>
@@ -102,6 +113,7 @@ export default function Header() {
             <input
               type="search"
               ref={inputRef}
+              onKeyDown={handleKeyDown}
               placeholder="Search videos"
               className="w-full bg-transparent border border-blue-600 rounded-full py-2 px-4 pl-10 text-blue-300 placeholder-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 shadow-lg"
             />
