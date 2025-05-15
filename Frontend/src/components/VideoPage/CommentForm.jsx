@@ -3,6 +3,8 @@ import { validateTitle } from "../../utils/validation";
 import Input from "../UI/Input";
 import { apiFetch } from "../../utils/api";
 import { useSelector } from "react-redux";
+import defaultChannelPic from '../../../public/icon-7797704_640.png';
+
 
 export default function CommentForm({
   channelName,
@@ -43,7 +45,7 @@ export default function CommentForm({
   return (
     <form onSubmit={submitHandler} className="flex items-start gap-3 p-4 bg-white rounded-lg shadow-sm">
       <img
-        src={channelImageURL}
+        src={channelImageURL || defaultChannelPic}
         alt={channelName}
         className="w-10 h-10 rounded-full object-cover"
       />
