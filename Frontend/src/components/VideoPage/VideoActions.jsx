@@ -23,7 +23,7 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
 
   // Check subscription status
   useEffect(() => {
-    apiFetch(`http://localhost:5000/subscription/subscribe`)
+    apiFetch(`http://localhost:5000/subscription/` + currentUser._id)
       .then((res) => {
         if (!res.ok) throw new Error('Not subscribed');
         return res.json();
@@ -59,7 +59,7 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
 
   const toggleSubscribe = async () => {
     try {
-      if (!subscribed) {
+      if (!subscribed) {                                      ``
         await apiFetch('http://localhost:5000/subscription/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
