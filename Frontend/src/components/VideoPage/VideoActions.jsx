@@ -68,7 +68,7 @@ export default function VideoActions({ videoId, channelId, initialLikes }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             user_id: currentUser._id,
-            subscribedChannel: [channelId],
+            channelId,
           }),
         });
       } else {
