@@ -15,7 +15,6 @@ const verifyJWT=(req,res,next)=>{
         (err,decode)=>{
             if(err)return res.sendStatus(403);
             req.email=decode.email;
-            console.log(req.email);
             next();
         }
     )

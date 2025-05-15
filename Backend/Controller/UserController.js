@@ -131,9 +131,13 @@ router.put("/uploadimage/:id", upload.single("image"), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded or wrong field name" });
     }
+    console.log(req.file);
 
     const user_id = req.params.id;
     const user = await User.findById(user_id);
+    if(user.channelImageURL){
+        user.channelImageURL='';
+    }
 
     const imageName = crypto.randomBytes(32).toString('hex');
 
@@ -152,6 +156,7 @@ router.put("/uploadimage/:id", upload.single("image"), async (req, res) => {
     await S3.send(command);
 
     const publicImageUrl = generatePublicURL(imageName);
+    
     user.channelImageURL = publicImageUrl; 
     await user.save();
 

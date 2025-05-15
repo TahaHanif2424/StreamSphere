@@ -28,7 +28,7 @@ app.use(cors({
     next();
   })
 
-app.use(express.json());
+app.use(express.json({limit:'500mb'}));
 app.use(cookieParser());
 
 //Refresh Token

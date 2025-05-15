@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
   const demoVideo = {
     title: 'Test Video',
-    hlsBaseUrl: 'https://stream-sphere.s3.amazonaws.com/videos/8015ec43c492e552/master.m3u8',
+    hlsBaseUrl: 'https://stream-sphere.s3.amazonaws.com/videos/f3b48be2d505c995/master.m3u8',
     channelName: 'Demo Channel',
     channelImageURL: null,
     description: 'This is a test video stream from S3.',

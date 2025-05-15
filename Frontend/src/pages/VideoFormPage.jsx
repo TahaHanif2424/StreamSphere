@@ -40,8 +40,7 @@ export async function action({ request, params }) {
     body: formData,
     credentials: 'include',
     headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${token}`
     }
   });
 
