@@ -3,13 +3,13 @@ export async function apiFetch(url, opts = {}) {
   const token = localStorage.getItem('accessToken');
   console.log(token);
   const options = {
+    ...opts,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),
       ...(opts.headers || {}),
     },
-    ...opts,
   };
 
   let res = await fetch(url, options);
