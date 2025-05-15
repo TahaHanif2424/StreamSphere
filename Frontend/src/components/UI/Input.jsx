@@ -30,7 +30,8 @@ export default function Input({
 
   if (validation && isTouched) {
     if (isValid) {
-      borderClass = "border-green-500 focus:ring-green-500 focus:border-green-500";
+      borderClass =
+        "border-green-500 focus:ring-green-500 focus:border-green-500";
       bgClass = "bg-green-950 text-green-200";
     } else {
       borderClass = "border-red-500 focus:ring-red-500 focus:border-red-500";
@@ -39,16 +40,16 @@ export default function Input({
   }
 
   return (
-    <div className="flex flex-col gap-1 w-full transition-all duration-300">
+    <div className="flex flex-col gap-2 w-full transition-all duration-300">
       <label
         htmlFor={id}
-        className="text-sm font-semibold text-zinc-300 tracking-wide"
+        className="text-xs font-semibold text-zinc-300 tracking-wide"
       >
         {label}
       </label>
 
       <div
-        className={`flex items-center gap-3 px-3 py-2 rounded-lg shadow-sm border transition-all duration-300 ${borderClass} ${bgClass}`}
+        className={`flex items-center gap-3 px-3 py-1.5 rounded-lg shadow-sm border transition-all duration-300 ${borderClass} ${bgClass}`}
       >
         {Icon && <Icon className="text-zinc-400 text-lg" />}
         <input

@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
-import { Menu } from "lucide-react"; // hamburger icon
+import { Menu, X } from "lucide-react"; // hamburger & close icons
+import { motion, AnimatePresence } from "framer-motion";
 import defaultChannelPic from "../../../public/icon-7797704_640.png";
 
 export default function Header() {
@@ -35,6 +36,7 @@ export default function Header() {
 
   const toggleSidebar = () => {
     setSidebarOpen((prev) => !prev);
+    setDropdownOpen(false);
   };
 
   const goTo = (path) => {
@@ -44,83 +46,166 @@ export default function Header() {
 
   return (
     <>
-      {/* HEADER */}
-      <header className="flex items-center w-screen bg-white fixed top-0 left-0 px-4 sm:px-10 h-[10dvh] justify-between py-4 shadow-lg shadow-black/20 z-20">
-        <div className="flex items-center gap-4">
-          {/* Hamburger */}
-          <button onClick={toggleSidebar}>
-            <Menu className="w-6 h-6 text-black" />
-          </button>
-          <h1 className="text-2xl tracking-widest font-semibold">Stream Sphere</h1>
+      <header className="fixed top-0 left-0 w-full z-30 bg-gradient-to-r from-indigo-900 via-black to-black shadow-lg shadow-indigo-900/40 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 md:py-4">
+          {/* Left: Hamburger + Brand */}
+          <div className="flex items-center gap-6">
+            <button
+              aria-label={sidebarOpen ? "Close menu" : "Open menu"}
+              onClick={toggleSidebar}
+              className="text-indigo-400 hover:text-indigo-600 focus:outline-none"
+            >
+              <AnimatePresence exitBeforeEnter initial={false}>
+                {sidebarOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <X className="w-7 h-7" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Menu className="w-7 h-7" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
+
+            <h1 className="text-white font-extrabold text-2xl tracking-wide select-none">
+              Stream <span className="text-indigo-400">Sphere</span>
+            </h1>
+          </div>
+
+          {/* Center: Search Bar */}
+          <motion.div
+            className="relative hidden md:block"
+            initial={{ width: 250 }}
+            whileFocus={{ width: 350 }}
+          >
+            <input
+              type="search"
+              placeholder="Search videos, channels..."
+              className="w-full bg-transparent border border-indigo-600 rounded-full py-2 px-4 pl-10 text-indigo-300 placeholder-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all duration-300 shadow-lg"
+            />
+            <svg
+              className="w-5 h-5 absolute left-3 top-3.5 text-indigo-400 pointer-events-none"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </motion.div>
+
+          {/* Right: User avatar & dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <motion.img
+              src={userData?.channelImageURL || defaultChannelPic}
+              alt="User Avatar"
+              className="w-11 h-11 rounded-full object-cover border-2 border-indigo-400 cursor-pointer shadow-lg"
+              onClick={() => setDropdownOpen((v) => !v)}
+              whileHover={{ scale: 1.1, boxShadow: "0 0 10px #7c3aed" }}
+              transition={{ type: "spring", stiffness: 300 }}
+            />
+
+            <AnimatePresence>
+              {dropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                  className="absolute right-0 mt-3 w-44 bg-gradient-to-tr from-indigo-900 via-black to-black border border-indigo-600 rounded-lg shadow-lg text-indigo-200 font-semibold overflow-hidden"
+                >
+                  <button
+                    onClick={handleViewChannel}
+                    className="w-full text-left px-4 py-3 hover:bg-indigo-700 transition-colors"
+                  >
+                    View Channel
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-3 hover:bg-red-700 transition-colors text-red-400"
+                  >
+                    Logout
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
-        {/* Search */}
-        <input
-          type="text"
-          className="outline-none border border-black/50 px-3 text-lg bg-white focus:border-black rounded-md py-1 w-[25%]"
-          placeholder="Search"
-        />
+        {/* Sidebar */}
+        <AnimatePresence>
+          {sidebarOpen && (
+            <>
+              <motion.div
+                onClick={toggleSidebar}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.4 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black backdrop-blur-sm z-20"
+              />
 
-        {/* Avatar + Dropdown */}
-        <div className="relative" ref={dropdownRef}>
-          <img
-            src={userData.channelImageURL || defaultChannelPic}
-            alt="profile"
-            className="w-10 h-10 rounded-full object-cover border-2 border-sky-500 cursor-pointer"
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-          />
-
-          {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-30">
-              <button
-                onClick={handleViewChannel}
-                className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
+              <motion.aside
+                initial={{ x: "-100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "-100%" }}
+                transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                className="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-indigo-900 via-black to-black shadow-2xl z-30 flex flex-col"
               >
-                View Channel
-              </button>
-              <button
-                onClick={handleLogout}
-                className="block w-full px-4 py-2 text-sm text-red-600 hover:bg-red-100 text-left"
-              >
-                Logout
-              </button>
-            </div>
+                <div className="flex items-center justify-between px-6 py-5 border-b border-indigo-700">
+                  <h2 className="text-white font-bold text-xl tracking-wide select-none">
+                    Stream Sphere
+                  </h2>
+                  <button
+                    aria-label="Close sidebar"
+                    onClick={toggleSidebar}
+                    className="text-indigo-400 hover:text-indigo-600 focus:outline-none"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+                <nav className="flex flex-col mt-6 space-y-3 px-6 text-indigo-300 font-semibold">
+                  <button
+                    onClick={() => goTo(`/channels/${userData._id}?tab=history`)}
+                    className="hover:text-indigo-400 transition-colors"
+                  >
+                    📺 Watch History
+                  </button>
+                  <button
+                    onClick={() => goTo(`/channels/${userData._id}?tab=playlists`)}
+                    className="hover:text-indigo-400 transition-colors"
+                  >
+                    🎞️ Playlists
+                  </button>
+                  <button
+                    onClick={() => goTo(`/channels/${userData._id}?tab=videos`)}
+                    className="hover:text-indigo-400 transition-colors"
+                  >
+                    📺 Channel Details
+                  </button>
+                </nav>
+              </motion.aside>
+            </>
           )}
-        </div>
+        </AnimatePresence>
       </header>
-
-      {/* SIDEBAR + BACKDROP */}
-      {sidebarOpen && (
-        <>
-          <div
-            onClick={toggleSidebar}
-            className="fixed inset-0 bg-black opacity-50 z-10"
-          />
-
-          <aside className="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-20 transform translate-x-0 transition-transform duration-300 ease-in-out">
-            {/* Sidebar Header */}
-            <div className="flex items-center gap-4 px-4 py-4 border-b shadow-sm">
-              <button onClick={toggleSidebar}>
-                <Menu className="w-6 h-6 text-black" />
-              </button>
-              <h2 className="text-xl font-semibold">Stream Sphere</h2>
-            </div>
-
-            {/* Sidebar Links */}
-            <nav className="flex flex-col px-4 pt-4 space-y-2 text-lg text-gray-700">
-              <button onClick={() => goTo(`/channels/${userData._id}?tab=history`)} className="hover:bg-gray-100 py-2 text-left px-2 rounded">
-                📺 Watch History
-              </button>
-              <button onClick={() => goTo(`/channels/${userData._id}?tab=playlists`)} className="hover:bg-gray-100 py-2 text-left px-2 rounded">
-                🎞️ Playlists
-              </button>
-              <button onClick={() => goTo(`/channels/${userData._id}?tab=videos`)} className="hover:bg-gray-100 py-2 text-left px-2 rounded">
-                📺 Channel Details
-              </button>
-            </nav>
-          </aside>
-        </>
-      )}
     </>
   );
 }

@@ -1,5 +1,5 @@
 // ✅ Login.jsx - Dark theme with animations and icon support
-import { useSubmit, Form } from "react-router-dom";
+import { useSubmit, Form, useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import Input from "../UI/Input";
 import { validateEmail, validatePassword } from "../../utils/validation";
@@ -7,6 +7,7 @@ import { FaLock, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [
     enteredEmail,
     setEnteredEmail,
@@ -37,6 +38,10 @@ export default function Login() {
         }
       );
     }
+  }
+
+  function switchToSignup() {
+    navigate("?mode=signup");
   }
 
   return (
@@ -106,6 +111,16 @@ export default function Login() {
         >
           Login
         </motion.button>
+        <p className="mt-4 text-sm text-gray-400">
+        Don't have an account?{" "}
+        <button
+          onClick={switchToSignup}
+          className="text-blue-500 hover:underline font-semibold"
+          type="button"
+        >
+          Sign Up
+        </button>
+      </p>
       </Form>
     </motion.div>
   );
