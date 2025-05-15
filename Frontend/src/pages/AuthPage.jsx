@@ -27,7 +27,7 @@ export default function AuthPage() {
         backgroundImage: `url('${bgPic}')`,
       }}
     >
-      <div className="absolute inset-0 bg-black bg-opacity-70 z-0" />
+      {/* <div className="absolute inset-0 bg-black bg-opacity-10 z-0" /> */}
       <div className="z-10 w-full max-w-md">{componentRendered}</div>
     </div>
   );

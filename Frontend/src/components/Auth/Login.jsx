@@ -49,7 +49,7 @@ export default function Login() {
       <Form
         onSubmit={handleFormSubmission}
         action="/"
-        className="flex flex-col items-center gap-6 p-8 w-full shadow-xl rounded-2xl bg-zinc-900 border border-zinc-700 relative overflow-hidden backdrop-blur-md"
+        className="flex flex-col items-center gap-6 p-8 w-full shadow-xl rounded-2xl bg-zinc-900/80 border border-zinc-700 relative overflow-hidden "
       >
         <motion.h1
           initial={{ scale: 0.95, opacity: 0 }}
