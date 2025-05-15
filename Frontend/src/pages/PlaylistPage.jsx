@@ -19,8 +19,6 @@ export default function PlaylistPage() {
         if (!res.ok) throw new Error("Failed to fetch playlist");
         const data = await res.json();
         setPlaylist(data.playlist);
-
-        
         setVideos(data.videos);
       } catch (error) {
         console.error(error);
@@ -41,6 +39,10 @@ export default function PlaylistPage() {
     navigate(`/channels/${currUser._id}`);
   }
 
+  function handleAddVideo() {
+    navigate(`/upload?playlistId=${playlistId}`);
+  }
+
   if (loading) return <div className="p-8 text-center">Loading playlist...</div>;
   if (!playlist) return <div className="p-8 text-center text-red-500">Playlist not found</div>;
 
@@ -51,14 +53,24 @@ export default function PlaylistPage() {
           <h1 className="text-3xl font-bold mb-2">{playlist.name}</h1>
           <p className="text-gray-600">{videos.length} videos</p>
         </div>
-        {currUser._id === playlist.user_id && (
-          <button
-            onClick={deletePlaylist}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-          >
-            Delete Playlist
-          </button>
-        )}
+        <div className="flex gap-2">
+          {currUser._id === playlist.user_id && (
+            <>
+              <button
+                onClick={handleAddVideo}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Add Video
+              </button>
+              <button
+                onClick={deletePlaylist}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Delete Playlist
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       {videos.length === 0 ? (
@@ -68,4 +80,4 @@ export default function PlaylistPage() {
       )}
     </div>
   );
-}
+};

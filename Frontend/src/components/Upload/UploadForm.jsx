@@ -1,4 +1,4 @@
-import { Form, useParams, useSubmit } from "react-router-dom";
+import { Form, useParams, useSearchParams, useSubmit } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { validateTitle } from "../../utils/validation";
 import Input from "../UI/Input";
@@ -7,6 +7,8 @@ import { useRef, useState, useEffect } from "react";
 
 export default function UploadForm({ title, thumbnail, video }) {
   const params = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log(searchParams);
   const submit = useSubmit();
   const isEditing = !!params.videoId;
   const [files, setFiles] = useState({ image: null, video: null });
