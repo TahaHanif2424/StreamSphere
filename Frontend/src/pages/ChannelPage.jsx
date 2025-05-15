@@ -164,7 +164,7 @@ export default function ChannelPage() {
                 <div
                   key={pl._id}
                   className="p-4 border rounded shadow cursor-pointer hover:bg-gray-100"
-                  onClick={() => navigate(`/playlist/${pl._id}`)}
+                  onClick={() => navigate(`/playlists/${pl._id}`)}
                 >
                   <h2 className="text-lg font-semibold">{pl.name}</h2>
                   <p className="text-sm text-gray-600">{pl.video_id.length} videos</p>

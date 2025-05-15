@@ -6,6 +6,7 @@ import { authAction } from "../actions";
 import ChannelPage, { loader as channelLoader } from "../pages/ChannelPage";
 import VideoFormPage, {action as uploadOrEditAction} from "../pages/VideoFormPage";
 import VideoPage, { loader as videoLoader } from '../pages/VideoPage';
+import PlaylistPage from "../pages/PlaylistPage";
 
 const router = createBrowserRouter([
   { path: "/auth", element: <AuthPage />, index: true, action: authAction },
@@ -19,6 +20,9 @@ const router = createBrowserRouter([
         path: "channels/:channelId",
         element: <ChannelPage />,
         loader: channelLoader,
+      },
+      {
+        path: '/playlists/:playlistId', element: <PlaylistPage />
       },
       {
         path: 'upload', element: <VideoFormPage />, action: uploadOrEditAction
