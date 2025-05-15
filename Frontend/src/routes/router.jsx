@@ -7,6 +7,7 @@ import ChannelPage, { loader as channelLoader } from "../pages/ChannelPage";
 import VideoFormPage, {action as uploadOrEditAction} from "../pages/VideoFormPage";
 import VideoPage, { loader as videoLoader } from '../pages/VideoPage';
 import PlaylistPage from "../pages/PlaylistPage";
+import SearchPage from "../pages/SearchPage";
 
 const router = createBrowserRouter([
   { path: "/auth", element: <AuthPage />, index: true, action: authAction },
@@ -20,6 +21,9 @@ const router = createBrowserRouter([
         path: "channels/:channelId",
         element: <ChannelPage />,
         loader: channelLoader,
+      },
+      {
+        path: 'search', element: <SearchPage />
       },
       {
         path: '/playlists/:playlistId', element: <PlaylistPage />
