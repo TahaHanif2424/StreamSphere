@@ -18,7 +18,7 @@ export async function action({ request, params }) {
   const user = store.getState().user.user;
   const isEditing = !!params.videoId;
   const originalFormData = await request.formData();
-  const urlSearchparams = new URLSearchParams(request.url);
+  const urlSearchparams = new URL(request.url).searchParams;
 
   const formData = new FormData();
 
@@ -30,7 +30,7 @@ export async function action({ request, params }) {
   formData.append("thumbnail", thumbnailFile);
   formData.append("data", JSON.stringify({ title, user_id: user._id }));
 
-  const isPlaylistAdding = urlSearchparams.get('playlistId');
+  const isPlaylistAdding = !!urlSearchparams.get('playlistId');
 
   let url = isEditing
     ? `http://localhost:5000/video/update/${params.videoId}`
@@ -50,11 +50,11 @@ export async function action({ request, params }) {
     const response2 = await apiFetch('http://localhost:5000/playlist/add/' + urlSearchparams.get('playlistId'), {
       method: 'PUT',
       body: JSON.stringify({
-        video_id: resData._id,
-        headers: {
+        video_id: resData._id, 
+      }),
+      headers: {
           'Content-Type': 'application/json'
-        } 
-      })
+        }
     });
 
     if(!response2.ok)
