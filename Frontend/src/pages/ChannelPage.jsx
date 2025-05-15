@@ -112,10 +112,10 @@ export default function ChannelPage() {
                   }`}
                 />
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">
                     {channelInfo.channelName}
                   </h1>
-                  <div className="text-sm text-gray-600 mt-1">
+                  <div className="text-sm text-neutral-700 mt-1">
                     <Suspense fallback={<span>–</span>}>
                       <Await resolve={loaderData.subCount}>
                         {(subCount) => <span>{subCount} subscribers</span>}
@@ -209,7 +209,7 @@ export default function ChannelPage() {
               }
 
               return watchedVideos.length === 0 ? (
-                <p className="text-gray-500">No watch history yet.</p>
+                <p className="text-neutral-600">No watch history found.</p>
               ) : (
                 <VideosList
                   videos={watchedVideos}
@@ -243,10 +243,10 @@ export default function ChannelPage() {
                   className="bg-white p-4 rounded-lg shadow hover:shadow-md transition cursor-pointer border border-gray-200"
                   onClick={() => navigate(`/playlists/${pl._id}`)}
                 >
-                  <h3 className="text-lg font-semibold text-gray-800">
+                  <h3 className="text-lg font-semibold text-neutral-900">
                     {pl.name}
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-neutral-600">
                     {pl.video_id.length} videos
                   </p>
                 </div>
