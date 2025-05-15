@@ -1,7 +1,13 @@
-import useInput from "../../hooks/useInput";
-import { validateConfirmPassword, validateEmail, validatePassword } from "../../utils/validation";
 import { useSubmit, Form } from "react-router-dom";
+import useInput from "../../hooks/useInput";
+import {
+  validateEmail,
+  validatePassword,
+  validateConfirmPassword,
+} from "../../utils/validation";
 import Input from "../UI/Input";
+import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 export default function Signup() {
   const [
@@ -43,7 +49,9 @@ export default function Signup() {
     isChannelValid,
   ] = useInput({ isValidationOn: false }, "");
 
-  const isFormValid = isEmailValid && isPasswordValid && isConfirmPasswordValid;
+  const isFormValid =
+    isEmailValid && isPasswordValid && isConfirmPasswordValid;
+
   const submit = useSubmit();
 
   function handleFormSubmission(event) {
@@ -54,7 +62,7 @@ export default function Signup() {
         {
           email: enteredEmail,
           password: enteredPassword,
-          channelName: enteredChannel
+          channelName: enteredChannel,
         },
         {
           method: "POST",
@@ -65,69 +73,94 @@ export default function Signup() {
   }
 
   return (
-    <Form
-      onSubmit={handleFormSubmission}
-      className="flex flex-col gap-4 w-full max-w-md p-6 bg-white shadow-md rounded-xl border border-gray-300"
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="w-full max-w-md"
     >
-      <div className="text-center mb-1">
-        <h2 className="text-2xl font-bold text-gray-800">Create Account</h2>
-        <p className="text-sm text-gray-500 mt-1">Sign up to continue</p>
-      </div>
-
-      <Input
-        value={enteredChannel}
-        validation={false}
-        setValue={setEnteredChannel}
-        isTouched={isChannelTouched}
-        setIsTouched={setIsChannelTouched}
-        isValid={isChannelValid}
-        type="text"
-        label="Channel Name"
-        id="channel"
-      />
-
-      <Input
-        value={enteredEmail}
-        validation={true}
-        setValue={setEnteredEmail}
-        setIsTouched={setIsEmailTouched}
-        type="email"
-        label="Email"
-        id="email"
-        isTouched={isEmailTouched}
-        isValid={isEmailValid}
-      />
-
-      <Input
-        value={enteredPassword}
-        validation={true}
-        setValue={setEnteredPassword}
-        isTouched={isPasswordTouched}
-        setIsTouched={setIsPasswordTouched}
-        isValid={isPasswordValid}
-        type="password"
-        label="Password"
-        id="password"
-      />
-
-      <Input
-        value={enteredConfirmPassword}
-        validation={true}
-        setValue={setEnteredConfirmPassword}
-        isTouched={isConfirmPasswordTouched}
-        setIsTouched={setIsConfirmPasswordTouched}
-        isValid={isConfirmPasswordValid}
-        type="password"
-        label="Confirm Password"
-        id="confirm-password"
-      />
-
-      <button
-        type="submit"
-        className="mt-3 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors duration-300"
+      <Form
+        onSubmit={handleFormSubmission}
+        className="flex flex-col gap-6 p-8 w-full shadow-2xl rounded-2xl bg-[#1c1c1e]/90 backdrop-blur-xl border border-white/10 text-white"
       >
-        Sign Up
-      </button>
-    </Form>
+        <motion.h2
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-3xl font-bold text-center"
+        >
+          Create Account
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="text-gray-400 text-sm text-center"
+        >
+          Sign up to continue exploring content
+        </motion.p>
+
+        <Input
+          value={enteredChannel}
+          validation={false}
+          setValue={setEnteredChannel}
+          setIsTouched={setIsChannelTouched}
+          isTouched={isChannelTouched}
+          isValid={isChannelValid}
+          type="text"
+          label="Channel Name"
+          id="channel"
+          icon={<FaUser />}
+        />
+
+        <Input
+          value={enteredEmail}
+          validation={true}
+          setValue={setEnteredEmail}
+          setIsTouched={setIsEmailTouched}
+          isTouched={isEmailTouched}
+          isValid={isEmailValid}
+          type="email"
+          label="Email"
+          id="email"
+          icon={<FaEnvelope />}
+        />
+
+        <Input
+          value={enteredPassword}
+          validation={true}
+          setValue={setEnteredPassword}
+          setIsTouched={setIsPasswordTouched}
+          isTouched={isPasswordTouched}
+          isValid={isPasswordValid}
+          type="password"
+          label="Password"
+          id="password"
+          icon={<FaLock />}
+        />
+
+        <Input
+          value={enteredConfirmPassword}
+          validation={true}
+          setValue={setEnteredConfirmPassword}
+          setIsTouched={setIsConfirmPasswordTouched}
+          isTouched={isConfirmPasswordTouched}
+          isValid={isConfirmPasswordValid}
+          type="password"
+          label="Confirm Password"
+          id="confirm-password"
+          icon={<FaLock />}
+        />
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          type="submit"
+          className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl shadow-md transition duration-300"
+        >
+          Sign Up
+        </motion.button>
+      </Form>
+    </motion.div>
   );
 }
