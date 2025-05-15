@@ -2,6 +2,7 @@ import { Suspense, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Await, defer, useLoaderData, useNavigate, useParams } from 'react-router';
 import VideosList from '../components/HomePage/VideosList';
+import { apiFetch } from '../utils/api';
 
 export default function ChannelPage() {
   const loaderData = useLoaderData();
@@ -22,7 +23,7 @@ export default function ChannelPage() {
     if (!selectedFile) return;
     const form = new FormData();
     form.append('image', selectedFile);
-    await fetch(`http://localhost:5000/user/uploadimage/${channelId}`, {
+    await apiFetch(`http://localhost:5000/user/uploadimage/${channelId}`, {
       method: 'PUT',
       body: form,
     });
@@ -127,7 +128,7 @@ export default function ChannelPage() {
 
 // loader
 async function loadChannelVideos(channelId) {
-  const response = await fetch('http://localhost:5000/video/get', {
+  const response = await apiFetch('http://localhost:5000/video/get', {
     method: 'POST',
     body: JSON.stringify({ user_id: channelId }),
     headers: { 'Content-Type': 'application/json' }
@@ -136,13 +137,14 @@ async function loadChannelVideos(channelId) {
   return response.json();
 }
 async function loadChannelInfo(channelId) {
-  const response = await fetch('http://localhost:5000/user/getimage');
+  const response = await apiFetch('http://localhost:5000/user/getuser/' + channelId);
   if (!response.ok) throw new Error('Could not fetch user data');
   const users = await response.json();
-  return users.find(u => u._id === channelId);
+  return users
 }
+
 async function loadSubscriberCount(channelId) {
-  const res = await fetch(`http://localhost:5000/subscription/count/${channelId}`);
+  const res = await apiFetch(`http://localhost:5000/subscription/count/${channelId}`);
   if (!res.ok) return 0;
   const { count } = await res.json();
   return count;
