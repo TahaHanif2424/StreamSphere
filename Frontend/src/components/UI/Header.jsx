@@ -46,14 +46,14 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-30 bg-gradient-to-r from-indigo-900 via-black to-black shadow-lg shadow-indigo-900/40 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 md:py-4">
+      <header className="fixed top-0 left-0 w-full z-30 bg-gradient-to-r from-blue-900 via-black to-black shadow-lg shadow-blue-900/40 backdrop-blur-md">
+        <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3 md:py-4">
           {/* Left: Hamburger + Brand */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-5">
             <button
               aria-label={sidebarOpen ? "Close menu" : "Open menu"}
               onClick={toggleSidebar}
-              className="text-indigo-400 hover:text-indigo-600 focus:outline-none"
+              className="text-blue-400 hover:text-blue-600 focus:outline-none"
             >
               <AnimatePresence exitBeforeEnter initial={false}>
                 {sidebarOpen ? (
@@ -81,23 +81,23 @@ export default function Header() {
             </button>
 
             <h1 className="text-white font-extrabold text-2xl tracking-wide select-none">
-              Stream <span className="text-indigo-400">Sphere</span>
+              Stream <span className="text-blue-500">Sphere</span>
             </h1>
           </div>
 
           {/* Center: Search Bar */}
           <motion.div
             className="relative hidden md:block"
-            initial={{ width: 250 }}
-            whileFocus={{ width: 350 }}
+            initial={{ width: 220 }}
+            whileFocus={{ width: 300 }}
           >
             <input
               type="search"
               placeholder="Search videos, channels..."
-              className="w-full bg-transparent border border-indigo-600 rounded-full py-2 px-4 pl-10 text-indigo-300 placeholder-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all duration-300 shadow-lg"
+              className="w-full bg-transparent border border-blue-600 rounded-full py-2 px-4 pl-10 text-blue-300 placeholder-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 shadow-lg"
             />
             <svg
-              className="w-5 h-5 absolute left-3 top-3.5 text-indigo-400 pointer-events-none"
+              className="w-5 h-5 absolute left-3 top-3.5 text-blue-400 pointer-events-none"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -117,9 +117,9 @@ export default function Header() {
             <motion.img
               src={userData?.channelImageURL || defaultChannelPic}
               alt="User Avatar"
-              className="w-11 h-11 rounded-full object-cover border-2 border-indigo-400 cursor-pointer shadow-lg"
+              className="w-11 h-11 rounded-full object-cover border-2 border-blue-400 cursor-pointer shadow-lg"
               onClick={() => setDropdownOpen((v) => !v)}
-              whileHover={{ scale: 1.1, boxShadow: "0 0 10px #7c3aed" }}
+              whileHover={{ scale: 1.1, boxShadow: "0 0 10px #3b82f6" }}
               transition={{ type: "spring", stiffness: 300 }}
             />
 
@@ -130,11 +130,11 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.25 }}
-                  className="absolute right-0 mt-3 w-44 bg-gradient-to-tr from-indigo-900 via-black to-black border border-indigo-600 rounded-lg shadow-lg text-indigo-200 font-semibold overflow-hidden"
+                  className="absolute right-0 mt-3 w-44 bg-gradient-to-tr from-blue-900 via-black to-black border border-blue-600 rounded-lg shadow-lg text-blue-200 font-semibold overflow-hidden"
                 >
                   <button
                     onClick={handleViewChannel}
-                    className="w-full text-left px-4 py-3 hover:bg-indigo-700 transition-colors"
+                    className="w-full text-left px-4 py-3 hover:bg-blue-700 transition-colors"
                   >
                     View Channel
                   </button>
@@ -167,36 +167,36 @@ export default function Header() {
                 animate={{ x: 0 }}
                 exit={{ x: "-100%" }}
                 transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                className="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-indigo-900 via-black to-black shadow-2xl z-30 flex flex-col"
+                className="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-blue-900 via-black to-black shadow-2xl z-30 flex flex-col"
               >
-                <div className="flex items-center justify-between px-6 py-5 border-b border-indigo-700">
+                <div className="flex items-center justify-between px-4 py-5 border-b border-blue-700">
                   <h2 className="text-white font-bold text-xl tracking-wide select-none">
                     Stream Sphere
                   </h2>
                   <button
                     aria-label="Close sidebar"
                     onClick={toggleSidebar}
-                    className="text-indigo-400 hover:text-indigo-600 focus:outline-none"
+                    className="text-blue-400 hover:text-blue-600 focus:outline-none"
                   >
                     <X className="w-6 h-6" />
                   </button>
                 </div>
-                <nav className="flex flex-col mt-6 space-y-3 px-6 text-indigo-300 font-semibold">
+                <nav className="flex flex-col mt-6 space-y-3 px-4 text-blue-300 font-semibold">
                   <button
                     onClick={() => goTo(`/channels/${userData._id}?tab=history`)}
-                    className="hover:text-indigo-400 transition-colors"
+                    className="hover:text-blue-400 transition-colors"
                   >
                     📺 Watch History
                   </button>
                   <button
                     onClick={() => goTo(`/channels/${userData._id}?tab=playlists`)}
-                    className="hover:text-indigo-400 transition-colors"
+                    className="hover:text-blue-400 transition-colors"
                   >
                     🎞️ Playlists
                   </button>
                   <button
                     onClick={() => goTo(`/channels/${userData._id}?tab=videos`)}
-                    className="hover:text-indigo-400 transition-colors"
+                    className="hover:text-blue-400 transition-colors"
                   >
                     📺 Channel Details
                   </button>
