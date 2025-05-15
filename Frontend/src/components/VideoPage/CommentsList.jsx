@@ -25,7 +25,7 @@ export default function CommentsList({
         setComments={setAllComments}
         videoId={videoId}
       />
-      <div className="space-y-4 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
+      <div className="space-y-4 pr-1">
         {allComments.map((c) => (
           <CommentItem key={c._id} {...c} />
         ))}
