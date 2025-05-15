@@ -9,7 +9,7 @@ export default function VideoPage() {
   const { destinationVideo, videos, comments } = useRouteLoaderData('video');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-black to-slate-950 px-4 sm:px-6 lg:px-10 py-8 text-white animate-fadeIn">
+    <div className="min-h-screen bg-transparent px-4 sm:px-6 lg:px-10 py-8 text-white animate-fadeIn">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Main Video + Comments */}
         <div className="lg:col-span-2 flex flex-col gap-10">
