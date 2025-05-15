@@ -61,5 +61,5 @@ export async function action({ request, params }) {
       throw new Error('Error adding video to playlist');
   }
 
-  return response;
+  return resData;
 }
