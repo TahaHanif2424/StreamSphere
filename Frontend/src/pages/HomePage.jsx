@@ -8,7 +8,7 @@ export default function HomePage() {
   const { videos } = useLoaderData();
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-full mx-auto">
       <h1 className="text-center text-4xl font-bold text-blue-200 mb-10">
         Discover the Latest in <span className="text-blue-400">Streaming</span>
       </h1>
