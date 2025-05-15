@@ -28,7 +28,7 @@ export default function VideoPage() {
         </div>
 
         {/* Up Next */}
-        <aside className="flex flex-col gap-4 p-4 bg-slate-800 rounded-xl shadow-lg animate-slideUp">
+        <aside className="flex flex-col gap-4 p-4 bg-slate-900 rounded-xl shadow-lg animate-slideUp">
           <h2 className="text-xl font-semibold text-sky-300">Up Next</h2>
           <div className="flex-1 overflow-y-auto space-y-4">
             <VideosList videos={videos} />
