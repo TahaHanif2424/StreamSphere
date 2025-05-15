@@ -137,10 +137,10 @@ async function loadChannelVideos(channelId) {
   return response.json();
 }
 async function loadChannelInfo(channelId) {
-  const response = await apiFetch('http://localhost:5000/user/getuser/' + channelId);
+  const response = await apiFetch('http://localhost:5000/user/getuser/' + channelId, {method: 'GET'});
   if (!response.ok) throw new Error('Could not fetch user data');
   const users = await response.json();
-  return users
+  return users;
 }
 
 async function loadSubscriberCount(channelId) {
