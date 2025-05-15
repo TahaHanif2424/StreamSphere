@@ -1,7 +1,9 @@
+import { useSubmit, Form } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import Input from "../UI/Input";
 import { validateEmail, validatePassword } from "../../utils/validation";
-import { useSubmit, Form } from "react-router-dom";
+import { FaLock, FaEnvelope } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 export default function Login() {
   const [
@@ -37,47 +39,73 @@ export default function Login() {
   }
 
   return (
-    <Form
-      onSubmit={handleFormSubmission}
-      action="/"
-      className="flex flex-col items-center gap-5 p-6 w-full max-w-md shadow-lg shadow-black/30 rounded-xl font-inter border border-gray-900 bg-white"
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="w-full max-w-md"
     >
-      <h1 className="text-3xl font-bold text-center text-blue-700 mb-2">
-        Welcome Back
-      </h1>
-      <p className="text-center text-sm text-gray-500 mb-4">
-        Please enter your credentials to login
-      </p>
-
-      <Input
-        value={enteredEmail}
-        validation={true}
-        setValue={setEnteredEmail}
-        setIsTouched={setIsEmailTouched}
-        type="email"
-        label="Email"
-        id="email"
-        isTouched={isEmailTouched}
-        isValid={isEmailValid}
-      />
-      <Input
-        value={enteredPassword}
-        validation={true}
-        setValue={setEnteredPassword}
-        isTouched={isPasswordTouched}
-        setIsTouched={setIsPasswordTouched}
-        isValid={isPasswordValid}
-        type="password"
-        label="Password"
-        id="password"
-      />
-
-      <button
-        type="submit"
-        className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow transition duration-300"
+      <Form
+        onSubmit={handleFormSubmission}
+        action="/"
+        className="flex flex-col items-center gap-6 p-8 w-full shadow-2xl rounded-2xl bg-white border border-gray-300 relative overflow-hidden"
       >
-        Login
-      </button>
-    </Form>
+        <motion.h1
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-4xl font-extrabold text-blue-700 mb-1"
+        >
+          Welcome Back
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="text-gray-500 text-sm text-center"
+        >
+          Login to continue exploring content
+        </motion.p>
+
+        <div className="w-full">
+          <Input
+            value={enteredEmail}
+            validation={true}
+            setValue={setEnteredEmail}
+            setIsTouched={setIsEmailTouched}
+            type="email"
+            label="Email"
+            id="email"
+            isTouched={isEmailTouched}
+            isValid={isEmailValid}
+            icon={<FaEnvelope className="text-gray-400" />}
+          />
+        </div>
+
+        <div className="w-full">
+          <Input
+            value={enteredPassword}
+            validation={true}
+            setValue={setEnteredPassword}
+            setIsTouched={setIsPasswordTouched}
+            isTouched={isPasswordTouched}
+            isValid={isPasswordValid}
+            type="password"
+            label="Password"
+            id="password"
+            icon={<FaLock className="text-gray-400" />}
+          />
+        </div>
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          type="submit"
+          className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition duration-300"
+        >
+          Login
+        </motion.button>
+      </Form>
+    </motion.div>
   );
 }

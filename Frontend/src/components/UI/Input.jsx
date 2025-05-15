@@ -11,12 +11,12 @@ export default function Input({
   isValid,
   setValue,
   setIsTouched,
+  Icon, 
 }) {
   const timerRef = useRef(null);
 
   function handleInputChange(event) {
     setValue(event.target.value);
-
     if (!isTouched) {
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
@@ -25,7 +25,7 @@ export default function Input({
     }
   }
 
-  let borderClass = "border-gray-300 focus:ring-blue-400 focus:border-blue-400";
+  let borderClass = "border-gray-300 focus:ring-blue-500 focus:border-blue-500";
   let bgClass = "bg-white";
 
   if (validation && isTouched) {
@@ -39,21 +39,27 @@ export default function Input({
   }
 
   return (
-    <div className="flex flex-col gap-1 w-full">
+    <div className="flex flex-col gap-1 w-full transition-all duration-300">
       <label
         htmlFor={id}
-        className="text-sm font-semibold text-gray-800 tracking-wide"
+        className="text-sm font-semibold text-gray-700 tracking-wide"
       >
         {label}
       </label>
-      <input
-        type={type}
-        id={id}
-        value={value}
-        name={name}
-        onChange={handleInputChange}
-        className={`w-full px-3 py-2 text-gray-800 rounded-lg shadow-sm transition duration-200 outline-none border ${borderClass} ${bgClass} focus:ring-2`}
-      />
+
+      <div
+        className={`flex items-center gap-3 px-3 py-2 rounded-lg shadow-sm border transition-all duration-300 ${borderClass} ${bgClass}`}
+      >
+        {Icon && <Icon className="text-gray-500 text-lg" />}
+        <input
+          type={type}
+          id={id}
+          value={value}
+          name={name}
+          onChange={handleInputChange}
+          className="w-full text-gray-800 bg-transparent outline-none text-sm"
+        />
+      </div>
     </div>
   );
 }
