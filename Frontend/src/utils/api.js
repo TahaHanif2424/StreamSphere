@@ -1,6 +1,7 @@
 // src/utils/api.js
 export async function apiFetch(url, opts = {}) {
   const token = localStorage.getItem('accessToken');
+  console.log(token);
   const options = {
     credentials: 'include',
     headers: {

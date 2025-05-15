@@ -38,7 +38,7 @@ app.use("/refresh", RefreshToken);
 app.use("/user",userRouter);
 
 //Authorization
-// app.use(verifyJWT);
+app.use(verifyJWT);
 
 //Video Router
 app.use('/video', videoRouter);

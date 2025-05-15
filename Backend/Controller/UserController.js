@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const User = require("../Model/User");
 const { GenerateAccessToken, GenerateRefreshToken } = require("../Auth/GenerateToken");
-const { PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const { PutObjectCommand, GetObjectCommand} = require('@aws-sdk/client-s3');
 const S3 = require("../AWS/AWSConfig");
 const bucketName = process.env.BUCKET_NAME;
 const sharp = require('sharp');
@@ -60,7 +60,6 @@ router.post("/login", async (req, res) => {
             user.refreshToken = refreshToken;
             await user.save();
             res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true });
-
             return res.status(201).send({ message: "Logged in successfully", accessToken, refreshToken });
         } else {
             res.status(400).send({ error: "Invalid Username and Password" });
@@ -71,6 +70,21 @@ router.post("/login", async (req, res) => {
     }
 })
 
+
+//Return data of specifc user
+//URL http://localhost:5000/user/getuser
+router.get("/getuser/:id", async (req,res)=>{
+    try {
+        const user_id=req.params.id;
+        const user=await User.findOne({_id:user_id});
+        if(!user){
+            console.log("error");
+        }
+        return res.status(200).send(user);
+    } catch (error) {
+        console.error({error});
+    }
+});
 
 
 //Forgot Password

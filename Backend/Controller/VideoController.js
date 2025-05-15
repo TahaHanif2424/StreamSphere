@@ -95,6 +95,7 @@ router.post("/get", async (req, res) => {
     try {
         const user_id = req.body.user_id;
         const video = await Video.find({ user_id });
+        console.log(video);
         res.status(200).send({ video });
     } catch (err) {
         return res.status(400).send({ error: "InValid Request" })
