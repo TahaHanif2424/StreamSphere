@@ -8,13 +8,14 @@ import { useRef, useState, useEffect } from "react";
 export default function UploadForm({ title, thumbnail, video }) {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log(searchParams);
   const submit = useSubmit();
   const isEditing = !!params.videoId;
   const [files, setFiles] = useState({ image: null, video: null });
 
   const hiddenImageInput = useRef();
   const hiddenVideoInput = useRef();
+
+  const isPlaylistAdding = !!searchParams.get('playlistId');
 
   useEffect(() => {
     if (files.image && hiddenImageInput.current) {
@@ -40,7 +41,13 @@ export default function UploadForm({ title, thumbnail, video }) {
     isEditing ? title : ""
   );
 
-  const postURL = isEditing ? `/videos/${params.videoId}/edit` : "/upload";
+  let postURL = "/upload";
+
+  if(isPlaylistAdding) {
+    postURL = `/upload?playlistId=${searchParams.get('playlistId')}`;
+  } else if(isEditing) {
+    postURL = `/videos/${params.videoId}/edit`;
+  }
 
   function handleSubmission(e) {
     e.preventDefault();

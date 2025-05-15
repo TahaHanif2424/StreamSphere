@@ -18,6 +18,7 @@ export async function action({ request, params }) {
   const user = store.getState().user.user;
   const isEditing = !!params.videoId;
   const originalFormData = await request.formData();
+  const urlSearchparams = new URLSearchParams(request.url);
 
   const formData = new FormData();
 
@@ -29,7 +30,9 @@ export async function action({ request, params }) {
   formData.append("thumbnail", thumbnailFile);
   formData.append("data", JSON.stringify({ title, user_id: user._id }));
 
-  const url = isEditing
+  const isPlaylistAdding = urlSearchparams.get('playlistId');
+
+  let url = isEditing
     ? `http://localhost:5000/video/update/${params.videoId}`
     : "http://localhost:5000/video/add";
 
@@ -39,6 +42,23 @@ export async function action({ request, params }) {
     method: "POST",
     body: formData, 
   });
+
+  if(!response.ok)
+    throw new Error('Error uploading Video');
+
+  const resData = await response.json();
+
+  if(isPlaylistAdding) {
+    const response2 = await apiFetch('http://localhost:5000/playlist/add/' + urlSearchparams.get('playlistId'), {
+      method: 'PUT',
+      body: JSON.stringify({
+        video_id: resData._id 
+      })
+    });
+
+    if(!response2.ok)
+      throw new Error('Error adding video to playlist');
+  }
 
   return response;
 }
