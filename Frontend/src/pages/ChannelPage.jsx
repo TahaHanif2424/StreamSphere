@@ -24,7 +24,7 @@ export default function ChannelPage() {
     navigate("/upload");
   }
   function openModal() {
-    if(currUser._id !== loaderData.channelInfo._id)
+    if(currUser._id !== channelId)
       return;
     setIsModalOpen(true);
   }
@@ -64,7 +64,7 @@ export default function ChannelPage() {
                   src={channelInfo.channelImageURL || defaultChannelPic}
                   onClick={openModal}
                   alt={channelInfo.channelName}
-                  className={`w-16 h-16 rounded-full object-cover ${currUser._id === channelInfo._id ? 'cursor-pointer' : ''} shadow-md`}
+                  className={`w-16 h-16 rounded-full object-cover ${currUser._id === channelId ? 'cursor-pointer' : ''} shadow-md`}
                 />
                 <div>
                   <h1 className="text-3xl font-bold text-gray-800">
