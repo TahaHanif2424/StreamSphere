@@ -45,7 +45,11 @@ export default function ChannelPage() {
     await apiFetch("http://localhost:5000/playlist/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: channelId, name: newPlaylistName, video_id: [] }),
+      body: JSON.stringify({
+        user_id: channelId,
+        name: newPlaylistName,
+        video_id: [],
+      }),
     });
     setNewPlaylistName("");
     setIsPlaylistModalOpen(false);
@@ -81,7 +85,9 @@ export default function ChannelPage() {
 
   return (
     <div className="min-h-screen w-full bg-gray-50 py-8 px-4 sm:px-10">
-      <Suspense fallback={<div className="text-center">Loading channel info...</div>}>
+      <Suspense
+        fallback={<div className="text-center">Loading channel info...</div>}
+      >
         <Await resolve={loaderData.channelInfo}>
           {(channelInfo) => (
             <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6 border-b pb-4">
@@ -90,10 +96,14 @@ export default function ChannelPage() {
                   src={channelInfo.channelImageURL || defaultChannelPic}
                   onClick={openImageModal}
                   alt={channelInfo.channelName}
-                  className={`w-16 h-16 rounded-full object-cover ${currUser._id === channelId ? 'cursor-pointer' : ''}`}
+                  className={`w-16 h-16 rounded-full object-cover ${
+                    currUser._id === channelId ? "cursor-pointer" : ""
+                  }`}
                 />
                 <div>
-                  <h1 className="text-3xl font-bold">{channelInfo.channelName}</h1>
+                  <h1 className="text-3xl font-bold">
+                    {channelInfo.channelName}
+                  </h1>
                   <div className="text-gray-600 text-sm mt-1">
                     <Suspense fallback={<span>– subscribers</span>}>
                       <Await resolve={loaderData.subCount}>
@@ -110,7 +120,12 @@ export default function ChannelPage() {
                 </div>
               </div>
               {channelId === currUser._id && (
-                <button onClick={handleUploadClick} className="bg-green-600 text-white px-4 py-2 rounded">Upload New Video</button>
+                <button
+                  onClick={handleUploadClick}
+                  className="bg-green-600 text-white px-4 py-2 rounded"
+                >
+                  Upload New Video
+                </button>
               )}
             </div>
           )}
@@ -119,17 +134,31 @@ export default function ChannelPage() {
 
       <div className="flex gap-4 mb-6">
         <button
-          className={`px-4 py-2 rounded ${activeTab === "videos" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+          className={`px-4 py-2 rounded ${
+            activeTab === "videos" ? "bg-blue-600 text-white" : "bg-gray-200"
+          }`}
           onClick={() => setActiveTab("videos")}
         >
           Videos
         </button>
         <button
-          className={`px-4 py-2 rounded ${activeTab === "playlists" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+          className={`px-4 py-2 rounded ${
+            activeTab === "playlists" ? "bg-blue-600 text-white" : "bg-gray-200"
+          }`}
           onClick={() => setActiveTab("playlists")}
         >
           Playlists
         </button>
+        {channelId === currUser._id && activeTab === "history" && (
+          <button
+            className={`px-4 py-2 rounded ${
+              activeTab === "history" ? "bg-blue-600 text-white" : "bg-gray-200"
+            }`}
+            onClick={() => setActiveTab("history")}
+          >
+            Watch History
+          </button>
+        )}
       </div>
 
       {activeTab === "videos" && (
@@ -142,6 +171,24 @@ export default function ChannelPage() {
                 videos={loaded.video}
               />
             )}
+          </Await>
+        </Suspense>
+      )}
+
+      {activeTab === "history" && (
+        <Suspense fallback={<div>Loading watch history...</div>}>
+          <Await resolve={loaderData.watchHistory}>
+            {(data) =>
+              data.watchedVideos.length === 0 ? (
+                <p className="text-gray-500">No watch history yet.</p>
+              ) : (
+                <VideosList
+                  videos={data.watchedVideos}
+                  isOpenedOnChannels={true}
+                  isChangeable={false}
+                />
+              )
+            }
           </Await>
         </Suspense>
       )}
@@ -167,7 +214,9 @@ export default function ChannelPage() {
                   onClick={() => navigate(`/playlists/${pl._id}`)}
                 >
                   <h2 className="text-lg font-semibold">{pl.name}</h2>
-                  <p className="text-sm text-gray-600">{pl.video_id.length} videos</p>
+                  <p className="text-sm text-gray-600">
+                    {pl.video_id.length} videos
+                  </p>
                 </div>
               ))}
             </div>
@@ -178,7 +227,10 @@ export default function ChannelPage() {
       {/* Image Upload Modal */}
       {isImageModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div onClick={closeImageModal} className="fixed inset-0 bg-black opacity-50" />
+          <div
+            onClick={closeImageModal}
+            className="fixed inset-0 bg-black opacity-50"
+          />
           <form
             onSubmit={handleImageSubmit}
             className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
@@ -213,7 +265,10 @@ export default function ChannelPage() {
       {/* Playlist Creation Modal */}
       {isPlaylistModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div onClick={() => setIsPlaylistModalOpen(false)} className="fixed inset-0 bg-black opacity-50" />
+          <div
+            onClick={() => setIsPlaylistModalOpen(false)}
+            className="fixed inset-0 bg-black opacity-50"
+          />
           <form
             onSubmit={createPlaylist}
             className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
@@ -260,12 +315,16 @@ async function loadChannelVideos(channelId) {
   return response.json();
 }
 async function loadChannelInfo(channelId) {
-  const response = await apiFetch("http://localhost:5000/user/getuser/" + channelId);
+  const response = await apiFetch(
+    "http://localhost:5000/user/getuser/" + channelId
+  );
   if (!response.ok) throw new Error("Could not fetch user data");
   return response.json();
 }
 async function loadSubscriberCount(channelId) {
-  const res = await apiFetch(`http://localhost:5000/subscription/count/${channelId}`);
+  const res = await apiFetch(
+    `http://localhost:5000/subscription/count/${channelId}`
+  );
   if (!res.ok) return 0;
   const { count } = await res.json();
   return count;
@@ -275,6 +334,16 @@ async function loadTotalLikes(channelId) {
   return vidData.video.reduce((sum, vid) => sum + (vid.likes || 0), 0);
 }
 
+async function loadWatchHistory(channelId) {
+  const response = await apiFetch("http://localhost:5000/histroy/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id: channelId }),
+  });
+  if (!response.ok) return { watchedVideos: [] };
+  return response.json();
+}
+
 export async function loader({ params }) {
   const channelId = params.channelId;
   return defer({
@@ -282,5 +351,6 @@ export async function loader({ params }) {
     channelInfo: loadChannelInfo(channelId),
     subCount: loadSubscriberCount(channelId),
     totalLikes: loadTotalLikes(channelId),
+    watchHistory: loadWatchHistory(channelId),
   });
 }

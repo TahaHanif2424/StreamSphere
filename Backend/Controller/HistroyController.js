@@ -6,17 +6,20 @@ const router = express.Router();
 
 
 //Show all
-// http://localhost:5000/histroy/
-router.get("/", async (req,res)=>{
-        try{
-            const user_id=req.body.user_id;
-            const histroy=await Histroy.findOne({user_id});
-            return res.status(200).send({histroy});
-            
-        }catch(err){
-            return res.status(400).send({erroe:"bad request"});
-        }
-})
+// POST http://localhost:5000/histroy/
+router.post("/", async (req, res) => {
+    try {
+        const user_id = req.body.user_id;
+        const histroy = await Histroy.findOne({ user_id });
+        if (!histroy) return res.status(200).send({ watchedVideos: [] });
+
+        const videos = await Video.find({ _id: { $in: histroy.watchedVideos } });
+        return res.status(200).send({ watchedVideos: videos });
+    } catch (err) {
+        return res.status(400).send({ error: "Bad request" });
+    }
+});
+
 
 
 //ADD to Histroy
