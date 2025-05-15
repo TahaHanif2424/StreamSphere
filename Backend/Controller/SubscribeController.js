@@ -5,6 +5,20 @@ const Subscribe = require("../Model/Subscribe");
 const router=express.Router();
 
 
+//Get all subscriber of the user
+//URL http://localhost:5000/subscription/
+router.get("/:id",async (erq,res)=>{
+    try {
+        const user_id=req.params.id;
+        const subscriptions=await Subscribe.find({user_id});
+        return res.status(200).send(subscriptions);
+    } catch (error) {
+        return res.status(400).send({error});
+    }
+})
+
+
+
 //Subscribe Channel
 //URL http://localhost:5000/subscription/subscribe
 router.post("/subscribe", async (req,res)=>{
@@ -16,6 +30,9 @@ router.post("/subscribe", async (req,res)=>{
         return res.status(400).send({message:"Error while subscribing"});
     }
 });
+
+//Number of subscribers
+//URL http://localhost:5000/subscription/count/id         here the id is user_id
 
 router.get('/count/:id', async (req, res) => {
   try {
@@ -31,7 +48,7 @@ router.get('/count/:id', async (req, res) => {
 
 
 //UN-Subscribe Channel
-//URL http://localhost:5000/subscription/unsubscribe/id
+//URL http://localhost:5000/subscription/unsubscribe/id         here the id is other person(whom you want to unsubscribe)
 router.put("/unsubscribe/:id", async (req, res) => {
     try {
         const channelIdToUnsubscribe = req.params.id; 
