@@ -15,18 +15,13 @@ export default function PlaylistPage() {
   useEffect(() => {
     async function fetchPlaylist() {
       try {
-        const res = await apiFetch(`http://localhost:5000/playlist/${playlistId}`);
+        const res = await apiFetch(`http://localhost:5000/playlist/video/${playlistId}`);
         if (!res.ok) throw new Error("Failed to fetch playlist");
         const data = await res.json();
-        setPlaylist(data);
+        setPlaylist(data.playlist);
 
-        const videoRes = await apiFetch("http://localhost:5000/video/getbyids", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids: data.video_id }),
-        });
-        const videoData = await videoRes.json();
-        setVideos(videoData.videos);
+        
+        setVideos(data.videos);
       } catch (error) {
         console.error(error);
       } finally {

@@ -18,14 +18,30 @@ router.get("/:id", async (req,res)=>{
 
 //Get All videos of playlist
 // URL http://localhost:5000/playlist/video/id      here the id is playlist_id
-router.get("/video/:id", async (req,res)=>{
-    try{
-        const playlist_id=req.params.id;
-        const playlist=await Playlist.findOne({_id:playlist_id});
-        return res.status(200).send(playlist)
-    }catch(err){
-        return res.status(500).send({error:"Error while displaying the playlis"});
+router.get("/video/:id", async (req, res) => {
+  try {
+    const playlist_id = req.params.id;
+    const playlist = await Playlist.findById(playlist_id);
+
+    if (!playlist) {
+      return res.status(404).send({ error: "Playlist not found" });
     }
+
+    const videos = await Video.find({ _id: { $in: playlist.video_id } });
+
+    return res.status(200).send({
+      playlist: {
+        _id: playlist._id,
+        name: playlist.name,
+        user_id: playlist.user_id,
+        video_ids: playlist.video_id,
+      },
+      videos,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ error: "Error while displaying the playlist" });
+  }
 });
 
 //Create Playlist
