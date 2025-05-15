@@ -8,19 +8,19 @@ export default function HomePage() {
   const { videos } = useLoaderData();
 
   return (
-    <>
-      <h1 className="text-center text-3xl font-semibold">
-        Entertain yourself by streaming our recent Videos
+    <div className="max-w-7xl mx-auto">
+      <h1 className="text-center text-4xl font-bold text-blue-200 mb-10">
+        Discover the Latest in <span className="text-blue-400">Streaming</span>
       </h1>
       <Suspense fallback={<SkeletonVideosList />}>
         <Await
           resolve={videos}
           children={(loadedVideos) => (
-              <VideosList videos={loadedVideos} />
+            <VideosList videos={loadedVideos} />
           )}
         />
       </Suspense>
-    </>
+    </div>
   );
 }
 

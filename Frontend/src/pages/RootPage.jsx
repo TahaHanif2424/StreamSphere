@@ -10,7 +10,7 @@ export default function RootPage() {
   return (
     <>
       <Header />
-      <div className="mt-[10dvh] w-screen pt-5">
+      <div className="mt-[10dvh] w-full min-h-[90dvh] bg-gradient-to-br from-black via-blue-950 to-blue-900 px-6 py-8 text-white">
         <RequireAuth>
           <Outlet />
         </RequireAuth>
