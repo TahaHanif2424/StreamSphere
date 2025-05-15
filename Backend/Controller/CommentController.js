@@ -33,10 +33,11 @@ router.post("/:id", async (req, res) => {
         const video=await Video.findById(video_id);
         
         const comments=new Comment({user_id,video_id,comment});
+        await comments.populate("user_id", "channelImageURL channelName");
         await comments.save();
         video.comments+=1;
         await video.save();
-        return res.status(200).send({ message: "Comment added successfully" });
+        return res.status(200).send(comments);
     } catch (err) {
         return res.status(500).send({ error: "Error while adding the comment" });
     }

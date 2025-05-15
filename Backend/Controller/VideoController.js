@@ -10,7 +10,7 @@ const { spawn } = require('child_process');
 const os = require("os");
 
 //AWS Imports
-const { PutObjectCommand, GetObjectCommand, DeleteObjectsCommand,ListObjectsV2Command } = require('@aws-sdk/client-s3');
+const { PutObjectCommand, GetObjectCommand, DeleteObjectsCommand, ListObjectsV2Command } = require('@aws-sdk/client-s3');
 const S3 = require('../AWS/AWSConfig');
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const bucketName = process.env.BUCKET_NAME;
@@ -34,53 +34,59 @@ const sharp = require('sharp');
 //Get all Videos
 //URL http://localhost:5000/video/get-all
 
+// router.get("/get-all", async (req, res) => {
+//     try {
+//         const videos = await Video.find().populate("user_id", "channelName channelImageURL");
+
+//         const signedVideos = await Promise.all(
+//             videos.map(async (video) => {
+//                 if (!video.videoName) return video;
+
+//                 // Generate signed video URL
+//                 const getVideoUrl = new GetObjectCommand({
+//                     Bucket: bucketName,
+//                     Key: video.videoName,
+//                 });
+//                 const videoUrl = await getSignedUrl(S3, getVideoUrl, { expiresIn: 3600 });
+
+//                 // Save URL to database
+//                 video.URL = videoUrl;
+//                 await video.save(); // saves updated URL to MongoDB
+
+//                 // Generate signed channel image URL
+//                 let imageUrl = "";
+//                 if (video.user_id?.channelImageName) {
+//                     const getImageUrl = new GetObjectCommand({
+//                         Bucket: bucketName,
+//                         Key: video.user_id.channelImageName,
+//                     });
+//                     imageUrl = await getSignedUrl(S3, getImageUrl, { expiresIn: 3600 });
+//                 }
+
+//                 return {
+//                     ...video.toObject(),
+//                     URL: videoUrl,
+//                     channelName: video.user_id?.channelName || "Default",
+//                     channelImageURL: imageUrl,
+//                 };
+//             })
+//         );
+
+//         res.status(200).send(signedVideos);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(400).send({ error: "Invalid Request" });
+//     }
+// });
+
 router.get("/get-all", async (req, res) => {
     try {
-        const videos = await Video.find().populate("user_id", "channelName channelImageURL");
-        console.log(videos);
-
-        const signedVideos = await Promise.all(
-            videos.map(async (video) => {
-                if (!video.videoName) return video;
-
-                // Generate signed video URL
-                const getVideoUrl = new GetObjectCommand({
-                    Bucket: bucketName,
-                    Key: video.videoName,
-                });
-                const videoUrl = await getSignedUrl(S3, getVideoUrl, { expiresIn: 3600 });
-
-                // Save URL to database
-                video.URL = videoUrl;
-                await video.save(); // saves updated URL to MongoDB
-
-                // Generate signed channel image URL
-                let imageUrl = "";
-                if (video.user_id?.channelImageName) {
-                    const getImageUrl = new GetObjectCommand({
-                        Bucket: bucketName,
-                        Key: video.user_id.channelImageName,
-                    });
-                    imageUrl = await getSignedUrl(S3, getImageUrl, { expiresIn: 3600 });
-                }
-
-                return {
-                    ...video.toObject(),
-                    URL: videoUrl,
-                    channelName: video.user_id?.channelName || "Default",
-                    channelImageURL: imageUrl,
-                };
-            })
-        );
-
-        res.status(200).send(signedVideos);
+        const video = await Video.find().populate("user_id", "channelName channelImageURL");
+        res.status(200).send(video);
     } catch (err) {
-        console.error(err);
-        res.status(400).send({ error: "Invalid Request" });
+        return res.status(400).send({ error: "InValid Request" })
     }
 });
-
-
 
 //Find all videos of USER
 //URL http://localhost:5000/video/get
@@ -89,7 +95,6 @@ router.post("/get", async (req, res) => {
     try {
         const user_id = req.body.user_id;
         const video = await Video.find({ user_id });
-        console.log(video);
         res.status(200).send({ video });
     } catch (err) {
         return res.status(400).send({ error: "InValid Request" })
@@ -100,13 +105,12 @@ router.post("/get", async (req, res) => {
 router.post("/add", upload, async (req, res) => {
     try {
         const videoData = JSON.parse(req.body.data);
-        console.log(videoData);
         const videoFile = req.files.video[0];
         const thumbnailFile = req.files.thumbnail[0];
         const resizedBuffer = await sharp(thumbnailFile.buffer)
-        .resize(1920, 1080) // Width: 320px, Height: 180px
-        .toFormat('jpeg')
-        .toBuffer();
+            .resize(1920, 1080) // Width: 320px, Height: 180px
+            .toFormat('jpeg')
+            .toBuffer();
 
         const randomName = (bytes = 8) => crypto.randomBytes(bytes).toString("hex");
         const fileId = randomName();
@@ -178,6 +182,7 @@ router.post("/add", upload, async (req, res) => {
             const video = new Video({
                 ...videoData,
                 videoName: `${baseS3Key}/master.m3u8`,
+                URL: `https://${bucketName}.s3.amazonaws.com/${baseS3Key}/master.m3u8`,
                 thumbnailName: thumbnailKey,
                 thumbnailURL: `https://${bucketName}.s3.amazonaws.com/${thumbnailKey}`,
             });
@@ -232,8 +237,8 @@ router.delete("/delete/:id", async (req, res) => {
 
         // Delete from MongoDB
         await Video.deleteOne({ _id: video_id });
-        await Comment.deleteMany({video_id});
-        await Likes.deleteMany({video_id});
+        await Comment.deleteMany({ video_id });
+        await Likes.deleteMany({ video_id });
 
         return res.status(200).send({ message: "Video and related files deleted successfully." });
     } catch (err) {

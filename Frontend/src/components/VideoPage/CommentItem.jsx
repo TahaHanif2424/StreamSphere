@@ -11,8 +11,8 @@ export default function CommentItem({
   return (
     <div className="flex gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition">
       <img
-        src={channelImageURL}
-        alt={channelName}
+        src={user_id.channelImageURL}
+        alt={user_id.channelName}
         onClick={() => navigate(`/channels/${user_id._id}`)}
         className="w-10 h-10 rounded-full object-cover cursor-pointer"
       />

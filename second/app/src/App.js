@@ -9,32 +9,20 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('http://localhost:5000/video/get-all');
+  const demoVideo = {
+    title: 'Test Video',
+    hlsBaseUrl: 'https://stream-sphere.s3.amazonaws.com/videos/8015ec43c492e552/master.m3u8',
+    channelName: 'Demo Channel',
+    channelImageURL: null,
+    description: 'This is a test video stream from S3.',
+    _id: 'test-video-id'
+  };
 
-        // Update the videoData structure for VideoPlayer
-        const updatedVideos = response.data.map(video => ({
-          ...video,
-          hlsBaseUrl: video.URL
-        }));
+  setVideos([demoVideo]);
+  setSelectedVideo(demoVideo);
+  setLoading(false);
+}, []);
 
-        setVideos(updatedVideos);
-
-        if (updatedVideos && updatedVideos.length > 0) {
-          setSelectedVideo(updatedVideos[0]);
-        }
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching videos:', err);
-        setError('Failed to load videos. Please try again later.');
-        setLoading(false);
-      }
-    };
-
-    fetchVideos();
-  }, []);
 
   const handleVideoSelect = (video) => {
     setSelectedVideo(video);

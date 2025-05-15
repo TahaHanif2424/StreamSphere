@@ -20,9 +20,11 @@ export default function CommentsList({
         videoId={videoId}
       />
       <div className="space-y-4">
-        {allComments.map((c) => (
-          <CommentItem key={c._id} {...c} />
-        ))}
+        {allComments.map((c) => {
+          console.log(c);
+          return <CommentItem key = {c._id
+        } { ...c } />;}
+        )}
       </div>
     </div>
   );

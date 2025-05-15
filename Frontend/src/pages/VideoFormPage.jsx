@@ -1,5 +1,6 @@
 import { useRouteLoaderData } from "react-router";
 import UploadForm from "../components/Upload/UploadForm";
+import store from "../store";
 
 export default function VideoFormPage() {
   const data = useRouteLoaderData("video");
@@ -13,6 +14,7 @@ export default function VideoFormPage() {
 }
 
 export async function action({ request, params }) {
+  const user = store.getState().user.user;
   const isEditing = !!params.videoId;
   const originalFormData = await request.formData();
 
@@ -24,7 +26,7 @@ export async function action({ request, params }) {
 
   formData.append("video", videoFile);
   formData.append("thumbnail", thumbnailFile);
-  formData.append("data", JSON.stringify({ title }));
+  formData.append("data", JSON.stringify({ title, user_id: user._id }));
 
   console.log(formData);
 

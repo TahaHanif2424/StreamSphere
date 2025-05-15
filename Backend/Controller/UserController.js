@@ -29,7 +29,6 @@ router.post("/signup", async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
         const user = new User(req.body);
         user.password = hashedPassword;
-        console.log(user);
         await user.save();
         res.status(201).send({ message: "User created successfully" });
     } catch (err) {
@@ -110,42 +109,44 @@ router.put("/forgotpassword", async (req, res) => {
 //Upload Image
 //URL http://localhost:5000/user/uploadimage/id           this id is user_id
 
+const generatePublicURL = (key) =>
+  `https://${bucketName}.s3.${process.env.BUCKET_REGION}.amazonaws.com/${key}`;
+
 router.put("/uploadimage/:id", upload.single("image"), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ error: "No file uploaded or wrong field name" });
-        }
-
-        const user_id = req.params.id;
-        const user = await User.findById(user_id);
-
-        const randomName = () => crypto.randomBytes(32).toString('hex');
-        const imageName = randomName();
-
-        const buffer = await sharp(req.file.buffer)
-            .resize({ height: 800, width: 800, fit: 'contain' })
-            .toBuffer();
-
-        const params = {
-            Bucket: bucketName,
-            Key: imageName,
-            Body: buffer,
-            ContentType: req.file.mimetype,
-        };
-
-        const command = new PutObjectCommand(params);
-        await S3.send(command);
-
-        user.channelImageName = imageName;
-        await user.save();
-
-        res.status(200).json({ success: true });
-    } catch (err) {
-        console.error("Upload error:", err); 
-        res.sendStatus(400);
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded or wrong field name" });
     }
-});
 
+    const user_id = req.params.id;
+    const user = await User.findById(user_id);
+
+    const imageName = crypto.randomBytes(32).toString('hex');
+
+    const buffer = await sharp(req.file.buffer)
+      .resize({ height: 800, width: 800, fit: 'contain' })
+      .toBuffer();
+
+    const params = {
+      Bucket: bucketName,
+      Key: imageName,
+      Body: buffer,
+      ContentType: req.file.mimetype,
+    };
+
+    const command = new PutObjectCommand(params);
+    await S3.send(command);
+
+    const publicImageUrl = generatePublicURL(imageName);
+    user.channelImageURL = publicImageUrl; 
+    await user.save();
+
+    res.status(200).json({ success: true, imageURL: publicImageUrl });
+  } catch (err) {
+    console.error("Upload error:", err);
+    res.sendStatus(400);
+  }
+});
 
 
 //display Image
@@ -166,13 +167,15 @@ router.get("/getimage", async (req, res) => {
                 const command = new GetObjectCommand(getObjectParams);
                 const url = await getSignedUrl(S3, command, { expiresIn: 3600 });
 
+                user.channelImageURL=url;
+                await user.save();
                 return {
                     ...user.toObject(),
                     channelImageURL: url,
                 };
             })
         );
-        console.log(userImages);
+
         res.status(200).send(userImages);
         }
     catch (err) {

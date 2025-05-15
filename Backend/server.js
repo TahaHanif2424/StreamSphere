@@ -10,11 +10,7 @@ const HistroyRouter=require("./Controller/HistroyController");
 const RatingRouter=require("./Controller/RatingController");
 const RefreshToken=require("./Routes/RefreshTokenRoute");
 const cookieParser = require("cookie-parser");
-const fs = require("fs");
-const path = require("path");
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
-const os = require("os");
+const verifyJWT=require("./Middleware/verifyJWT");
 
 const cors = require('cors');
 
@@ -40,6 +36,9 @@ app.use("/refresh", RefreshToken);
 
 //User Routes
 app.use("/user",userRouter);
+
+//Authorization
+// app.use(verifyJWT);
 
 //Video Router
 app.use('/video', videoRouter);

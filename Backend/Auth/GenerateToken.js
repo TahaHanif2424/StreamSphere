@@ -8,7 +8,7 @@ function GenerateAccessToken(email) {
     return jwt.sign(
         { email: email },
         process.env.ACCESS_SECRET_TOKEN,
-        { expiresIn: '5m' }
+        { expiresIn: '30m' }
     );
 }
 function GenerateRefreshToken(email) {

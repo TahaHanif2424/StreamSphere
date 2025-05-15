@@ -27,15 +27,11 @@ export default function CommentForm({
     });
     if (!res.ok) throw new Error("Unable to post comment");
 
+    const resData = await res.json();
+
     setComments((prev) => [
       ...prev,
-      {
-        _id: Date.now().toString(),
-        channelName,
-        channelImageURL,
-        comment: enteredComment,
-        date: Date.now(),
-      },
+      resData
     ]);
     setEnteredComment("");
     setIsTouched(false);
