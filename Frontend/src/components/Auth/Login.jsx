@@ -1,3 +1,4 @@
+// ✅ Login.jsx - Dark theme with animations and icon support
 import { useSubmit, Form } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import Input from "../UI/Input";
@@ -48,13 +49,13 @@ export default function Login() {
       <Form
         onSubmit={handleFormSubmission}
         action="/"
-        className="flex flex-col items-center gap-6 p-8 w-full shadow-2xl rounded-2xl bg-white border border-gray-300 relative overflow-hidden"
+        className="flex flex-col items-center gap-6 p-8 w-full shadow-xl rounded-2xl bg-zinc-900 border border-zinc-700 relative overflow-hidden backdrop-blur-md"
       >
         <motion.h1
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-4xl font-extrabold text-blue-700 mb-1"
+          className="text-4xl font-extrabold text-white mb-1"
         >
           Welcome Back
         </motion.h1>
@@ -62,7 +63,7 @@ export default function Login() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="text-gray-500 text-sm text-center"
+          className="text-zinc-400 text-sm text-center"
         >
           Login to continue exploring content
         </motion.p>
@@ -78,7 +79,7 @@ export default function Login() {
             id="email"
             isTouched={isEmailTouched}
             isValid={isEmailValid}
-            icon={<FaEnvelope className="text-gray-400" />}
+            Icon={FaEnvelope}
           />
         </div>
 
@@ -93,7 +94,7 @@ export default function Login() {
             type="password"
             label="Password"
             id="password"
-            icon={<FaLock className="text-gray-400" />}
+            Icon={FaLock}
           />
         </div>
 
@@ -101,7 +102,7 @@ export default function Login() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="submit"
-          className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition duration-300"
+          className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 transition duration-300"
         >
           Login
         </motion.button>

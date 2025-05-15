@@ -11,7 +11,7 @@ export default function Input({
   isValid,
   setValue,
   setIsTouched,
-  Icon, 
+  Icon,
 }) {
   const timerRef = useRef(null);
 
@@ -25,16 +25,16 @@ export default function Input({
     }
   }
 
-  let borderClass = "border-gray-300 focus:ring-blue-500 focus:border-blue-500";
-  let bgClass = "bg-white";
+  let borderClass = "border-zinc-700 focus:ring-blue-500 focus:border-blue-500";
+  let bgClass = "bg-zinc-800 text-white";
 
   if (validation && isTouched) {
     if (isValid) {
-      borderClass = "border-green-400 focus:ring-green-400 focus:border-green-400";
-      bgClass = "bg-green-50";
+      borderClass = "border-green-500 focus:ring-green-500 focus:border-green-500";
+      bgClass = "bg-green-950 text-green-200";
     } else {
-      borderClass = "border-red-400 focus:ring-red-400 focus:border-red-400";
-      bgClass = "bg-red-50";
+      borderClass = "border-red-500 focus:ring-red-500 focus:border-red-500";
+      bgClass = "bg-red-950 text-red-200";
     }
   }
 
@@ -42,7 +42,7 @@ export default function Input({
     <div className="flex flex-col gap-1 w-full transition-all duration-300">
       <label
         htmlFor={id}
-        className="text-sm font-semibold text-gray-700 tracking-wide"
+        className="text-sm font-semibold text-zinc-300 tracking-wide"
       >
         {label}
       </label>
@@ -50,14 +50,14 @@ export default function Input({
       <div
         className={`flex items-center gap-3 px-3 py-2 rounded-lg shadow-sm border transition-all duration-300 ${borderClass} ${bgClass}`}
       >
-        {Icon && <Icon className="text-gray-500 text-lg" />}
+        {Icon && <Icon className="text-zinc-400 text-lg" />}
         <input
           type={type}
           id={id}
           value={value}
           name={name}
           onChange={handleInputChange}
-          className="w-full text-gray-800 bg-transparent outline-none text-sm"
+          className="w-full bg-transparent outline-none text-sm placeholder:text-zinc-400"
         />
       </div>
     </div>
