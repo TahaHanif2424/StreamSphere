@@ -95,14 +95,14 @@ export default function Header() {
 
           {/* Center: Search Bar */}
           <motion.div
-            className="relative hidden md:block"
+            className="relative hidden md:flex md:justify-start md:items-center"
             initial={{ width: 220 }}
             whileFocus={{ width: 300 }}
           >
             <input
               type="search"
               ref={inputRef}
-              placeholder="Search videos, channels..."
+              placeholder="Search videos"
               className="w-full bg-transparent border border-blue-600 rounded-full py-2 px-4 pl-10 text-blue-300 placeholder-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 shadow-lg"
             />
             <svg
