@@ -32,7 +32,7 @@ export default function Header() {
   }, []);
 
   const handleLogout = async () => {
-    const response = await apiFetch('http://localhost:5000/logout', {
+    const response = await apiFetch('http://localhost:5000/refresh', {
       method: 'POST'
     });
 
