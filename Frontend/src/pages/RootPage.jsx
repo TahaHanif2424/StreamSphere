@@ -22,11 +22,12 @@ export default function RootPage() {
 export async function loader() {
   if (store.getState().user.user) return; // already logged in
 
-  const refresh = await fetch("http://localhost:5000/refresh", {
+  // 1) Attempt refresh
+  const refresh = await apiFetch("http://localhost:5000/refresh", {
     method: "GET",
     credentials: "include",
   });
-  if (!refresh.ok) return redirect('/'); // not logged in
+  if (!refresh.ok) return; // not logged in
 
   const { accessToken } = await refresh.json();
   localStorage.setItem("accessToken", accessToken);
