@@ -60,6 +60,7 @@ router.post("/login", async (req, res) => {
             user.refreshToken = refreshToken;
             await user.save();
             res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true });
+            console.log(accessToken);
             return res.status(201).send({ message: "Logged in successfully", accessToken, refreshToken });
         } else {
             res.status(400).send({ error: "Invalid Username and Password" });

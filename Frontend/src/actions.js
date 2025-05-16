@@ -28,6 +28,7 @@ export async function authAction({ request }) {
     };
     localStorage.setItem('accessToken', accessToken);
     store.dispatch(userActions.addUser(user));
+    console.log(store.getState().user.user);
     return redirect('/');
   } else {
     return redirect('/auth?mode=login');
