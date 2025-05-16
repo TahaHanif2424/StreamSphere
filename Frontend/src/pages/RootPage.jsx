@@ -26,7 +26,7 @@ export async function loader() {
     method: "GET",
     credentials: "include",
   });
-  if (!refresh.ok) return; // not logged in
+  if (!refresh.ok) return redirect('/'); // not logged in
 
   const { accessToken } = await refresh.json();
   localStorage.setItem("accessToken", accessToken);
