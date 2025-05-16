@@ -214,7 +214,7 @@ export default function ChannelPage() {
                 <VideosList
                   videos={watchedVideos}
                   isOpenedOnChannels={true}
-                  isChangeable={false}
+                  isChangeable={true}
                   handleDelete={handleWatchDelete}
                 />
               );

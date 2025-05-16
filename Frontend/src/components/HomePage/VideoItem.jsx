@@ -84,12 +84,6 @@ export default function VideoItem({
       {isChangeable && (
         <div className="flex gap-3 justify-end mt-2">
           <button
-            onClick={handleEditClick}
-            className="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition"
-          >
-            Edit
-          </button>
-          <button
             onClick={handleDeleteClick}
             className="px-4 py-1.5 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition"
           >
