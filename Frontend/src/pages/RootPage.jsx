@@ -22,15 +22,14 @@ export default function RootPage() {
 export async function loader() {
   if (store.getState().user.user) return; // already logged in
 
-  // 1) Attempt refresh
-  // const refresh = await apiFetch("http://localhost:5000/refresh", {
-  //   method: "GET",
-  //   credentials: "include",
-  // });
-  // if (!refresh.ok) return; // not logged in
+  const refresh = await apiFetch("http://localhost:5000/refresh", {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!refresh.ok) return; // not logged in
 
-  // const { accessToken } = await refresh.json();
-  // localStorage.setItem("accessToken", accessToken);
+  const { accessToken } = await refresh.json();
+  localStorage.setItem("accessToken", accessToken);
 
   // 2) Fetch profile
   const profile = await apiFetch("http://localhost:5000/user/profile", {

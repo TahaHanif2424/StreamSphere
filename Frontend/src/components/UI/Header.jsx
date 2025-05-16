@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X } from "lucide-react"; // hamburger & close icons
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import defaultChannelPic from "../../../public/icon-7797704_640.png";
 import SidebarItem from "./SidebarItem";
