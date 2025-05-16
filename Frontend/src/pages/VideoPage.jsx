@@ -49,7 +49,7 @@ export default function VideoPage() {
           <VideoPlayer videoData={destinationVideo} />
 
           {/* Channel + Video Info Section */}
-          <div className="flex flex-col sm:flex-row gap-6 py-4 bg-slate-800 rounded-xl shadow-md">
+          <div className="flex flex-col sm:flex-row gap-y-6 px-2 py-4 bg-slate-800 rounded-xl shadow-md">
             {/* Left: Channel Info */}
             <div className="flex flex-col items-start gap-2 w-full sm:w-[200px]">
               <img
