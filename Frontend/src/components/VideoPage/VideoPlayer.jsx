@@ -85,21 +85,6 @@ export default function VideoPlayer({ videoData }) {
       setError("HLS not supported");
     }
 
-    const toggleFullscreen = () => {
-      if (screenfull.isEnabled && containerRef.current) {
-        screenfull.toggle(containerRef.current);
-      }
-    };
-
-    useEffect(() => {
-      if (!screenfull.isEnabled) return;
-      function handleChange() {
-        setIsFullscreen(screenfull.isFullscreen);
-      }
-      screenfull.on("change", handleChange);
-      return () => screenfull.off("change", handleChange);
-    }, []);
-
     // time updates
     const onLoaded = () => setDuration(video.duration);
     const onTime = () => setCurrentTime(video.currentTime);
@@ -149,6 +134,21 @@ export default function VideoPlayer({ videoData }) {
   };
 
   const progressPct = duration ? (currentTime / duration) * 100 : 0;
+
+  const toggleFullscreen = () => {
+    if (screenfull.isEnabled && containerRef.current) {
+      screenfull.toggle(containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (!screenfull.isEnabled) return;
+    function handleChange() {
+      setIsFullscreen(screenfull.isFullscreen);
+    }
+    screenfull.on("change", handleChange);
+    return () => screenfull.off("change", handleChange);
+  }, []);
 
   return (
     <div
