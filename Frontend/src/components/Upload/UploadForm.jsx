@@ -4,18 +4,17 @@ import { validateTitle } from "../../utils/validation";
 import Input from "../UI/Input";
 import FileDropZone from "./FileDropZone";
 import { useRef, useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export default function UploadForm({ title, thumbnail, video }) {
   const params = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const submit = useSubmit();
   const isEditing = !!params.videoId;
   const [files, setFiles] = useState({ image: null, video: null });
 
   const hiddenImageInput = useRef();
   const hiddenVideoInput = useRef();
-
-  const isPlaylistAdding = !!searchParams.get('playlistId');
 
   useEffect(() => {
     if (files.image && hiddenImageInput.current) {
@@ -42,16 +41,14 @@ export default function UploadForm({ title, thumbnail, video }) {
   );
 
   let postURL = "/upload";
-
-  if(isPlaylistAdding) {
-    postURL = `/upload?playlistId=${searchParams.get('playlistId')}`;
-  } else if(isEditing) {
+  if (searchParams.get("playlistId")) {
+    postURL += `?playlistId=${searchParams.get("playlistId")}`;
+  } else if (isEditing) {
     postURL = `/videos/${params.videoId}/edit`;
   }
 
   function handleSubmission(e) {
     e.preventDefault();
-
     const form = e.target.closest("form");
     submit(new FormData(form), {
       method: "POST",
@@ -61,44 +58,53 @@ export default function UploadForm({ title, thumbnail, video }) {
   }
 
   return (
-    <Form
-      method="POST"
-      className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-xl space-y-6"
-      encType="multipart/form-data"
+    <motion.div
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="max-w-2xl mx-auto mt-12"
     >
-      <h1 className="text-2xl font-bold text-blue-600 text-center">
-        {!isEditing ? "Upload a New Video" : "Edit Video"}
-      </h1>
+      <Form
+        method="POST"
+        className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 space-y-6 border border-blue-100"
+        encType="multipart/form-data"
+      >
+        <h1 className="text-3xl font-extrabold text-center text-blue-600 tracking-tight">
+          {isEditing ? "Edit Your Video" : "Upload a New Creation"}
+        </h1>
 
-      <div>
-        <Input
-          type="text"
-          label="Title"
-          id="title"
-          name="title"
-          validation={true}
-          isTouched={isTitleTouched}
-          setIsTouched={setIsTitleTouched}
-          value={enteredTitle}
-          setValue={setEnteredTitle}
-          isValid={isTitleValid}
-        />
-      </div>
+        <div>
+          <Input
+            type="text"
+            label="Title"
+            id="title"
+            name="title"
+            validation={true}
+            isTouched={isTitleTouched}
+            setIsTouched={setIsTitleTouched}
+            value={enteredTitle}
+            setValue={setEnteredTitle}
+            isValid={isTitleValid}
+          />
+        </div>
 
-      <FileDropZone setFiles={setFiles} files={files} />
+        <FileDropZone setFiles={setFiles} files={files} />
 
-      <input type="file" name="thumbnail" ref={hiddenImageInput} hidden />
-      <input type="file" name="video" ref={hiddenVideoInput} hidden />
+        <input type="file" name="thumbnail" ref={hiddenImageInput} hidden />
+        <input type="file" name="video" ref={hiddenVideoInput} hidden />
 
-      <div className="text-center">
-        <button
-          onClick={handleSubmission}
-          type="submit"
-          className="bg-blue-500 text-white text-lg font-semibold rounded-md py-2 px-6 transition-colors duration-200 hover:bg-white hover:text-blue-600 border border-blue-500 cursor-pointer"
-        >
-          Submit
-        </button>
-      </div>
-    </Form>
+        <div className="text-center">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleSubmission}
+            type="submit"
+            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-full py-2 px-8 shadow-md hover:shadow-lg transition-all"
+          >
+            {isEditing ? "Update Video" : "Upload Video"}
+          </motion.button>
+        </div>
+      </Form>
+    </motion.div>
   );
 }

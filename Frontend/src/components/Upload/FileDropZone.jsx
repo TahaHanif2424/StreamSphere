@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { motion } from "framer-motion";
 
 export default function FileDropZone({ setFiles, files }) {
   const [imageURL, setImageURL] = useState(files.image);
@@ -29,9 +30,11 @@ export default function FileDropZone({ setFiles, files }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div
+    <motion.div
       {...getRootProps()}
-      className="border-2 border-dashed border-blue-400 rounded-md p-6 text-center cursor-pointer bg-blue-50 hover:bg-blue-100 transition-colors duration-200 space-y-4"
+      className={`transition-all duration-300 border-2 border-dashed rounded-xl p-6 text-center cursor-pointer
+      ${isDragActive ? 'border-blue-600 bg-blue-50' : 'border-blue-300 bg-white/70 backdrop-blur-md'}`}
+      whileHover={{ scale: 1.02 }}
     >
       <input {...getInputProps()} />
 
@@ -39,38 +42,32 @@ export default function FileDropZone({ setFiles, files }) {
         {(imageURL || videoURL) && (
           <div className="flex gap-4 flex-wrap justify-center">
             {imageURL && (
-              <div className="w-40 h-40 overflow-hidden rounded-lg shadow-md border border-blue-200">
-                <img
-                  src={imageURL}
-                  alt="Uploaded"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-40 h-40 overflow-hidden rounded-xl shadow-md border"
+              >
+                <img src={imageURL} alt="Uploaded" className="w-full h-full object-cover" />
+              </motion.div>
             )}
-
             {videoURL && (
-              <div className="w-40 h-40 overflow-hidden rounded-lg shadow-md border border-blue-200">
-                <video
-                  src={videoURL}
-                  controls
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-40 h-40 overflow-hidden rounded-xl shadow-md border"
+              >
+                <video src={videoURL} controls className="w-full h-full object-cover" />
+              </motion.div>
             )}
           </div>
         )}
 
-        <div>
-          {isDragActive ? (
-            <p className="text-blue-600 font-medium">Drop your image and video files here...</p>
-          ) : (
-            <p className="text-gray-700">
-              Drag & drop <span className="text-blue-500 font-semibold">one image</span> and{" "}
-              <span className="text-blue-500 font-semibold">one video</span> here, or click to select.
-            </p>
-          )}
-        </div>
+        <p className="text-gray-600 font-medium">
+          {isDragActive
+            ? "Drop the files here..."
+            : "Drag & drop or click to select a thumbnail and video file"}
+        </p>
       </div>
-    </div>
+    </motion.div>
   );
 }
