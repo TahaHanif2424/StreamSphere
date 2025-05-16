@@ -2,6 +2,7 @@
 import { redirect } from 'react-router-dom';
 import store from './store/index';
 import { userActions } from './store/user-slice';
+import { apiFetch } from './utils/api';
 
 export async function authAction({ request }) {
   const form = await request.formData();
@@ -19,14 +20,19 @@ export async function authAction({ request }) {
   if (mode === 'login') {
     const { accessToken } = await res.json();
     // Decode minimal user from the JWT payload
-    const payload = JSON.parse(atob(accessToken.split('.')[1]));
-    const user = {
-      _id: payload.userId,
-      email: payload.email,
-      channelName: payload.channelName,
-      channelImageURL: payload.channelImageURL
-    };
+
     localStorage.setItem('accessToken', accessToken);
+
+    const userResponse = await apiFetch('http://localhost:5000/user/profile');
+
+    const userData = await userResponse.json();
+
+    const user = {
+      _id: userData.userId,
+      email: userData.email,
+      channelName: userData.channelName,
+      channelImageURL: userData.channelImageURL
+    };
     store.dispatch(userActions.addUser(user));
     console.log(store.getState().user.user);
     return redirect('/');
