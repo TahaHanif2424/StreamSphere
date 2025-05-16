@@ -47,28 +47,30 @@ export default function VideoPage() {
         <div className="lg:col-span-2 flex flex-col gap-10">
           <VideoPlayer videoData={destinationVideo} />
 
-          {/* Video Description + Channel Info */}
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 px-2 py-4 bg-slate-800 rounded-xl shadow-md">
-            {/* Channel Info */}
-            <div className="flex items-center gap-4">
+          {/* Channel + Video Info Section */}
+          <div className="flex flex-col sm:flex-row gap-6 px-2 py-4 bg-slate-800 rounded-xl shadow-md">
+            {/* Left: Channel Info */}
+            <div className="flex flex-col items-center gap-2 w-full sm:w-[200px]">
               <img
                 src={destinationVideo.user_id.channelImageURL}
                 alt="Channel"
-                className="w-14 h-14 rounded-full object-cover border-2 border-sky-500 shadow"
+                className="w-16 h-16 rounded-full object-cover border-2 border-sky-500 shadow"
               />
-              <div>
-                <h3 className="text-lg font-bold text-white">
+              <div className="flex items-center justify-center gap-2">
+                <h3 className="text-sm font-semibold text-white">
                   {destinationVideo.user_id.channelName}
                 </h3>
-                <p className="text-sm text-gray-400">
-                  {destinationVideo.user_id.subscribers || 0}{" "}
-                  subscribers
+                <p className="text-xs text-gray-400">
+                  {destinationVideo.user_id.subscribers || 0} subs
                 </p>
               </div>
             </div>
 
-            {/* Video Info */}
+            {/* Right: Video Info */}
             <div className="flex-1">
+              <h2 className="text-lg font-bold text-white mb-2">
+                {destinationVideo.title}
+              </h2>
               <p className="text-sm text-gray-200 whitespace-pre-line mb-2">
                 {destinationVideo.description}
               </p>
