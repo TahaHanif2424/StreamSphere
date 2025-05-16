@@ -47,25 +47,43 @@ export default function VideoPage() {
         <div className="lg:col-span-2 flex flex-col gap-10">
           <VideoPlayer videoData={destinationVideo} />
 
-          {/* New Video Info Section */}
-          <div className="bg-slate-900 p-5 rounded-lg shadow-md space-y-2 animate-slideUp">
-            <h1 className="text-2xl font-semibold text-white">
-              {destinationVideo.title}
-            </h1>
-            <p className="text-sm text-gray-400">
-              Uploaded on{" "}
-              {new Date(destinationVideo.date).toLocaleDateString(
-                undefined,
-                {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                }
-              )}
-            </p>
-            <p className="text-base text-gray-300 whitespace-pre-wrap">
-              {destinationVideo.description}
-            </p>
+          {/* Video Description + Channel Info */}
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 px-2 py-4 bg-slate-800 rounded-xl shadow-md">
+            {/* Channel Info */}
+            <div className="flex items-center gap-4">
+              <img
+                src={destinationVideo.user_id.channelImageURL}
+                alt="Channel"
+                className="w-14 h-14 rounded-full object-cover border-2 border-sky-500 shadow"
+              />
+              <div>
+                <h3 className="text-lg font-bold text-white">
+                  {destinationVideo.user_id.channelName}
+                </h3>
+                <p className="text-sm text-gray-400">
+                  {destinationVideo.user_id.subscribers || 0}{" "}
+                  subscribers
+                </p>
+              </div>
+            </div>
+
+            {/* Video Info */}
+            <div className="flex-1">
+              <p className="text-sm text-gray-200 whitespace-pre-line mb-2">
+                {destinationVideo.description}
+              </p>
+              <p className="text-xs text-gray-400">
+                Published on{" "}
+                {new Date(destinationVideo.date).toLocaleDateString(
+                  "en-US",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }
+                )}
+              </p>
+            </div>
           </div>
 
           <VideoActions
