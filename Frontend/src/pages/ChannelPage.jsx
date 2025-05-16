@@ -187,7 +187,7 @@ export default function ChannelPage() {
 
               async function handleWatchDelete(id) {
                 const response = await apiFetch(
-                  "http://localhost:5000/history/remove/" + id,
+                  "http://localhost:5000/histroy/remove/" + id,
                   {
                     method: "DELETE",
                     headers: {
