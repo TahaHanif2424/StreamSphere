@@ -1,14 +1,17 @@
 import { useNavigate } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import defaultChannelPic from "../../../public/icon-7797704_640.png";
 import SidebarItem from "./SidebarItem";
+import { apiFetch } from "../../utils/api";
+import { userActions } from "../../store/user-slice";
 
 export default function Header() {
   const navigate = useNavigate();
   const userData = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -28,8 +31,19 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    navigate("/auth?mode=login");
+  const handleLogout = async () => {
+    const response = await apiFetch('http://localhost:5000/logout', {
+      method: 'POST'
+    });
+
+    if(!response.ok)
+      throw new Error('Cant logout');
+
+    localStorage.removeItem('accessToken');
+
+    dispatch(userActions.removeUser());
+
+    navigate('/auth?mode=login');
   };
 
   const handleViewChannel = () => {
