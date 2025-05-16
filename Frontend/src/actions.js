@@ -28,13 +28,12 @@ export async function authAction({ request }) {
     const userData = await userResponse.json();
 
     const user = {
-      _id: userData.userId,
+      _id: userData._id,
       email: userData.email,
       channelName: userData.channelName,
       channelImageURL: userData.channelImageURL
     };
     store.dispatch(userActions.addUser(user));
-    console.log(store.getState().user.user);
     return redirect('/');
   } else {
     return redirect('/auth?mode=login');
