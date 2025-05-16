@@ -1,12 +1,15 @@
 import Login from "../components/Auth/Login";
 import Signup from "../components/Auth/Signup";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import bgPic from "/public/bg_pic.png";
 
 export default function AuthPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  if(localStorage.getItem('accessToken'))
+    navigate('/');
 
   useEffect(() => {
     if (!searchParams.has("mode")) {
