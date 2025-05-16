@@ -25,10 +25,11 @@ export async function action({ request, params }) {
   const videoFile = originalFormData.get("video");
   const thumbnailFile = originalFormData.get("thumbnail");
   const title = originalFormData.get("title");
+  const description = originalFormData.get('description');
 
   formData.append("video", videoFile);
   formData.append("thumbnail", thumbnailFile);
-  formData.append("data", JSON.stringify({ title, user_id: user._id }));
+  formData.append("data", JSON.stringify({ title, user_id: user._id, description }));
 
   const isPlaylistAdding = !!urlSearchparams.get('playlistId');
 

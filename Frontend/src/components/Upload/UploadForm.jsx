@@ -20,6 +20,9 @@ export default function UploadForm({ title, thumbnail, video }) {
   const isEditing = !!params.videoId;
   const [files, setFiles] = useState({ image: null, video: null });
   const navigation = useNavigation();
+  const [description, setDescription] = useState(
+    isEditing ? video?.description || "" : ""
+  );
 
   const hiddenImageInput = useRef();
   const hiddenVideoInput = useRef();
@@ -67,7 +70,7 @@ export default function UploadForm({ title, thumbnail, video }) {
 
   return (
     <>
-    {navigation.state === 'submitting' && <FormLoader />}
+      {navigation.state === "submitting" && <FormLoader />}
       <motion.div
         initial={{ opacity: 0, y: 60 }}
         animate={{ opacity: 1, y: 0 }}
@@ -83,7 +86,7 @@ export default function UploadForm({ title, thumbnail, video }) {
             {isEditing ? "Edit Your Video" : "Upload a New Creation"}
           </h1>
 
-          <div>
+          <div className="space-y-6">
             <Input
               type="text"
               label="Title"
@@ -96,6 +99,24 @@ export default function UploadForm({ title, thumbnail, video }) {
               setValue={setEnteredTitle}
               isValid={isTitleValid}
             />
+
+            <div className="flex flex-col">
+              <label
+                htmlFor="description"
+                className="mb-2 font-medium text-white"
+              >
+                Description
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                rows="6"
+                className="p-4 rounded-lg bg-slate-800 text-white border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y min-h-[150px]"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Write a compelling description of your video..."
+              />
+            </div>
           </div>
 
           <FileDropZone setFiles={setFiles} files={files} />
