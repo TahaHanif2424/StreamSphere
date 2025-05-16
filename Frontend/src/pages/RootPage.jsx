@@ -22,7 +22,7 @@ export default function RootPage() {
 export async function loader() {
   if (store.getState().user.user) return; // already logged in
 
-  const refresh = await apiFetch("http://localhost:5000/refresh", {
+  const refresh = await fetch("http://localhost:5000/refresh", {
     method: "GET",
     credentials: "include",
   });
