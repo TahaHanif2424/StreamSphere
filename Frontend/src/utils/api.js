@@ -12,7 +12,7 @@ export async function apiFetch(url, opts = {}) {
 
   let res = await fetch(url, options);
 
-  if (res.status === 401) {
+  if (!res.ok) {
     const refresh = await fetch('/refresh', { method: 'GET', credentials: 'include' });
     if (refresh.ok) {
       const { accessToken } = await refresh.json();
