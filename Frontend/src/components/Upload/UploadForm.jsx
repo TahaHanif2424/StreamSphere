@@ -111,7 +111,7 @@ export default function UploadForm({ title, thumbnail, video }) {
                 id="description"
                 name="description"
                 rows="6"
-                className="p-4 rounded-lg bg-slate-800 text-white border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y min-h-[150px]"
+                className="p-4 rounded-lg bg-zinc-800 text-white border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y min-h-[150px]"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Write a compelling description of your video..."
