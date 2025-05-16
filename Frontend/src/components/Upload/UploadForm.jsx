@@ -66,7 +66,7 @@ export default function UploadForm({ title, thumbnail, video }) {
     >
       <Form
         method="POST"
-        className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 space-y-6 border border-blue-100"
+        className="bg-slate-900 backdrop-blur-md rounded-2xl shadow-xl p-8 space-y-6 border border-blue-100"
         encType="multipart/form-data"
       >
         <h1 className="text-3xl font-extrabold text-center text-blue-600 tracking-tight">
