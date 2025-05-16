@@ -6,6 +6,7 @@ import VideosList from "../components/VideoPage/VideosList";
 import { apiFetch } from "../utils/api";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import defaultPic from '../../public/icon-7797704_640.png'
 
 export default function VideoPage() {
   const { destinationVideo, videos, comments } = useRouteLoaderData("video");
@@ -48,11 +49,11 @@ export default function VideoPage() {
           <VideoPlayer videoData={destinationVideo} />
 
           {/* Channel + Video Info Section */}
-          <div className="flex flex-col sm:flex-row gap-6 px-2 py-4 bg-slate-800 rounded-xl shadow-md">
+          <div className="flex flex-col sm:flex-row gap-6 py-4 bg-slate-800 rounded-xl shadow-md">
             {/* Left: Channel Info */}
-            <div className="flex flex-col items-center gap-2 w-full sm:w-[200px]">
+            <div className="flex flex-col items-start gap-2 w-full sm:w-[200px]">
               <img
-                src={destinationVideo.user_id.channelImageURL}
+                src={destinationVideo.user_id.channelImageURL || defaultPic}
                 alt="Channel"
                 className="w-16 h-16 rounded-full object-cover border-2 border-sky-500 shadow"
               />
