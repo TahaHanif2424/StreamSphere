@@ -46,6 +46,28 @@ export default function VideoPage() {
         {/* Main Video + Comments */}
         <div className="lg:col-span-2 flex flex-col gap-10">
           <VideoPlayer videoData={destinationVideo} />
+
+          {/* New Video Info Section */}
+          <div className="bg-slate-900 p-5 rounded-lg shadow-md space-y-2 animate-slideUp">
+            <h1 className="text-2xl font-semibold text-white">
+              {destinationVideo.title}
+            </h1>
+            <p className="text-sm text-gray-400">
+              Uploaded on{" "}
+              {new Date(destinationVideo.date).toLocaleDateString(
+                undefined,
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )}
+            </p>
+            <p className="text-base text-gray-300 whitespace-pre-wrap">
+              {destinationVideo.description}
+            </p>
+          </div>
+
           <VideoActions
             videoId={destinationVideo._id}
             channelId={destinationVideo.user_id._id}
