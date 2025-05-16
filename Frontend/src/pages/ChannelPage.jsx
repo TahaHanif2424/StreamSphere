@@ -305,7 +305,7 @@ export default function ChannelPage() {
           />
           <form
             onSubmit={createPlaylist}
-            className="bg-white p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
+            className="bg-transparent p-6 rounded-lg shadow-lg z-10 w-full max-w-sm"
           >
             <h3 className="text-xl font-semibold mb-4">Create Playlist</h3>
             <input
