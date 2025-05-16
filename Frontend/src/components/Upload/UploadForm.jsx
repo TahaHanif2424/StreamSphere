@@ -1,10 +1,17 @@
-import { Form, useParams, useSearchParams, useSubmit } from "react-router-dom";
+import {
+  Form,
+  useNavigation,
+  useParams,
+  useSearchParams,
+  useSubmit,
+} from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { validateTitle } from "../../utils/validation";
 import Input from "../UI/Input";
 import FileDropZone from "./FileDropZone";
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import FormLoader from "./FormLoader";
 
 export default function UploadForm({ title, thumbnail, video }) {
   const params = useParams();
@@ -12,6 +19,7 @@ export default function UploadForm({ title, thumbnail, video }) {
   const submit = useSubmit();
   const isEditing = !!params.videoId;
   const [files, setFiles] = useState({ image: null, video: null });
+  const navigation = useNavigation();
 
   const hiddenImageInput = useRef();
   const hiddenVideoInput = useRef();
@@ -58,53 +66,56 @@ export default function UploadForm({ title, thumbnail, video }) {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 60 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="max-w-2xl mx-auto mt-12"
-    >
-      <Form
-        method="POST"
-        className="bg-slate-900 backdrop-blur-md rounded-2xl shadow-xl p-8 space-y-6 border-2 border-blue-100"
-        encType="multipart/form-data"
+    <>
+    {navigation.state === 'submitting' && <FormLoader />}
+      <motion.div
+        initial={{ opacity: 0, y: 60 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-2xl mx-auto mt-12"
       >
-        <h1 className="text-3xl font-extrabold text-center text-blue-600 tracking-tight">
-          {isEditing ? "Edit Your Video" : "Upload a New Creation"}
-        </h1>
+        <Form
+          method="POST"
+          className="bg-slate-900 backdrop-blur-md rounded-2xl shadow-xl p-8 space-y-6 border-2 border-blue-100"
+          encType="multipart/form-data"
+        >
+          <h1 className="text-3xl font-extrabold text-center text-blue-600 tracking-tight">
+            {isEditing ? "Edit Your Video" : "Upload a New Creation"}
+          </h1>
 
-        <div>
-          <Input
-            type="text"
-            label="Title"
-            id="title"
-            name="title"
-            validation={true}
-            isTouched={isTitleTouched}
-            setIsTouched={setIsTitleTouched}
-            value={enteredTitle}
-            setValue={setEnteredTitle}
-            isValid={isTitleValid}
-          />
-        </div>
+          <div>
+            <Input
+              type="text"
+              label="Title"
+              id="title"
+              name="title"
+              validation={true}
+              isTouched={isTitleTouched}
+              setIsTouched={setIsTitleTouched}
+              value={enteredTitle}
+              setValue={setEnteredTitle}
+              isValid={isTitleValid}
+            />
+          </div>
 
-        <FileDropZone setFiles={setFiles} files={files} />
+          <FileDropZone setFiles={setFiles} files={files} />
 
-        <input type="file" name="thumbnail" ref={hiddenImageInput} hidden />
-        <input type="file" name="video" ref={hiddenVideoInput} hidden />
+          <input type="file" name="thumbnail" ref={hiddenImageInput} hidden />
+          <input type="file" name="video" ref={hiddenVideoInput} hidden />
 
-        <div className="text-center">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={handleSubmission}
-            type="submit"
-            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-full py-2 px-8 shadow-md hover:shadow-lg transition-all"
-          >
-            {isEditing ? "Update Video" : "Upload Video"}
-          </motion.button>
-        </div>
-      </Form>
-    </motion.div>
+          <div className="text-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleSubmission}
+              type="submit"
+              className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-full py-2 px-8 shadow-md hover:shadow-lg transition-all"
+            >
+              {isEditing ? "Update Video" : "Upload Video"}
+            </motion.button>
+          </div>
+        </Form>
+      </motion.div>
+    </>
   );
 }
