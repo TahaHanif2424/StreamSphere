@@ -8,8 +8,10 @@ import bgPic from "/public/bg_pic.png";
 export default function AuthPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  if(localStorage.getItem('accessToken'))
-    navigate('/');
+
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) navigate("/");
+  }, [navigate]);
 
   useEffect(() => {
     if (!searchParams.has("mode")) {
